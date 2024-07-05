@@ -1,0 +1,42 @@
+;;
+;;  framework.sb
+;;  SoftwareUpdateCore
+;;
+;;  Sandbox Profile for the SoftwareUpdateCore Framework
+;;
+;;  Created by Erik Phillips on 11/15/19.
+;;  Copyright © 2019 Apple Inc. All rights reserved.
+;;
+;;  WARNING: The sandbox rules in this file currently constitute
+;;  Apple System Private Interface and are subject to change at
+;;  any time and without notice.
+;;
+;; MacOS Install location:
+;;   /System/Library/PrivateFrameworks/SoftwareUpdateCore.framework/Versions/A/Resources/framework.sb
+;;
+
+(version 1)
+
+(import "system.sb")
+(import "com.apple.corefoundation.sb")
+(import "/System/Library/PrivateFrameworks/SoftwareUpdateCoreSupport.framework/Versions/A/Resources/framework.sb")
+(import "/System/Library/PrivateFrameworks/MobileSoftwareUpdate.framework/Versions/A/Resources/framework.sb")
+(corefoundation)
+
+(allow process-info* (target self))
+
+;; For resolving symlinks, realpath(3), and equivalents.
+(allow file-read-metadata)
+
+;; For validating the entitlements of clients.
+(allow process-info-codesignature)
+
+;; Allow access to read the NVRAM variables
+(allow nvram*)
+
+;; Allow access to read fsctl
+(allow system-fsctl)
+
+;; Allow the following MACH service names to be looked up
+(allow mach-lookup
+    (global-name "com.apple.mobileassetd.v2"))

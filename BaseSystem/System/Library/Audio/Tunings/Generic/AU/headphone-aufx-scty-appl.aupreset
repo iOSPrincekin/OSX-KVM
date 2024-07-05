@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>data</key>
+	<data>
+	AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAABQEAAAAAAAAI/gAAAAAAAA0AAAAAAAAAEAAAA
+	AAAAAAW/gAAAAAAABgAAAAAAAAAHv4AAAAAAAAg+ij1xAAAACT4FHrgAAAAKPPXCjwAA
+	AAs+TMzNAAAADD9MzM0AAAANP2ZmZgAAAA4AAAAAAAAADz1MzM0AAAAQPSPXCgAAABFD
+	+gAAAAAAEkWcQAAAAAATP8AAAAAAABQ+Cj1xAAAAFT/AAAAAAAAWQrQAAAAAABfB8AAA
+	AAAAGD+AAAAAAAAZwJAAAAAAABo/gAAAAAAAG0MgAAAAAAAcAAAAAAAAAB0/gAAAAAAA
+	HkLIAAAAAAAfQEAAAA==
+	</data>
+	<key>manufacturer</key>
+	<integer>1634758764</integer>
+	<key>name</key>
+	<string>headphone-aufx-scty-appl</string>
+	<key>subtype</key>
+	<integer>1935897721</integer>
+	<key>type</key>
+	<integer>1635083896</integer>
+	<key>version</key>
+	<integer>0</integer>
+</dict>
+</plist>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AddFunds</key>
+	<dict>
+		<key>AMPFlagGroup</key>
+		<string>Apple Media Services</string>
+		<key>AMPTestable</key>
+		<true/>
+		<key>DisplayName</key>
+		<string>Add Funds view controller</string>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>PaymentVerificationApplePay</key>
+	<dict>
+		<key>AMPFlagGroup</key>
+		<string>Apple Media Services</string>
+		<key>AMPTestable</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Payment Verification via Apple Pay</string>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>PaymentVerificationCardOnFile</key>
+	<dict>
+		<key>AMPFlagGroup</key>
+		<string>Apple Media Services</string>
+		<key>AMPTestable</key>
+		<true/>
+		<key>DisplayName</key>
+		<string>Payment Verification via card on file</string>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+</dict>
+</plist>

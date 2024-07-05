@@ -1,0 +1,655 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recovery Apple Silicon</title>
+    <link rel="stylesheet" type="text/css" href="../css/static.css">
+</head>
+<body class="apd-topic" dir="rtl" data-isTaskOpen="true">
+    <header role="presentation" id="mchl82829c17" class="AppleTopic">
+        <figure class="topicIcon">
+            <img src="../SharedGlobalArt/IL_AppleLogo_11.png" alt="" height="30" width="24">
+        </figure>
+        <h1>שימוש ב-macOS Recovery במחשב Mac עם Apple Silicon </h1>
+        <p>macOS Recovery הוא מערכת שחזור המובנית ב-Mac.</p>
+        <p>ניתן להשתמש ביישומים ב-macOS Recovery במחשבי Mac עם Apple Silicon כדי לתקן את הכונן הפנימי, להתקין מחדש את macOS, לשחזר קבצים מגיבוי Time Machine, להגדיר את מדיניות האבטחה עבור כוננים שונים, להעביר קבצים בין שני מחשבי Mac, לבצע הפעלה במצב בטוח ועוד.</p>
+        <p>
+            התקנה מחדש של macOS מצריכה חיבור לאינטרנט. כדי להתחבר לאינטרנט דרך חיבור לרשת חוטית או אלחוטית. מומלץ לעיין במאמר 
+            <a href="#mchle9d1cb3c" class="xRef Task">התחברות לאינטרנט באמצעות רשת אלחוטית</a>
+            .
+        </p>
+        <div class="Alert">
+            <p class="Note">
+                <em>הערה: </em>
+                 אם המחשב מחובר לפורטל שבוי (לדוגמה, בבית קפה, בספרייה או במלון) או לרשת ארגונית, יתכן שלא תינתן לך גישה לאינטרנט ב-macOS Recovery.
+            </p>
+        </div>
+        <div id="mchla906a106" class="Subhead">
+            <div class="heading-nobreak">
+                <h2 class="Name">יישומים הזמינים ב-macOS Recovery ב-Mac עם Apple Silicon</h2>
+                <p>היישומים הבאים זמינים ב-macOS Recovery ב-Mac עם Apple Silicon:</p>
+            </div>
+            <ul>
+                <li>
+                    <p>
+                        <em>שחזור: </em>
+                        היישום ״שחזור״ מספק גישה ליישומים נוספים ב-macOS Recovery. מומלץ לעיין ב
+                        <a href="#mchl5abfbb29" class="xRef Task">הפעלת המחשב ב-macOS Recovery</a>
+                        , 
+                        <a href="#mchldc3556ed" class="xRef Task">הפעלת המחשב ב-macOS Recovery וקישור התקני פלט מסוג Bluetooth</a>
+                        , וגם ב
+                        <a href="#mchlb7e93c86" class="xRef Task">סיום macOS Recovery</a>
+                        .
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>שחזור המערכת בעזרת Time Machine: </em>
+                        ניתן לשחזר את הנתונים מגיבוי Time Machine. ביישום ״שחזור״, יש לבחור ב״שחזור מ-Time Machine״, ואז ללחוץ על ״המשך״. כדי לחזור ליישום ״שחזור״, יש לבחור ב״שחזור המערכת בעזרת Time Machine״ > ״סיים את שחזור המערכת בעזרת Time Machine״. ראה/י 
+                        <a href="#mchlf4cdcc0f" class="xRef Task">שימוש ב-Time Machine לשחזור המערכת</a>
+                        .
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>התקנת macOS: </em>
+                        ניתן להתקין מחדש את macOS במחשב. ביישום ״שחזור״, יש לבחור ב״התקנה מחדש של macOS״, ואז ללחוץ על ״המשך״. כדי לחזור אל היישום ״שחזור״, יש לבחור ב״התקנת macOS Big Sur״ > ״סיים את התקנת macOS״. מומלץ לעיין ב
+                        <a href="#mchl57249f89" class="xRef Task">התקנה מחדש של macOS</a>
+                        .
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>Safari: </em>
+                        ביישום ״שחזור״, יש לבחור ב-Safari, ואז ללחוץ על ״המשך״. כדי לחזור אל היישום ״שחזור״, יש לבחור ב-Safari > ״סיים את Safari״. אם התחברת אל האינטרנט, ניתן להשתמש ב-Safari כדי לחפש אחר מידע נוסף באתר התמיכה של Apple. יש לשים לב לכך שההרחבות והתוספים של דפדפן Safari כבויים ב-macOS Recovery.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>כלי העזר לכוננים: </em>
+                        לתיקון או מחיקת הכונן. ביישום ״שחזור״, יש לבחור ב״כלי העזר לכוננים״, ואז ללחוץ על ״המשך״. כדי לחזור אל היישום ״שחזור״, יש לבחור ב״כלי העזר לכוננים״ > ״סיים את כלי העזר לכוננים״. מומלץ לעיין ב
+                        <a href="#mchl0e4c30d6" class="xRef Task">מחיקה והתקנה מחדש של macOS</a>
+                         וגם ב
+                        <a href="#mchl3fe49482" class="xRef Task">תיקון הכונן הפנימי</a>
+                        .
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>כלי העזר של אבטחת ההפעלה: </em>
+                        להגדרת סוגי מדיניות האבטחה עבור ה-Mac. ביישום ״שחזור״, יש לבחור ב״כלי עזר״ > ״כלי העזר של אבטחת ההפעלה״. כדי לחזור ליישום ״שחזור״, יש לבחור ב״כלי העזר לאבטחת ההפעלה״ > ״סיים את כלי העזר לאבטחת ההפעלה״. מומץ לעיין ב
+                        <a href="#mchl9b13cbdc" class="xRef Task">הגדרת מדיניות האבטחה</a>
+                        .
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>המסוף: </em>
+                        לשינוי ההגדרות דרך שורת הפקודה. ביישום ״שחזור״, יש לבחור ב״כלי עזר״ > ״המסוף״. כדי לחזור אל היישום ״שחזור״, יש לבחור ב״המסוף״ > ״סיים את המסוף״.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>שיתוף כונן: </em>
+                        לשיתוף הכונן של Mac שהופעל ב-macOS Recovery. ביישום ״שחזור״, יש לבחור ב״כלי עזר״ > ״שיתוף כונן״. מומלץ לעיין ב
+                        <a href="#mchl6e3b9225" class="xRef Task">שימוש ב״שיתוף כונן״ להעברת קבצים בין שני מחשבי Mac</a>
+                        .
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>כונן הפעלה: </em>
+                        ניתן להגדיר את כונן ההפעלה עבור ה-Mac. יש לבחור בתפריט Apple 
+                        <img src="../SharedGlobalArt/IL_AppleLogo_11.png" alt="" height="30" width="24">
+                          > ״כונן הפעלה״. כדי לסיים את היישום, יש לבחור ב״כונן הפעלה״ > ״סיים את כונן הפעלה״. 
+                    </p>
+                </li>
+            </ul>
+        </div>
+        <p>ניתן גם להשתמש ב-macOS Recovery כדי לבצע את המשימות הבאות:</p>
+        <ul>
+            <li>
+                <p>
+                    <a href="#mchl08ae9930" class="xRef Task">הפעלת המחשב במצב בטוח</a>
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="#mchlbcf8b54b" class="xRef Task">הגדרת כונן ההפעלה המשמש כברירת-מחדל והפעלה מחדש של המחשב</a>
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="#mchl2a21e30c" class="xRef Task">הצגת דו״ח פעילות שחזור</a>
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="#mchl4ee3f192" class="xRef Task">יצירת קובץ אבחון שחזור</a>
+                </p>
+            </li>
+        </ul>
+        <div id="mchl5abfbb29" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchl5abfbb29">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchl5abfbb29" class="Name">הפעלת המחשב ב-macOS Recovery</h2>
+                    <ol>
+                        <li>
+                            <p>
+                                יש לבחור בתפריט Apple 
+                                <img src="../SharedGlobalArt/IL_AppleLogo_11.png" alt="" height="30" width="24">
+                                 > ״כיבוי״.
+                            </p>
+                        </li>
+                        <li>
+                            <p>יש ללחוץ ולהחזיק את כפתור ההפעלה ב-Mac עד להופעת הכיתוב ״טוען אפשרויות הפעלה״.</p>
+                        </li>
+                        <li>
+                            <p>יש ללחוץ על ״אפשרויות״, ואז ללחוץ על ״המשך״. </p>
+                        </li>
+                        <li>
+                            <p>במקרה הצורך, יש להזין את הסיסמה עבור חשבון של מנהל מערכת.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div id="mchldc3556ed" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchldc3556ed">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchldc3556ed" class="Name">הפעלת המחשב ב-macOS Recovery וקישור התקני קלט מסוג Bluetooth</h2>
+                    <p>יש למלא אחר ההנחיות הבאות אם ברצונך לקשר מקלדת, משטח מגע או עכבר מסוג Bluetooth אל ה-Mac בעת הפעלת macOS Recovery.</p>
+                </div>
+                <ol>
+                    <li>
+                        <p>
+                            יש לבחור בתפריט Apple 
+                            <img src="../SharedGlobalArt/IL_AppleLogo_11.png" alt="" height="30" width="24">
+                             > ״כיבוי״.
+                        </p>
+                    </li>
+                    <li>
+                        <p>יש ללחוץ ולהחזיק את כפתור ההפעלה ב-Mac עד להופעת הכיתוב ״Loading startup options״.</p>
+                    </li>
+                    <li>
+                        <p>כשכונן המערכת והכפתור ״אפשרויות״ מופיעים, יש ללחוץ על כפתור ההפעלה שלוש פעמים.</p>
+                        <div class="Alert">
+                            <p class="Note">
+                                <em>הערה: </em>
+                                צריך להיות מרווח זמן של שנייה בין כל לחיצה על כפתור ההפעלה. לחיצה מהירה מדי לא תירשם מאחר שלחיצות מהירות שמורות למטרות אחרות, כגון VoiceOver.
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <p>יש להשתמש במדריך ההגדרות של Bluetooth על-מנת לקשר את אביזרי ה-Bluetooth ל-Mac.</p>
+                        <div class="Alert">
+                            <p class="Note">
+                                <em>הערה: </em>
+                                מדריך ההגדרות של Bluetooth לא יופיע אם כבר יש לך התקן קלט מחובר.
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <p>יש להזין סיסמה עבור חשבון מנהל מערכת.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div id="mchl08ae9930" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchl08ae9930">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchl08ae9930" class="Name">הפעלת המחשב במצב בטוח</h2>
+                    <ol>
+                        <li>
+                            <p>
+                                יש לבחור בתפריט Apple 
+                                <img src="../SharedGlobalArt/IL_AppleLogo_11.png" alt="" height="30" width="24">
+                                 > ״כיבוי״.
+                            </p>
+                        </li>
+                        <li>
+                            <p>יש להקיש ולהחזיק את כפתור ההפעלה ב-Mac עד להופעת הכיתוב ״טוען אפשרויות הפעלה״.</p>
+                        </li>
+                        <li>
+                            <p>יש לבחור כונן.</p>
+                        </li>
+                        <li>
+                            <p>יש להקיש ולהחזיק את מקש Shift, ואז ללחוץ על ״המשך במצב בטוח״.</p>
+                            <p>המחשב יופעל מחדש באופן אוטומטי.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div id="mchlbcf8b54b" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchlbcf8b54b">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchlbcf8b54b" class="Name">הגדרת כונן ההפעלה המשמש כברירת-מחדל והפעלה מחדש של המחשב</h2>
+                    <ol>
+                        <li>
+                            <p>
+                                יש לבחור בתפריט Apple 
+                                <img src="../SharedGlobalArt/IL_AppleLogo_11.png" alt="" height="30" width="24">
+                                 > ״כיבוי״.
+                            </p>
+                        </li>
+                        <li>
+                            <p>יש להקיש ולהחזיק את כפתור ההפעלה ב-Mac עד להופעת הכיתוב ״טוען אפשרויות הפעלה״.</p>
+                        </li>
+                        <li>
+                            <p>יש לבחור כונן.</p>
+                        </li>
+                        <li>
+                            <p>יש להקיש ולהחזיק את מקש Option, ואז ללחוץ על ״השתמש תמיד״.</p>
+                            <p>המחשב יופעל מחדש באופן אוטומטי.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div id="mchle9d1cb3c" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchle9d1cb3c">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchle9d1cb3c" class="Name">התחברות לאינטרנט באמצעות רשת אלחוטית</h2>
+                    <p>
+                        אם אייקון התפריט ״רשת אלחוטית״ (בפינה השמאלית העליונה של המסך) מכיל סרגל אחד או יותר 
+                        <span class="NoBreak">
+                            <img src="../SharedGlobalArt/IL_Wifi.png" alt="" height="30" width="42">
+                            , 
+                        </span>
+                        האינטרנט האלחוטי מופעל ומחובר לרשת אלחוטית. אם אייקון התפריט ״רשת אלחוטית״ אינו מכיל סרגלים 
+                        <span class="NoBreak">
+                            <img src="../SharedGlobalArt/IL_WiFiNoBars.png" alt="" height="30" width="41">
+                            , 
+                        </span>
+                        האינטרנט האלחוטי מופעל אך אינו מחובר לרשת אלחוטית. אם אייקון התפריט ״רשת אלחוטית״ נחצה באמצעות לוכסן 
+                        <span class="NoBreak">
+                            <img src="../SharedGlobalArt/IL_WifiSlash.png" alt="" height="30" width="34">
+                            , 
+                        </span>
+                        האינטרנט האלחוטי כבוי. יש להפעיל את האינטרנט האלחוטי לפני שניתן יהיה להצטרף לרשת אלחוטית.
+                    </p>
+                </div>
+                <p>ב-Mac, יש לבצע את אחת הפעולות הבאות:</p>
+                <ul>
+                    <li>
+                        <p>
+                            <em>הפעלת רשת אלחוטית: </em>
+                            יש ללחוץ על אייקון התפריט ״רשת אלחוטית״, ולבחור להפעיל רשת אלחוטית.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <em>כיבוי רשת אלחוטית: </em>
+                            יש ללחוץ על אייקון התפריט ״רשת אלחוטית״, ולבחור ״כבה רשת אלחוטית״.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <em>הצטרפות לרשת: </em>
+                            יש ללחוץ על אייקון התפריט ״רשת אלחוטית״, ולבחור רשת. במקרה הצורך, יש להקליד את סיסמת הרשת.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <em>הצטרפות לרשת סגורה: </em>
+                            יש ללחוץ על אייקון התפריט ״רשת אלחוטית״, ולבחור ב״הצטרף לרשת אחרת״. יש להזין את שם הרשת, ובמקרה הצורך גם את סיסמת הרשת.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="mchl3fe49482" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchl3fe49482">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchl3fe49482" class="Name">תיקון התקן האחסון הפנימי</h2>
+                    <p>אם נתקלת בבעיות במחשב או אם הפעלת את המחשב וראית את חלון macOS Recovery, יתכן שעליך לתקן את התקן האחסון הפנימי של המחשב (כגון כונן במצב יציב (SSD)).</p>
+                </div>
+                <ol>
+                    <li>
+                        <p>ביישום ״שחזור״, יש לבחור ב״כלי העזר לכוננים״, ואז ללחוץ על ״המשך״.</p>
+                    </li>
+                    <li>
+                        <p>ביישום ״כלי העזר לכוננים״, יש לבחור ״הצג״ > ״הצג את כל ההתקנים״.</p>
+                    </li>
+                    <li>
+                        <p>
+                            בסרגל הצד, יש לבחור כונן ועל ללחוץ על כפתור העזרה הראשונה 
+                            <span class="NoBreak">
+                                <img src="../SharedGlobalArt/IL_Stethoscope.png" alt="" height="30" width="37">
+                                .
+                            </span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>בתיבת הדו-שיח של העזרה הראשונה, יש ללחוץ על ״הפעל״, ולמלא אחר ההנחיות שעל גבי המסך.</p>
+                    </li>
+                    <li>
+                        <p>כשתהליך העזרה הראשונה מסתיים, יש ללחוץ על ״סיום״.</p>
+                    </li>
+                    <li>
+                        <p>יש לחזור על שלבים 3 עד 5 עבור כל כונן בהתקן האחסון.</p>
+                    </li>
+                    <li>
+                        <p>
+                            בסרגל הצד, יש לבחור גורם מכיל ואז ללחוץ על כפתור העזרה הראשונה 
+                            <span class="NoBreak">
+                                <img src="../SharedGlobalArt/IL_Stethoscope.png" alt="" height="30" width="37">
+                                .
+                            </span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>בתיבת הדו-שיח של העזרה הראשונה, יש ללחוץ על ״הפעל״ ולמלא אחר ההנחיות שעל גבי המסך.</p>
+                    </li>
+                    <li>
+                        <p>כשתהליך העזרה הראשונה מסתיים, יש ללחוץ על ״סיום״.</p>
+                    </li>
+                    <li>
+                        <p>יש לחזור על שלבים 7 עד 9 עבור כל גורם מכיל בהתקן האחסון.</p>
+                    </li>
+                    <li>
+                        <p>
+                            בסרגל הצד, יש לבחור התקן אחסון וללחוץ על כפתור העזרה הראשונה 
+                            <span class="NoBreak">
+                                <img src="../SharedGlobalArt/IL_Stethoscope.png" alt="" height="30" width="37">
+                                .
+                            </span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>בתיבת הדו-שיח של העזרה הראשונה, יש ללחוץ על ״הפעל״ ולמלא אחר ההנחיות שעל גבי המסך.</p>
+                    </li>
+                    <li>
+                        <p>כשתהליך העזרה הראשונה מסתיים, יש ללחוץ על ״סיום״.</p>
+                    </li>
+                </ol>
+                <p>
+                    אם ״כלי העזר לכוננים״ לא יכול לתקן את הכונן שלך, יש לגבות כמה שיותר מידע, ואז למלא אחר ההנחיות ב
+                    <a href="#mchl0e4c30d6" class="xRef Task">מחיקה והתקנה מחדש של macOS</a>
+                    .
+                </p>
+                <p>כדי לחזור אל היישום ״שחזור״, יש לבחור ב״כלי העזר לכוננים״ > ״סיים את כלי העזר לכוננים״.</p>
+            </div>
+        </div>
+        <div id="mchlf4cdcc0f" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchlf4cdcc0f">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchlf4cdcc0f" class="Name">שימוש ב-Time Machine לשחזור המערכת</h2>
+                    <p>אם יצרת בעבר גיבוי Time Machine, יש להשתמש ב״שחזר מגיבוי Time Machine״ כדי לשחזר את כל מה שנמצא במחשב למצבו הקודם.</p>
+                </div>
+                <div class="Alert">
+                    <p class="Important">
+                        <strong>חשוב: </strong>
+                        יש להשתמש בגיבוי Time Machine שלך רק לשחזור מידע במחשב שהוא מקור הגיבוי. אם ברצונך להעביר מידע מה-Mac למחשב חדש, יש לסיים את macOS Recovery, להפעיל מחדש את ה-Mac, ולהשתמש ביישום ״מדריך העברת הנתונים״ ב-macOS.
+                    </p>
+                </div>
+                <ol>
+                    <li>
+                        <p>אם הגיבוי שלך נמצא ב-Time Capsule, עליך לוודא שהתחברת לאינטרנט.</p>
+                    </li>
+                    <li>
+                        <p>ביישום ״שחזור״, יש לבחור ב״שחזר מגיבוי Time Machine״, ואז ללחוץ על ״המשך״.</p>
+                    </li>
+                    <li>
+                        <p>ביישום ״שחזור מערכת״ של Time Machine, יש למלא אחר ההנחיות במסך.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div id="mchl57249f89" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchl57249f89">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchl57249f89" class="Name">התקנה מחדש של macOS</h2>
+                    <p>בנסיבות מסוימות, יתכן שיהיה עליך להתקין מחדש את macOS. באפשרותך להתקין מחדש את macOS בלי לשנות את הקבצים ואת הגדרות המשתמש שלך.</p>
+                </div>
+                <ol>
+                    <li>
+                        <p>עליך לוודא שהתחברת לאינטרנט.</p>
+                    </li>
+                    <li>
+                        <p>ביישום ״שחזור״, יש ללחוץ על ״התקנה מחדש של macOS״, ואז ללחוץ על ״המשך״.</p>
+                        <div class="Alert">
+                            <p class="Important">
+                                <strong>חשוב: </strong>
+                                 בחלונית שבה בחרת כונן, יש לבחור את כונן ה-macOS הנוכחי (ברוב המקרים, זהו הכונן הזמין היחיד).
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <p>יש למלא אחר ההנחיות במסך.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div id="mchl0e4c30d6" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchl0e4c30d6">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchl0e4c30d6" class="Name">מחיקה והתקנה מחדש של macOS</h2>
+                    <p>אם מחקת והתקנת מחדש את macOS, חשבונות המשתמש שלך, הגדרות הרשת וכל הקבצים והתיקיות שב-Mac יימחקו. לפני מחיקת ה-macOS, יש לנסות להתחבר שוב למערכת ולבצע את ההנחיות שלמטה, ואז לגבות את כל הקבצים שברצונך לשמור על-ידי העתקתם לכונן אחר או להתקן אחסון. עליך גם לרשום את הגדרות הרשת שלך מהעדפות ״רשת״ כדי שיהיה קל יותר להתחבר שוב אחרי ההתקנה מחדש של ה-macOS.</p>
+                </div>
+                <ol>
+                    <li>
+                        <p>עליך לוודא שהתחברת לאינטרנט.</p>
+                    </li>
+                    <li>
+                        <p>ביישום ״שחזור״, יש ללחוץ על ״כלי העזר לכוננים״, ואז ללחוץ על ״המשך״.</p>
+                    </li>
+                    <li>
+                        <p>ב״כלי העזר לכוננים״, יש לבחור את הכונן שברצונך למחוק בסרגל הצד, וללחוץ על כפתור המחיקה בסרגל הכלים.</p>
+                    </li>
+                    <li>
+                        <p>יש להזין שם עבור כל כונן בשדה ״שם״.</p>
+                    </li>
+                    <li>
+                        <p>יש לבחור APFS מהתפריט הקופצני ״תבנית״, וללחוץ על ״מחיקת קבוצות אמצעי אחסון״.</p>
+                    </li>
+                    <li>
+                        <p>כאשר התהליך מסתיים, יש ללחוץ על ״סיום״ ואז לבחור ״כלי העזר לכוננים״ > ״סיים את כלי העזר לכוננים״.</p>
+                    </li>
+                    <li>
+                        <p>ביישום ״שחזור״, יש לבחור ב״התקנה מחדש של macOS״, ללחוץ על ״המשך״ ואז למלא אחר ההנחיות במסך.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div id="mchl9b13cbdc" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchl9b13cbdc">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchl9b13cbdc" class="Name">הגדרת מדיניות האבטחה</h2>
+                    <ol>
+                        <li>
+                            <p>ביישום ״שחזור״, יש לבחור ב״כלי העזר לכוננים״ > ״כלי העזר לאבטחת ההפעלה״.</p>
+                        </li>
+                        <li>
+                            <p>יש לבחור במערכת שברצונך להשתמש בה להגדרת מדיניות האבטחה.</p>
+                        </li>
+                        <li>
+                            <p>אם הכונן מוצפן באמצעות FileVault, יש ללחוץ על ״בטל נעילה״, להזין את הסיסמה וללחוץ על ״בטל נעילה״.</p>
+                        </li>
+                        <li>
+                            <p>יש ללחוץ על ״מדיניות האבטחה״.</p>
+                        </li>
+                        <li>
+                            <p>יש לעיין באפשרויות האבטחה הבאות:</p>
+                            <ul>
+                                <li>
+                                    <p>
+                                        <em>אבטחה מלאה: </em>
+                                        אפשרות זו מבטיחה שרק מערכת ההפעלה הנוכחית, או תוכנת מערכת הפעלה חתומה ש-Apple נותנת בה אמון כעת, יכולה לפעול. מצב זה דורש חיבור לאינטרנט בזמן התקנת התוכנה.
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>
+                                        <em>אבטחה מופחתת: </em>
+                                         אפשרות זו מאפשרת לכל גירסה של תוכנת מערכת הפעלה חתומה ש-Apple אי פעם נתנה בה אמון לפעול.
+                                    </p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>במידת הצורך, יש לבחור ״אבטחה מופחתת״, להזין את שם המשתמש והסיסמה של מנהל המערכת ולבצע את אחת הפעולות הבאות:</p>
+                            <ul>
+                                <li>
+                                    <p>כדי לאפשר התקנה של תוכנה המשמשת להרחבות ליבה, יש לבחור בתיבת הסימון ״אפשר ניהול משתמש של הרחבות ליבה ממפתחים מזוהים״.</p>
+                                </li>
+                                <li>
+                                    <p>כדי לאפשר ניהול מרחוק של הרחבות ליבה ועדכוני תוכנה של דור קודם באמצעות פתרון ניהול מכשירים ניידים (MDM) ב-Mac זה, יש לבחור בתיבת הסימון ״אפשר ניהול מרוחק של הרחבות ליבה ועדכוני תוכנה אוטומטיים״.</p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>יש ללחוץ על ״אישור״.</p>
+                        </li>
+                        <li>
+                            <p>יש להפעיל מחדש את ה-Mac כדי להחיל את השינויים.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div id="mchl6e3b9225" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchl6e3b9225">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchl6e3b9225" class="Name">שימוש ב״שיתוף כונן״ להעברת קבצים בין שני מחשבי Mac</h2>
+                    <p>ניתן להעביר קבצים בין Mac שאותחל בתוך macOS Recovery ו-Mac אחר על-ידי שיתוף כונן וחיבור שני המחשבים באמצעות כבל USB, כבל USB-C או כבל Thunderbolt.</p>
+                </div>
+                <ol>
+                    <li>
+                        <p>יש לחבר בין שני המחשבים באמצעות כבל USB, כבל USB-C או כבל Thunderbolt.</p>
+                    </li>
+                    <li>
+                        <p>ביישום ״שחזור״, יש לבחור ב״כלי עזר״ > ״שיתוף כונן״.</p>
+                    </li>
+                    <li>
+                        <p>יש לבחור את הכונן שברצונך לשתף, ואז ללחוץ על ״התחל בשיתוף״.</p>
+                    </li>
+                    <li>
+                        <p>ב-Mac השני, יש לפתוח את החלון Finder, ואז ללחוץ על ״רשת״ בסרגל הצד מתחת ל״מיקומים״.</p>
+                    </li>
+                    <li>
+                        <p>בחלון ״רשת״, יש ללחוץ פעמיים על ה-Mac שהכונן שלו שותף, ללחוץ על ״התחבר כ״, לבחור ״אורח״ בחלון ״התחבר כ״ ואז ללחוץ על ״התחבר״.</p>
+                    </li>
+                    <li>
+                        <p>לאחר מכן יש להעביר את הקבצים.</p>
+                    </li>
+                    <li>
+                        <p>עם סיום העברת הקבצים, יש להוציא את אמצעי האחסון מה-Mac השני.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div id="mchl2a21e30c" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchl2a21e30c">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchl2a21e30c" class="Name">הצגת דו״ח פעילות השחזור</h2>
+                    <p>דו״ח הפעילות כולל הודעות שנרשמו על-ידי macOS Recovery. באפשרותך לציין את סוגי ההודעות שברצונך להציג, לסמן הודעות על-מנת לחפש מלל ספציפי ולשמור את דו״ח הפעילות בקובץ.</p>
+                </div>
+                <ol>
+                    <li>
+                        <p>ביישום ״שחזור״, יש לבחור ״חלון״ > ״דו״ח שחזור״.</p>
+                    </li>
+                    <li>
+                        <p>יש ללחוץ על התפריט הקופצני ״רמת פירוט״, ולבחור אילו הודעות להציג:</p>
+                        <ul>
+                            <li>
+                                <p>
+                                    <em>הצג שגיאות בלבד: </em>
+                                    יש לבחור אפשרות זו כדי להציג הודעות שגיאה בלבד.
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <em>הצג שגיאות והתקדמות: </em>
+                                    יש לבחור באפשרות זו כדי להציג הודעות שגיאה והודעות התקדמות.
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <em>הצג את כל הדו״חות: </em>
+                                    יש לבחור אפשרות זו כדי להציג את כל ההודעות.
+                                </p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>כדי לסנן הודעות, יש להזין את המלל שברצונך לחפש בשדה הסינון.</p>
+                    </li>
+                    <li>
+                        <p>כדי לשמור את דו״ח הפעילות, יש ללחוץ על כפתור השמירה ולבחור מיקום עבור הקובץ, וללחוץ על ״שמור״.</p>
+                    </li>
+                    <li>
+                        <p>
+                            אם סיימת לעיין בדו״ח הפעילות, יש ללחוץ על כפתור הסגירה 
+                            <img src="../SharedGlobalArt/IL_XMarkBlackCircleFillRed.png" alt="" height="30" width="30">
+                             בפינה הימנית העליונה של החלון.
+                        </p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div id="mchl4ee3f192" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchl4ee3f192">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchl4ee3f192" class="Name">יצירת קובץ אבחון שחזור</h2>
+                    <p>אם הגשת דו״ח בעיה באמצעות Feedback Assistant, יתכן שתופיע בקשה לספק דו״ח אבחון שחזור. ניתן ליצור את הדו״ח ולשמור אותו בהתקן אחסון חיצוני.</p>
+                </div>
+                <ol>
+                    <li>
+                        <p>יש לחבר התקן אחסון חיצוני ל-Mac.</p>
+                    </li>
+                    <li>
+                        <p>יש להקיש על Control-Option-Shift-Command-Period.</p>
+                    </li>
+                    <li>
+                        <p>אחרי שהמסך מהבהב, יש להמתין כמה רגעים עד להופעת תיבת דו-שיח.</p>
+                    </li>
+                    <li>
+                        <p>יש להשתמש בתיבת הדו-שיח לשמירת קובץ אבחון השחזור במקום כלשהו בהתקן האחסון החיצוני.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div id="mchlb7e93c86" class="Task">
+            <div class="TaskBody" role="region" aria-hidden="false" id="aria-mchlb7e93c86">
+                <div class="heading-nobreak">
+                    <h2 aria-controls="aria-mchlb7e93c86" class="Name">סיום macOS Recovery</h2>
+                    <p>ה-Mac יופעל מחדש באופן אוטומטי בעת שחזור המערכת מ-Time Machine או התקנה מחדש של macOS. במקרים אחרים, יהיה עליך לסיים את macOS Recovery באופן ידני (לדוגמה, אם ברצונך לגבות את הקבצים לפני ההתקנה מחדש של ה-macOS, או אם הרגע שינית הגדרה באמצעות ״כלי העזר לאבטחת ההפעלה״).</p>
+                </div>
+                <p>ב-Mac, יש לבצע את אחת הפעולות הבאות:</p>
+                <ul>
+                    <li>
+                        <p>
+                            <em>הפעלה מחדש של ה-Mac: </em>
+                            יש לבחור בתפריט Apple 
+                            <img src="../SharedGlobalArt/IL_AppleLogo_11.png" alt="" height="30" width="24">
+                             > ״הפעל מחדש״.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <em>בחירת כונן הפעלה אחר לפני הפעלה מחדש של ה-Mac: </em>
+                            יש לבחור בתפריט Apple 
+                            <img src="../SharedGlobalArt/IL_AppleLogo_11.png" alt="" height="30" width="24">
+                             > ״כונן הפעלה״, לבחור כונן הפעלה ואז ללחוץ על ״הפעל מחדש״.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <em>כיבוי ה-Mac: </em>
+                            יש לבחור בתפריט Apple 
+                            <img src="../SharedGlobalArt/IL_AppleLogo_11.png" alt="" height="30" width="24">
+                             > ״כיבוי״.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <main></main>
+    <footer>
+        <p>© 2021 Apple Inc. כל הזכויות שמורות.</p>
+    </footer>
+    <script type="text/javascript" src="../js/static.js"></script>
+</body>
+</html>
+

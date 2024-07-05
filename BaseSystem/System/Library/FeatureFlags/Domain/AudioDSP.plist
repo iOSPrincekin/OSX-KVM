@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SKSpeechAnalysis</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>Use_Carpzipan_AUVP</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>apac</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>Description</key>
+		<string>New APAC</string>
+	</dict>
+</dict>
+</plist>

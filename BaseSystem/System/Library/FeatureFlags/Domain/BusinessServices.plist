@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>quickreply</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Quick Reply</string>
+		<key>Description</key>
+		<string>Enable Quick Reply</string>
+	</dict>
+	<key>listpicker</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>List Picker</string>
+		<key>Description</key>
+		<string>Enable Modal Presentation of List Picker</string>
+	</dict>
+	<key>timepicker</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Time Picker</string>
+		<key>Description</key>
+		<string>Enable Modal Presentation of Time Picker</string>
+	</dict>
+	<key>dynamic</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Nested List Picker</string>
+		<key>Description</key>
+		<string>Enable Modal Presentation of Nested List Picker &amp; Forms</string>
+	</dict>
+</dict>
+</plist>

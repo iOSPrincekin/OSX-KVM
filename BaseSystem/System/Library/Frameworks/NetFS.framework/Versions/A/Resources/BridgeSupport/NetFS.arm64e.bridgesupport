@@ -1,0 +1,123 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='1.0'>
+<struct name='NetFSInterface' type64='{_NetFSInterface=&quot;_interface&quot;^v&quot;_factoryID&quot;^{__CFUUID}&quot;_refCount&quot;I}'/>
+<struct name='NetFSMountInterface_V1' type64='{NetFSMountInterface_V1=&quot;_reserved&quot;^v&quot;QueryInterface&quot;^?&quot;AddRef&quot;^?&quot;Release&quot;^?&quot;CreateSessionRef&quot;^?&quot;GetServerInfo&quot;^?&quot;ParseURL&quot;^?&quot;CreateURL&quot;^?&quot;OpenSession&quot;^?&quot;EnumerateShares&quot;^?&quot;Mount&quot;^?&quot;Cancel&quot;^?&quot;CloseSession&quot;^?&quot;GetMountInfo&quot;^?}'/>
+<string_constant name='kNAUIOptionAllowUI' value='AllowUI'/>
+<string_constant name='kNAUIOptionForceUI' value='ForceUI'/>
+<string_constant name='kNAUIOptionKey' value='UIOption'/>
+<string_constant name='kNAUIOptionNoUI' value='NoUI'/>
+<string_constant name='kNetFSAccessRightsKey' value='AccessRights'/>
+<string_constant name='kNetFSAllowLoopbackKey' value='AllowLoopback'/>
+<string_constant name='kNetFSAllowSubMountsKey' value='AllowSubMounts'/>
+<string_constant name='kNetFSAlreadyMountedKey' value='AlreadyMounted'/>
+<string_constant name='kNetFSAlternatePortKey' value='AlternatePort'/>
+<string_constant name='kNetFSAuthenticationInfoKey' value='AuthenticationInfo'/>
+<string_constant name='kNetFSAuthorityParamsKey' value='AuthorityParams'/>
+<string_constant name='kNetFSChangePasswordKey' value='ChangePassword'/>
+<string_constant name='kNetFSConnectedAsGuestKey' value='MountedByGuest'/>
+<string_constant name='kNetFSConnectedAsUserKey' value='MountedByUser'/>
+<string_constant name='kNetFSConnectedMultiUserKey' value='ConnectedMultiUser'/>
+<string_constant name='kNetFSConnectedWithAuthenticationInfoKey' value='ConnectedWithAuthenticationInfo'/>
+<string_constant name='kNetFSDisplayNameKey' value='DisplayName'/>
+<string_constant name='kNetFSForceNewSessionKey' value='ForceNewSession'/>
+<string_constant name='kNetFSGetAccessRightsKey' value='GetAccessRights'/>
+<string_constant name='kNetFSGuestOnlyKey' value='GuestOnly'/>
+<string_constant name='kNetFSHasPasswordKey' value='HasPassword'/>
+<string_constant name='kNetFSHostKey' value='Host'/>
+<string_constant name='kNetFSIsHiddenKey' value='IsHidden'/>
+<string_constant name='kNetFSMechTypesSupportedKey' value='MechTypesSupported'/>
+<string_constant name='kNetFSMountAtMountDirKey' value='MountAtMountDir'/>
+<string_constant name='kNetFSMountFlagsKey' value='MountFlags'/>
+<string_constant name='kNetFSMountPathKey' value='MountPath'/>
+<string_constant name='kNetFSMountedByGuestKey' value='MountedByGuest'/>
+<string_constant name='kNetFSMountedByKerberosKey' value='MountedByKerberos'/>
+<string_constant name='kNetFSMountedByUserKey' value='MountedByUser'/>
+<string_constant name='kNetFSMountedMultiUserKey' value='MountedMultiUser'/>
+<string_constant name='kNetFSMountedURLKey' value='MountedURL'/>
+<string_constant name='kNetFSMountedWithAuthenticationInfoKey' value='MountedWithAuthenticationInfo'/>
+<string_constant name='kNetFSNoMountAuthenticationKey' value='NoMountAuthentication'/>
+<string_constant name='kNetFSNoUserPreferencesKey' value='NoUserPreferences'/>
+<string_constant name='kNetFSOpenURLMountKey' value='OpenURLMount'/>
+<string_constant name='kNetFSPasswordKey' value='Password'/>
+<string_constant name='kNetFSPathKey' value='Path'/>
+<string_constant name='kNetFSPrinterShareKey' value='PrinterShare'/>
+<string_constant name='kNetFSSchemeKey' value='Scheme'/>
+<string_constant name='kNetFSServerDisplayNameKey' value='ServerDisplayName'/>
+<string_constant name='kNetFSSoftMountKey' value='SoftMount'/>
+<string_constant name='kNetFSSupportsChangePasswordKey' value='SupportsChangePassword'/>
+<string_constant name='kNetFSSupportsGuestKey' value='SupportsGuest'/>
+<string_constant name='kNetFSSupportsKerberosKey' value='SupportsKerberos'/>
+<string_constant name='kNetFSUseAuthenticationInfoKey' value='UseAuthenticationInfo'/>
+<string_constant name='kNetFSUseGuestKey' value='Guest'/>
+<string_constant name='kNetFSUseKerberosKey' value='Kerberos'/>
+<string_constant name='kNetFSUserNameKey' value='UserName'/>
+<enum name='ENETFSACCOUNTRESTRICTED' value64='-5999'/>
+<enum name='ENETFSNOAUTHMECHSUPP' value64='-5997'/>
+<enum name='ENETFSNOPROTOVERSSUPP' value64='-5996'/>
+<enum name='ENETFSNOSHARESAVAIL' value64='-5998'/>
+<enum name='ENETFSPWDNEEDSCHANGE' value64='-5045'/>
+<enum name='ENETFSPWDPOLICY' value64='-5046'/>
+<function name='NetFSCFStringtoCString'>
+<arg type64='^{__CFString=}'/>
+<retval type64='*'/>
+</function>
+<function name='NetFSCopyURLForRemountingVolume'>
+<arg type64='^{__CFURL=}'/>
+<retval already_retained='true' type64='^{__CFURL=}'/>
+</function>
+<function name='NetFSInterface_AddRef'>
+<arg type64='^v'/>
+<retval type64='I'/>
+</function>
+<function name='NetFSInterface_Release'>
+<arg type64='^v'/>
+<retval type64='I'/>
+</function>
+<function name='NetFSMountURLAsync'>
+<arg type64='^{__CFURL=}'/>
+<arg type64='^{__CFURL=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<arg type64='^^v'/>
+<arg type64='@'/>
+<arg function_pointer='true' type64='@?'>
+<arg type64='i'/>
+<arg type64='^v'/>
+<arg type64='^{__CFArray=}'/>
+<retval type64='v'/>
+</arg>
+<retval type64='i'/>
+</function>
+<function name='NetFSMountURLCancel'>
+<arg type64='^v'/>
+<retval type64='i'/>
+</function>
+<function name='NetFSMountURLProbe'>
+<arg type64='^{__CFString=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='NetFSMountURLSync'>
+<arg type64='^{__CFURL=}'/>
+<arg type64='^{__CFURL=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<arg type64='^^{__CFArray}'/>
+<retval type64='i'/>
+</function>
+<function name='NetFSQueryInterface'>
+<arg type64='^v'/>
+<arg type64='{_REFIID=CCCCCCCCCCCCCCCC}'/>
+<arg type64='^^v'/>
+<retval type64='i'/>
+</function>
+<function name='NetFS_CreateInterface'>
+<arg type64='^{__CFUUID=}'/>
+<arg type64='^v'/>
+<retval type64='^{_NetFSInterface=^v^{__CFUUID}I}'/>
+</function>
+</signatures>

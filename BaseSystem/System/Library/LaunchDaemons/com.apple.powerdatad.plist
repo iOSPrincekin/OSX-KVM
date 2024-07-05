@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnableTransactions</key>
+	<true/>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>Label</key>
+	<string>com.apple.powerdatad</string>
+	<key>UserName</key>
+	<string>root</string>
+	<key>LaunchEvents</key>
+	<dict>
+		<key>com.apple.xpc.activity</key>
+		<dict>
+			<key>com.apple.powerdatad.3hourlyTask</key>
+			<dict>
+				<key>Priority</key>
+				<string>Maintenance</string>
+				<key>Interval</key>
+				<integer>10800</integer>
+				<key>AllowBattery</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+	<key>MachServices</key>
+	<dict>
+		<key>com.apple.powerdatad</key>
+		<true/>
+	</dict>
+	<key>Program</key>
+	<string>/usr/libexec/powerdatad</string>
+	<key>EnablePressuredExit</key>
+	<true/>
+</dict>
+</plist>

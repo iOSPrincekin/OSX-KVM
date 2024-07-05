@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>query_api</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>DisplayName</key>
+		<string>Query Captive Portal API URL</string>
+		<key>Description</key>
+		<string>When a Captive Portal API URL is present, query it rather than using probes.</string>
+	</dict>
+</dict>
+</plist>

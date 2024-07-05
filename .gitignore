@@ -12,3 +12,6 @@ OVMF_VARS-1024x768.fd
 OVMF_VARS*.fd
 OpenCore-Catalina/EFI/OC/Resources/
 *.log
+BaseSystem/System/Library/CoreServices/CoreGlyphs.bundle/Contents/Resources/Assets.car
+BaseSystem/System/Library/KernelCollections/BootKernelExtensions.kc
+BaseSystem/System/Library/Frameworks/WebKit.framework/Versions/A/Frameworks/WebCore.framework/Versions/A/WebCore

@@ -1,0 +1,54 @@
+aggregatectl OPTIONS - a utility to send data to the AggregateDictionary server
+
+General:
+--name NAME - look up the service named NAME and use it as the aggregation 
+    server instead of the default server.
+
+Committing data:
+--commit - tell the server to flush the log to disk before exiting
+--checkpoint - tell the server to checkpoint the log to the db before exiting
+--setCommitInterval INTERVAL - tell the server to automatically commit after
+    receiving INTERVAL messages. Set to <0 to turn off autocommit.
+--getCommitInterval - prints the number of messages between automatically
+    committing data to the database
+
+Logging:
+--setLogsMessages (yes|no) - turns on/off logging server activity to syslog
+--getLogsMessages - displays whether the server is logging activity to syslog
+
+Mutating data:
+--clearScalar KEY - clears the scalar key KEY
+--setScalar KEY:VALUE - sets the integer value VALUE for the scalar key KEY
+--addScalar KEY:VALUE - adds the integer value VALUE to the scalar key KEY
+--clearDistribution KEY - clears the distribution key KEY
+--setDistribution KEY:VALUE - sets the double value VALUE as the initial value
+    for the distribution key KEY
+--pushDistribution KEY:VALUE - pushes the double value VALUE onto the
+    distribution key KEY
+--loop N - perform any of the scalar/distribution operations in a loop N times
+--time - output the time spent executing mutators
+
+Reading data:
+--dump - prints out all data in database
+--scalarsWithPrefix PREFIX - prints out all scalars in database with a
+    particular prefix
+--distributionsWithPrefix PREFIX - prints out all distributions in database with
+    a particular prefix
+
+Examples:
+aggregatectl --clearScalar com.example.testKey --addScalar com.apple.testKey:1
+  Clears com.apple.testKey, then adds 1 to com.apple.testKey.
+
+aggregatectl --addScalar com.apple.testKeyA:1 --addScalar com.apple.testKeyB:2
+    --loop 100 --commit --time
+  In a loop that lasts 100 iterations, adds 1 to com.apple.testKeyA, and then 2
+  to com.apple.testKeyB, then commits the changes and prints the time spent in
+  sending the messages. The final value of com.apple.testKeyA will be
+  incremented by 100, and the final value of com.apple.testKeyB will be
+  incremented by 200.
+
+aggregatectl --scalarsWithPrefix app
+  List all scalars in the database with the prefix "app".
+
+aggregatectl --scalarsWithPrefix app --days 3
+  List scalar data in the database with the prefix "app" for the past 3 days (defaults to 7).

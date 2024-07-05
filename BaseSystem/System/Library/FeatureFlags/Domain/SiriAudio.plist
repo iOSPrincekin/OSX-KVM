@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>app_training_disambiguation</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Winter2020</string>
+		</dict>
+	</dict>
+	<key>app_selection</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Spring2021</string>
+		</dict>
+	</dict>
+	<key>app_selection_tvOS</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>Hidden</key>
+		<false/>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Spring2021</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

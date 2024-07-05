@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BuildMachineOSBuild</key>
+	<string>20A241115</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array/>
+	<key>CFBundleExecutable</key>
+	<string>Install</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.apple.installframework</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string>700</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1000</string>
+	<key>DTCompiler</key>
+	<string>com.apple.compilers.llvm.clang.1_0</string>
+	<key>DTPlatformBuild</key>
+	<string>12E6178j</string>
+	<key>DTPlatformName</key>
+	<string>macosx</string>
+	<key>DTPlatformVersion</key>
+	<string>11.6</string>
+	<key>DTSDKBuild</key>
+	<string>20G162c</string>
+	<key>DTSDKName</key>
+	<string>macosx11.6internal</string>
+	<key>DTXcode</key>
+	<string>1240</string>
+	<key>DTXcodeBuild</key>
+	<string>12E6178j</string>
+	<key>IFLanguageNamesOrder</key>
+	<array>
+		<string>en</string>
+		<string>ja</string>
+		<string>fr</string>
+		<string>de</string>
+		<string>es</string>
+		<string>it</string>
+		<string>pt</string>
+		<string>pt_PT</string>
+		<string>nl</string>
+		<string>sv</string>
+		<string>no</string>
+		<string>da</string>
+		<string>fi</string>
+		<string>ru</string>
+		<string>pl</string>
+		<string>zh_CN</string>
+		<string>zh_TW</string>
+		<string>ko</string>
+	</array>
+	<key>IFSupportedFSTypes</key>
+	<array>
+		<string>Journaled HFS+</string>
+		<string>Case-sensitive Journaled HFS+</string>
+		<string>Case-sensitive HFS+</string>
+		<string>HFS+</string>
+		<string>UFS</string>
+	</array>
+	<key>LSMinimumSystemVersion</key>
+	<string>11.6</string>
+</dict>
+</plist>

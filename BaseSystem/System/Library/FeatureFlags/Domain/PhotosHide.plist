@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AuroraSuggestion</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>Radar</key>
+		<string>55956650</string>
+	</dict>
+	<key>SemanticDevelopment</key>
+	<dict>
+		<key>TargetRelease</key>
+		<string>Fall2020</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Radar</key>
+		<string>56157909</string>
+	</dict>
+</dict>
+</plist>

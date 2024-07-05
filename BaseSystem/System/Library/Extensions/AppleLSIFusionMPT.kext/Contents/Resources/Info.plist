@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>AppleLSIFusionSCSI</key>
+		<dict>
+			<key>CFBundleIdentifierKernel</key>
+			<string>com.apple.iokit.IOSCSIParallelFamily</string>
+			<key>IOClass</key>
+			<string>IOUserSCSIParallelInterfaceController</string>
+			<key>IOUserClass</key>
+			<string>AppleLSIFusionSCSI</string>
+			<key>IOUserServerName</key>
+			<string>com.apple.DriverKit.AppleLSIFusionSCSI</string>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+			<key>IONameMatch</key>
+			<array>
+				<string>LSILogic,scsi</string>
+				<string>pci1000,30</string>
+			</array>
+			<key>IOUnitName</key>
+			<string>disk</string>
+			<key>Physical Interconnect</key>
+			<string>SCSI Parallel Interface</string>
+			<key>Physical Interconnect Location</key>
+			<string>External</string>
+			<key>Read Time Out Duration</key>
+			<integer>30000</integer>
+			<key>Write Time Out Duration</key>
+			<integer>30000</integer>
+		</dict>
+		<key>AppleLSIFusionFC</key>
+		<dict>
+			<key>CFBundleIdentifierKernel</key>
+			<string>com.apple.iokit.IOSCSIParallelFamily</string>
+			<key>IOClass</key>
+			<string>IOUserSCSIParallelInterfaceController</string>
+			<key>IOUserClass</key>
+			<string>AppleLSIFusionFC</string>
+			<key>IOUserServerName</key>
+			<string>com.apple.DriverKit.AppleLSIFusionFC</string>
+			<key>IOPCITunnelCompatible</key>
+			<true/>
+			<key>IONameMatch</key>
+			<array>
+				<string>IntraServer,fc</string>
+				<string>pci1000,626</string>
+				<string>pci1000,622</string>
+				<string>pci1000,646</string>
+			</array>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+			<key>IOUnitName</key>
+			<string>disk</string>
+			<key>Physical Interconnect</key>
+			<string>Fibre Channel Interface</string>
+			<key>Physical Interconnect Location</key>
+			<string>External</string>
+			<key>Read Time Out Duration</key>
+			<integer>30000</integer>
+			<key>Write Time Out Duration</key>
+			<integer>30000</integer>
+		</dict>
+	</dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOSCSIParallelFamily</key>
+		<string>1.3.7</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>DriverKit</string>
+	<key>OSBundleUsageDescription</key>
+	<string></string>
+</dict>
+</plist>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>next_gen_lm</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>next_gen_tr</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>next_gen_td</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>always_run_v2</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+</dict>
+</plist>

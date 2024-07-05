@@ -1,0 +1,16 @@
+;;
+;; SoftwareUpdate framework - sandbox profile
+;; Copyright (c) 2014 Apple Inc. All Rights reserved.
+;;
+;; WARNING: The sandbox rules in this file currently constitute
+;; Apple System Private Interface and are subject to change at any time and
+;; without notice. The contents of this file are also auto-generated and not
+;; user editable; it may be overwritten at any time.
+;;
+(if (entitlement "com.apple.private.softwareupdate.spi")
+   (allow mach-lookup (global-name "com.apple.softwareupdated")
+                      (global-name "com.apple.softwareupdated.SUOSUScheduler")
+                      (global-name "com.apple.sumaccontroller"))
+
+   (allow file-read* (literal "/Library/Preferences/com.apple.SoftwareUpdate.plist"))
+)

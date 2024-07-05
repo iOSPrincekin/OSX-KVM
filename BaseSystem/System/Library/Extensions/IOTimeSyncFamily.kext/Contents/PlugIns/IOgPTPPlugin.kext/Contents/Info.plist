@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BuildMachineOSBuild</key>
+	<string>20A241115</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>IOgPTPPlugin</string>
+	<key>CFBundleGetInfoString</key>
+	<string>IOgPTPPlugin 985.2, Copyright © 2010-2021 Apple Inc. All rights reserved.</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.apple.plugin.IOgPTPPlugin</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>IOgPTPPlugin</string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string>985.2</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>985.2</string>
+	<key>DTCompiler</key>
+	<string>com.apple.compilers.llvm.clang.1_0</string>
+	<key>DTPlatformBuild</key>
+	<string>12E6178j</string>
+	<key>DTPlatformName</key>
+	<string>macosx</string>
+	<key>DTPlatformVersion</key>
+	<string>11.6</string>
+	<key>DTSDKBuild</key>
+	<string>20G162c</string>
+	<key>DTSDKName</key>
+	<string>macosx11.6internal</string>
+	<key>DTXcode</key>
+	<string>1240</string>
+	<key>DTXcodeBuild</key>
+	<string>12E6178j</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>IOTimeSyncgPTPManager</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.plugin.IOgPTPPlugin</string>
+			<key>IOClass</key>
+			<string>IOTimeSyncgPTPManager</string>
+			<key>IOMatchCategory</key>
+			<string>IOTimeSyncgPTPManager</string>
+			<key>IOProbeScore</key>
+			<integer>0</integer>
+			<key>IOPropertyMatch</key>
+			<dict>
+				<key>WantsgPTPServices</key>
+				<true/>
+			</dict>
+			<key>IOProviderClass</key>
+			<string>IOTimeSyncClockManager</string>
+			<key>IOUserClientClass</key>
+			<string>IOTimeSyncgPTPManagerUserClient</string>
+			<key>TemperatureSensor</key>
+			<dict>
+				<key>MacBookAir10,1</key>
+				<string>PMU tdev5</string>
+				<key>MacBookPro17,1</key>
+				<string>PMU tdev7</string>
+				<key>Macmini9,1</key>
+				<string>PMU tdev8</string>
+				<key>iMac21,1</key>
+				<string>PMU tdev8</string>
+				<key>iMac21,2</key>
+				<string>PMU tdev8</string>
+			</dict>
+		</dict>
+	</dict>
+	<key>LSMinimumSystemVersion</key>
+	<string>11.6</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>IOgPTPPlugin 985.2, Copyright © 2010-2021 Apple Inc. All rights reserved.</string>
+	<key>OSBundleCompatibleVersion</key>
+	<string>625.1</string>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOHIDFamily</key>
+		<string>1.4</string>
+		<key>com.apple.iokit.IONetworkingFamily</key>
+		<string>2.0</string>
+		<key>com.apple.iokit.IOSkywalkFamily</key>
+		<string>1.0</string>
+		<key>com.apple.iokit.IOTimeSyncFamily</key>
+		<string>500.10</string>
+		<key>com.apple.kec.Libm</key>
+		<string>1.0</string>
+		<key>com.apple.kpi.bsd</key>
+		<string>10.0.0d1</string>
+		<key>com.apple.kpi.iokit</key>
+		<string>10.0.0d1</string>
+		<key>com.apple.kpi.libkern</key>
+		<string>10.0.0d1</string>
+		<key>com.apple.kpi.mach</key>
+		<string>10.0.0d1</string>
+		<key>com.apple.kpi.private</key>
+		<string>16.0</string>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,182 @@
+;;; This profile contains the rules necessary to make BlastDoor as close to
+;;; compute-only as possible, while still remaining functional.
+;;;
+;;; For all platforms: /System/Library/PrivateFrameworks/MessagesBlastDoorSupport.framework/XPCServices/MessagesBlastDoorService.xpc/MessagesBlastDoorService
+
+(version 1)
+
+;;; -------------------------------------------------------------------------------------------- ;;;
+;;; Basic Rules
+;;; -------------------------------------------------------------------------------------------- ;;;
+
+;; Deny all default rules.
+(deny default)
+(deny file-map-executable process-info* nvram*)
+(deny dynamic-code-generation)
+
+;; Rules copied from system.sb. Ones that we've deemed overly permissive
+;; or unnecessary for BlastDoor have been removed.
+
+;; Allow read access to standard system paths.
+(allow file-read*
+       (require-all (file-mode #o0004)
+                    (require-any (subpath "/System")
+                                 (subpath "/usr/lib")
+                                 (subpath "/usr/share")
+                                 (subpath "/private/var/db/dyld"))))
+
+(allow file-map-executable
+       (subpath "/System/Library/CoreServices/RawCamera.bundle")
+       (subpath "/usr/lib")
+       (subpath "/System/Library/Frameworks"))
+
+(allow file-test-existence (subpath "/System"))
+
+(allow file-read-metadata
+       (literal "/etc")
+       (literal "/tmp")
+       (literal "/var")
+       (literal "/private/etc/localtime"))
+
+;; Allow access to standard special files.
+(allow file-read*
+       (literal "/dev/random")
+       (literal "/dev/urandom"))
+
+(allow file-read* file-write-data
+       (literal "/dev/null")
+       (literal "/dev/zero"))
+
+(allow file-read* file-write-data file-ioctl
+       (literal "/dev/dtracehelper"))
+
+;; TODO: Don't allow core dumps to be written out unless this is on a dev
+;; fused device?
+(allow file-write*
+       (require-all (regex #"^/cores/")
+                    (require-not (file-mode 0))))
+
+;; Allow IPC to standard system agents.
+(allow mach-lookup
+       (global-name "com.apple.diagnosticd")
+       (global-name "com.apple.logd")
+       (global-name "com.apple.system.DirectoryService.libinfo_v1")
+       (global-name "com.apple.system.logger")
+       (global-name "com.apple.system.notification_center"))
+
+;; Allow mostly harmless operations.
+(allow signal process-info-dirtycontrol process-info-pidinfo
+       (target self))
+
+;; Temporarily allow sysctl-read with reporting to see if this is
+;; used for anything.
+(allow (with report) sysctl-read)
+
+;; We don't need to post any darwin notifications.
+(deny darwin-notification-post)
+
+;; We shouldn't allow any other file operations not covered under
+;; the default of deny above.
+(deny file-clone file-link)
+
+;; Don't deny file-test-existence: <rdar://problem/59611011>
+;; (deny file-test-existence)
+
+;; Don't allow access to any IOKit properties.
+(deny iokit-get-properties)
+
+(deny mach-cross-domain-lookup)
+
+;; Don't allow BlastDoor to spawn any other XPC services other than
+;; ones that we can intentionally whitelist later.
+(deny mach-lookup (xpc-service-name-regex #".*"))
+
+;; Don't allow any commands on sockets.
+(deny socket-ioctl)
+
+;; Denying this should have no ill effects for our use case.
+(deny system-privilege)
+
+;; To be uncommented once the system call whitelist is complete...
+;; (deny syscall-unix (with send-signal SIGKILL))
+(allow syscall-unix
+       (syscall-number SYS_exit)
+       (syscall-number SYS_kevent_qos)
+       (syscall-number SYS_kevent_id)
+       (syscall-number SYS_thread_selfid)
+       (syscall-number SYS_bsdthread_ctl)
+       (syscall-number SYS_kdebug_trace64)
+       (syscall-number SYS_getattrlist)
+       (syscall-number SYS_sigsuspend_nocancel)
+       (syscall-number SYS_proc_info)
+       
+       (syscall-number SYS___disable_threadsignal)
+       (syscall-number SYS___pthread_sigmask)
+       (syscall-number SYS___mac_syscall)
+       (syscall-number SYS___semwait_signal_nocancel)
+       (syscall-number SYS_abort_with_payload)
+       (syscall-number SYS_access)
+       (syscall-number SYS_bsdthread_create)
+       (syscall-number SYS_bsdthread_terminate)
+       (syscall-number SYS_close)
+       (syscall-number SYS_close_nocancel)
+       (syscall-number SYS_connect)
+       (syscall-number SYS_csops_audittoken)
+       (syscall-number SYS_csrctl)
+       (syscall-number SYS_fcntl)
+       (syscall-number SYS_fsgetpath)
+       (syscall-number SYS_fstat64)
+       (syscall-number SYS_fstatfs64)
+       (syscall-number SYS_getdirentries64)
+       (syscall-number SYS_geteuid)
+       (syscall-number SYS_getfsstat64)
+       (syscall-number SYS_getgid)
+       (syscall-number SYS_getrlimit)
+       (syscall-number SYS_getuid)
+       (syscall-number SYS_ioctl)
+       (syscall-number SYS_issetugid)
+       (syscall-number SYS_lstat64)
+       (syscall-number SYS_madvise)
+       (syscall-number SYS_mmap)
+       (syscall-number SYS_munmap)
+       (syscall-number SYS_mprotect)
+       (syscall-number SYS_mremap_encrypted)
+       (syscall-number SYS_open)
+       (syscall-number SYS_open_nocancel)
+       (syscall-number SYS_openat)
+       (syscall-number SYS_pathconf)
+       (syscall-number SYS_pread)
+       (syscall-number SYS_read)
+       (syscall-number SYS_readlink)
+       (syscall-number SYS_shm_open)
+       (syscall-number SYS_socket)
+       (syscall-number SYS_stat64)
+       (syscall-number SYS_statfs64)
+       (syscall-number SYS_sysctl)
+       (syscall-number SYS_sysctlbyname)
+       (syscall-number SYS_workq_kernreturn)
+       (syscall-number SYS_workq_open)
+)
+
+;; Still allow the system call but report in log.
+(allow (with report) syscall-unix)
+
+;; For validating the entitlements of clients. This is so only entitled
+;; clients can pass data into a BlastDoor instance.
+(allow process-info-codesignature)
+
+
+;;; -------------------------------------------------------------------------------------------- ;;;
+;;; Reading Files
+;;; -------------------------------------------------------------------------------------------- ;;;
+
+;; Support for BlastDoor receiving sandbox extensions from clients to either read files, or
+;; write to a target location.
+
+;; com.apple.app-sandbox.read
+(allow file-read*
+       (extension "com.apple.app-sandbox.read"))
+
+;; com.apple.app-sandbox.read-write
+(allow file-read* file-write*
+       (extension "com.apple.app-sandbox.read-write"))

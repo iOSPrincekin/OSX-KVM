@@ -1,0 +1,122 @@
+<!-- Posing Font - name:PostScript name -->
+<!ELEMENT PosingFont (Name*, FontMetrics?, Components)>
+<!ATTLIST PosingFont
+	name CDATA #REQUIRED
+	version CDATA #REQUIRED 
+>
+
+<!-- Name - language:BCP 47 language tag -->
+<!ELEMENT Name EMPTY >
+<!ATTLIST Name
+	type CDATA #REQUIRED
+	string CDATA #REQUIRED
+	language CDATA #IMPLIED
+>
+
+<!-- Font Metrics -->
+<!ELEMENT FontMetrics EMPTY >
+<!ATTLIST FontMetrics
+	unitsPerEm CDATA #IMPLIED
+	xMin CDATA #IMPLIED
+	yMin CDATA #IMPLIED
+	xMax CDATA #IMPLIED
+	yMax CDATA #IMPLIED
+	macStyle CDATA #IMPLIED
+	lowestRecPPEM CDATA #IMPLIED
+	ascender CDATA #IMPLIED
+	descender CDATA #IMPLIED
+	lineGap CDATA #IMPLIED
+	vertTypoAscender CDATA #IMPLIED
+	vertTypoDescender CDATA #IMPLIED
+	vertTypoLineGap CDATA #IMPLIED
+	advanceWidthMax CDATA #IMPLIED
+	advanceHeightMax CDATA #IMPLIED
+	minLeftSideBearing CDATA #IMPLIED
+	minRightSideBearing CDATA #IMPLIED
+	minTopSideBearing CDATA #IMPLIED
+	minBottomSideBearing CDATA #IMPLIED
+ 	xMaxExtent CDATA #IMPLIED
+	yMaxExtent CDATA #IMPLIED
+	caretSlopeRise CDATA #IMPLIED
+	caretSlopeRun CDATA #IMPLIED
+	caretOffset CDATA #IMPLIED
+	vertCaretSlopeRise CDATA #IMPLIED
+	vertCaretSlopeRun CDATA #IMPLIED
+	vertCaretOffset CDATA #IMPLIED
+	italicAngle CDATA #IMPLIED
+	underlinePosition CDATA #IMPLIED
+	underlineThickness CDATA #IMPLIED
+	isFixedPitch CDATA #IMPLIED
+	numGlyphs CDATA #IMPLIED
+	weightClass CDATA #IMPLIED
+	widthClass CDATA #IMPLIED
+	familyClass CDATA #IMPLIED
+>
+
+<!-- Components List -->
+<!ELEMENT Components (ComponentDef | LanguagePreferredList)+>
+
+<!-- Component Font Definition - name:PostScript name -->
+<!ELEMENT ComponentDef (Tracking?, Matrix?, UnicodeCharSet*, cmapOverride?, ToUnicode?)>
+<!ATTLIST ComponentDef
+	name CDATA #REQUIRED
+	locationHint CDATA #IMPLIED
+>
+
+<!-- List of components by Language Preferred -->
+<!ELEMENT LanguagePreferredList (LanguagePreferredComponentDef+)>
+
+<!-- Component font definition for a specific language -->
+<!ELEMENT LanguagePreferredComponentDef (Language, ComponentDef+)>
+
+<!-- Language - string:BCP 47 language tag -->
+<!ELEMENT Language EMPTY >
+<!ATTLIST Language
+	string CDATA #REQUIRED
+>
+
+<!-- Tracking -->
+<!ELEMENT Tracking EMPTY >
+<!ATTLIST Tracking
+	trackingValue CDATA #REQUIRED
+>
+
+<!-- Matrix -->
+<!ELEMENT Matrix EMPTY >
+<!ATTLIST Matrix
+	xx CDATA #REQUIRED
+	xy CDATA #REQUIRED
+	yx CDATA #REQUIRED
+	yy CDATA #REQUIRED
+	tx CDATA #REQUIRED
+	ty CDATA #REQUIRED
+>
+
+<!-- CharSet - uset:ICU UnicodeSet pattern string -->
+<!ELEMENT UnicodeCharSet EMPTY >
+<!ATTLIST UnicodeCharSet
+	uset CDATA #REQUIRED
+>
+
+<!-- cmap for components glyph ranges -->
+<!ELEMENT cmapOverride (map+)>
+
+<!ELEMENT map EMPTY>
+<!ATTLIST map
+	charValue CDATA #REQUIRED
+	charName CDATA #IMPLIED
+	glyphRefID CDATA #REQUIRED
+	glyphName CDATA #IMPLIED
+>
+
+<!-- Transcoding to Unicode -->
+<!ELEMENT ToUnicode (mapChar+)>
+<!ATTLIST ToUnicode
+	fromEncoding CDATA #IMPLIED
+>
+
+<!ELEMENT mapChar EMPTY>
+<!ATTLIST mapChar
+	fromCharValue CDATA #REQUIRED
+	toCharValue CDATA #REQUIRED
+>

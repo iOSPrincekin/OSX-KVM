@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>general</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Enables the RemoteManagement service.</string>
+		<key>Description</key>
+		<string>Controls whether the RemoteManagement service is enabled.</string>
+		<key>Radar</key>
+		<integer>44809787</integer>
+	</dict>
+	<key>device_channel</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Enables the RemoteManagement device channel.</string>
+		<key>Description</key>
+		<string>Controls whether the RemoteManagement device channel is enabled.</string>
+		<key>Radar</key>
+		<integer>61119000</integer>
+	</dict>
+	<key>create_account_in_settings</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Enables the ability to create RemoteManagement accounts in Settings.</string>
+		<key>Description</key>
+		<string>Controls whether Settings allows users to create RemoteManagement accounts.</string>
+		<key>Radar</key>
+		<integer>61599859</integer>
+	</dict>
+</dict>
+</plist>

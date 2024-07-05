@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   TextInputFeatureFlags.plist
+   TextInput
+
+   Created by Tusi on 3/3/20.
+   Copyright (c) 2020 ___ORGANIZATIONNAME___. All rights reserved.
+-->
+<plist version="1.0">
+    <dict>
+        <key>textinput_string_based_lm</key>
+        <dict>
+            <key>Enabled</key>
+            <false/> <!-- change to <true/> when the feature is ready for everyone! -->
+        </dict>
+    </dict>
+</plist>

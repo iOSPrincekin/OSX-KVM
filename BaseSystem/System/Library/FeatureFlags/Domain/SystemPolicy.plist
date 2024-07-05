@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+    <key>gatekeeper_rename_dialog</key>
+    <dict>
+        <key>Enabled</key>
+        <false/>
+        <key>Attributes</key>
+        <dict>
+            <key>TargetRelease</key>
+            <string>Fall2020</string>
+        </dict>
+    </dict>
+</dict>
+</plist>

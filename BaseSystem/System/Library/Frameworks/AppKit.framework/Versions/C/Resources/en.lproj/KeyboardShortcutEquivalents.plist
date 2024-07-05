@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- rdar://60808461 (Move Keyboard Shortcut overrides from override nibs into AppKit) -->
+<plist version="1.0">
+<dict>
+	<key>global</key>
+	<dict/>
+	<key>com.apple.example</key>
+	<dict/>
+</dict>
+</plist>

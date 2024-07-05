@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>disable_legacy_tls</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Disable Legacy TLS Versions</string>
+		<key>Description</key>
+		<string>Disable legacy TLS versions for all TLS connections through Network.framework</string>
+	</dict>
+	<key>safebrowsing_proxy</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Safe Browsing Proxy</string>
+		<key>Description</key>
+		<string>Automatically proxy all safe browsing URLs through an Apple proxy</string>
+	</dict>
+	<key>tcp_nocopy</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>No Copy TCP</string>
+		<key>Description</key>
+		<string>Remove the copy from TCP reading</string>
+	</dict>
+	<key>delegation_failures</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Delegation Failures Simulate Crashes</string>
+		<key>Description</key>
+		<string>Simulate a crash when traffic delegation fails</string>
+	</dict>
+	<key>automatic_name_encryption</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>DisplayName</key>
+		<string>Automatic Name Encryption</string>
+		<key>Description</key>
+		<string>Request records for DoH and ESNI</string>
+	</dict>
+	<key>request_all_svcb</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Request All SVCB Records</string>
+		<key>Description</key>
+		<string>Request records for all schemes using SVCB</string>
+	</dict>
+</dict>
+</plist>

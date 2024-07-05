@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adaptive-sync-limits</key>
+	<dict>
+		<key>allowed</key>
+		<true/>
+		<key>max-rate</key>
+		<real>170.0</real>
+		<key>min-rate</key>
+		<real>48.0</real>
+		<key>max-frame-duration-increase</key>
+		<real>0.0</real>
+		<key>max-frame-duration-decrease</key>
+		<real>0.0</real>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="ExtensionPermissions.css">
+        <script type="text/javascript" src="Utilities.js"></script>
+        <script type="text/javascript" src="HTMLViewController.js"></script>
+        <script type="text/javascript" src="ExtensionPermissions.js"></script>
+        <script type="text/javascript" src="ExtensionPermissionsExtras.js"></script>
+        <title class="l12n">Extension Permissions</title>
+    </head>
+    <body>
+        <div id="websiteAccess" class="hidden">
+            <div id="websiteAccessTitle"></div>
+            <div id="webpageContents" class="accessCategory">
+                <div class="accessTitle l12n">Webpage Contents</div>
+                <div class="accessSubtitle l12n">Can read sensitive information from webpages, including passwords, phone numbers, and credit cards. Can alter the appearance and behavior of webpages. This applies on:</div>
+                <ul id="webpageContentsDomainList"></ul>
+            </div>
+            <div id="trackingInformation" class="accessCategory">
+                <div class="accessTitle l12n">Tracking Information</div>
+                <div class="accessSubtitle l12n">Can send information to webpages you visit, which can be used to track you across:</div>
+                <ul id="trackingInformationDomainList"></ul>
+            </div>
+            <div id="browsingHistory" class="accessCategory">
+                <div class="accessTitle l12n">Browsing History</div>
+                <div class="accessSubtitle l12n">Can see when you visit:</div>
+                <ul id="browsingHistoryDomainList"></ul>
+            </div>
+        </div>
+        <div id="errors" class="hidden"></div>
+    </body>
+</html>

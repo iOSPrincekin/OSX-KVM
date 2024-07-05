@@ -1,0 +1,26 @@
+;
+;	Copyright (C) 2017 Apple Inc. All Rights Reserved.
+;
+;	Sandbox extensions for the Sharing framework.
+;
+
+; Allow CUPairingManager Mach lookup if they have its entitlements.
+(if	(or	(entitlement "com.apple.PairingManager.DeleteIdentity")
+		(entitlement "com.apple.PairingManager.HomeKit")
+		(entitlement "com.apple.PairingManager.Read")
+		(entitlement "com.apple.PairingManager.RemoveAdmin")
+		(entitlement "com.apple.PairingManager.RemovePeer")
+		(entitlement "com.apple.PairingManager.Write"))
+	(allow mach-lookup (global-name "com.apple.PairingManager")))
+
+; Allow SharingServices Mach lookup if they have its entitlements.
+(if	(or	(entitlement "com.apple.sharing.BluetoothUserInteraction")
+		(entitlement "com.apple.sharing.Client")
+		(entitlement "com.apple.sharing.CoordinatedAlerts")
+		(entitlement "com.apple.sharing.DeviceDiscovery")
+		(entitlement "com.apple.sharing.Diagnostics")
+		(entitlement "com.apple.sharing.RemoteInteractionSession")
+		(entitlement "com.apple.sharing.Services")
+		(entitlement "com.apple.sharing.Session")
+		(entitlement "com.apple.sharing.WiFiPasswordSharing"))
+	(allow mach-lookup (global-name "com.apple.SharingServices")))

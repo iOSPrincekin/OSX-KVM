@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>RegisterTokens</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>DisplayName</key>
+		<string>Applications can register token provider extensions</string>
+		<key>Description</key>
+		<string>Whether applications can provide token provider extensions</string>
+	</dict>
+	<key>UseTokens</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>DisplayName</key>
+		<string>Applications see global token items</string>
+		<key>Description</key>
+		<string>Whether applications see global token identities in keychain</string>
+	</dict>
+</dict>
+</plist>

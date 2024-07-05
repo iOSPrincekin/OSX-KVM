@@ -1,0 +1,118 @@
+Process:               $(procName|"???") [$(pid|"Unknown")]
+Path:                  $(procPath|"???")
+Identifier:            $(bundleInfo.CFBundleIdentifier|procName|"???")
+^(bundleInfo.CFBundleShortVersionString)Version:               $(bundleInfo.CFBundleShortVersionString) ($(bundleInfo.CFBundleVersion|"???"))
+^(!bundleInfo.CFBundleShortVersionString)Version:               $(bundleInfo.CFBundleVersion|"???")
+^(buildInfo.ProductBuildVersion)Build Info:            $(buildInfo.ProjectName|"Unknown")-$(buildInfo.SourceVersion|"Unknown")~$(buildInfo.BuildVersion|"Unknown") ($(buildInfo.ProductBuildVersion))
+^(buildInfo&!buildInfo.ProductBuildVersion)Build Info:            $(buildInfo.ProjectName|"Unknown")-$(buildInfo.SourceVersion|"Unknown")~$(buildInfo.BuildVersion|"Unknown")
+^(storeInfo.itemID)App Item ID:           $(storeInfo.itemID)
+^(storeInfo.softwareVersionExternalIdentifier)App External ID:       $(storeInfo.softwareVersionExternalIdentifier)
+^(!*translated)Code Type:             $(cpuType) (Native)
+^(*translated)Code Type:             $(cpuType) (Translated)
+Parent Process:        $(parentProc|"???") [$(parentPid|"Unknown")]
+^(responsibleProc)Responsible:           $(responsibleProc) [$(responsiblePid)]
+User ID:               $(userID)
+
+^(plugin)PlugIn Path:             $(plugin.ExecutablePath)
+^(plugin)PlugIn Identifier:       $(plugin.Identifier)
+^(plugin)PlugIn Version:          $(plugin.ShortVersionString) ($(plugin.Version|"???"))
+^(plugin)
+Date/Time:             $(captureTime)
+OS Version:            $(osVersion.train) ($(osVersion.build))
+Report Version:        12
+^(bridgeVersion.train)Bridge OS Version:     $(bridgeVersion.train) ($(bridgeVersion.build))
+^(bridgeVersion.status)Bridge OS Version:     $(bridgeVersion.status)
+Anonymous UUID:        $(crashReporterKey)
+
+^(sleepWakeUUID)Sleep/Wake UUID:       $(sleepWakeUUID)
+
+^(uptime)Time Awake Since Boot: $(uptime) seconds
+^(wakeTime)Time Since Wake:       $(wakeTime) seconds
+
+System Integrity Protection: $(sip)
+
+^(reportNotes)Notes:
+^(reportNotes)$(reportNotes)
+^(reportNotes)
+^(fatalDyldError)Dyld Error Message:
+^(fatalDyldError)  $(fatalDyldError)
+^(fatalDyldError)
+^(legacyInfo.threadTriggered.name&legacyInfo.threadTriggered.queue)Crashed Thread:        $(faultingThread)  $(legacyInfo.threadTriggered.name)  Dispatch queue: $(legacyInfo.threadTriggered.queue)
+^(legacyInfo.threadTriggered.name&!legacyInfo.threadTriggered.queue)Crashed Thread:        $(faultingThread)  $(legacyInfo.threadTriggered.name)
+^(!legacyInfo.threadTriggered.name&legacyInfo.threadTriggered.queue)Crashed Thread:        $(faultingThread)  Dispatch queue: $(legacyInfo.threadTriggered.queue)
+^(legacyInfo.threadTriggered&!legacyInfo.threadTriggered.name&!legacyInfo.threadTriggered.queue)Crashed Thread:        $(faultingThread)
+^(!legacyInfo.threadTriggered)Crashed Thread:        Unknown
+
+^(exception.signal)Exception Type:        $(exception.type) ($(exception.signal))
+^(!exception.signal)Exception Type:        $(exception.type)
+^(exception.subtype)Exception Codes:       $(exception.subtype)
+^(exception.codes)Exception Codes:       $(exception.codes)
+^(metadata:isSimulated)Exception Note:        SIMULATED (this is NOT a crash)
+^(!metadata:isSimulated&isCorpse)Exception Note:        EXC_CORPSE_NOTIFY
+
+^(termination)Termination Reason:    Namespace $(termination.namespace), Code $(termination.code) $(termination.indicator)
+^(termination.reasons)$(termination.reasons)
+^(termination.details)$(termination.details)
+^(termination.byPid)Terminating Process:   $(termination.byProc|"<unknown>") [$(termination.byPid)]
+^(termination)
+#(format_workQueueLimit
+$(<key>) Reached: $(<value>) (too many dispatch threads blocked in synchronous operations)
+)#
+^(workQueueLimits)$(format_workQueueLimit#workQueueLimits)
+^(*extMods.warnings)External Modification Warnings:
+^(*extMods.targeted.thread_create)Thread creation by external task.
+^(*extMods.targeted.thread_set_state)Debugger attached to process.
+^(*extMods.caller.task_for_pid)Process used task_for_pid().
+^(*extMods.warnings)
+^(vmRegionInfo)VM Region Info: $(vmRegionInfo)
+^(vmRegionInfo)
+^(externalGPUInfo)$(externalGPUInfo)
+^(externalGPUInfo)
+^(asi)Application Specific Information:
+#(format_asi
+$(<value>)
+)#
+^(asi)$(format_asi#asi)
+^(asi)
+^(asiSignatures)Application Specific Signatures:
+^(asiSignatures)$(asiSignatures)
+^(asiSignatures)
+#(format_asiBacktraces
+Application Specific Backtrace $(<index>):
+$(<item>)
+)#
+^(asiBacktraces)$(format_asiBacktraces#asiBacktraces)
+^(asiBacktraces)
+^(reportNotes)Error Formulating Crash Report:$(reportNotes)
+^(reportNotes)
+^(dyldMessages)Dyld Error Message:$(dyldMessages)
+^(dyldMessages)
+^(!fatalDyldError)$(threads|"Backtrace not available")
+
+$(threadState|"No thread state (register information) available")
+^(instructionState)$(instructionState)
+^(lastBranchState)$(lastBranchState)
+
+Binary Images:
+$(usedImages|"Binary images description not available")
+
+^(extMods)External Modification Summary:
+^(extMods)  Calls made by other processes targeting this process:
+^(extMods)    task_for_pid: $(extMods.targeted.task_for_pid)
+^(extMods)    thread_create: $(extMods.targeted.thread_create)
+^(extMods)    thread_set_state: $(extMods.targeted.thread_set_state)
+^(extMods)  Calls made by this process:
+^(extMods)    task_for_pid: $(extMods.caller.task_for_pid)
+^(extMods)    thread_create: $(extMods.caller.thread_create)
+^(extMods)    thread_set_state: $(extMods.caller.thread_set_state)
+^(extMods)  Calls made by all processes on this machine:
+^(extMods)    task_for_pid: $(extMods.system.task_for_pid)
+^(extMods)    thread_create: $(extMods.system.thread_create)
+^(extMods)    thread_set_state: $(extMods.system.thread_set_state)
+^(extMods)
+^(vmSummary)VM Region Summary:
+^(vmSummary)$(vmSummary)
+^(vmSummary)
+^(filteredLog)Filtered syslog:
+^(filteredLog)$(filteredLog)
+^(filteredLog)

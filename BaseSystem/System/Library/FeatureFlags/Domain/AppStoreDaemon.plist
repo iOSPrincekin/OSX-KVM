@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>asd_enable_almond</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Enable Almond</string>
+		<key>Description</key>
+		<string>Enable App Store Almond Support</string>
+		<key>Radar</key>
+		<integer>64776592</integer>
+		<key>AMPTestable</key>
+		<true/>
+		<key>AMPFlagGroup</key>
+		<string>App Store</string>
+	</dict>
+</dict>
+</plist>

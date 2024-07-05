@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+ <key>announce_telephony_chime</key>
+ <dict>
+  <key>Attributes</key>
+  <dict>
+   <key>TargetRelease</key>
+   <string>Spring2021</string>
+  </dict>
+  <key>Description</key>
+  <string>Enables sending AceCommand to play a chime when the call connects after a call announcement.</string>
+  <key>Enabled</key>
+  <true/>
+ </dict>
+
+ <key>GroupFaceTime</key>
+ <dict>
+  <key>Attributes</key>
+  <dict>
+   <key>TargetRelease</key>
+   <string>Spring2021</string>
+  </dict>
+  <key>Description</key>
+  <string>This flag enables group facetime feature in Siri.</string>
+  <key>Enabled</key>
+  <true/>
+ </dict>
+</dict>
+</plist>

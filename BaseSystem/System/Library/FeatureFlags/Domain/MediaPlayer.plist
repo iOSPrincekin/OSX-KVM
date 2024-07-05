@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+ <key>play_first</key>
+ <dict>
+  <key>AMPFlagGroup</key>
+  <string>MediaRemote</string>
+  <key>AMPTestable</key>
+  <false/>
+  <key>DisplayName</key>
+  <string>Play before context</string>
+  <key>Enabled</key>
+  <false/>
+ </dict>
+ <key>optimistic_context</key>
+ <dict>
+  <key>AMPFlagGroup</key>
+  <string>MediaRemote</string>
+  <key>AMPTestable</key>
+  <false/>
+  <key>DisplayName</key>
+  <string>Optimistic Local Context</string>
+  <key>Enabled</key>
+  <false/>
+ </dict>
+ <key>auto_play</key>
+ <dict>
+  <key>AMPFlagGroup</key>
+  <string>Music</string>
+  <key>AMPTestable</key>
+  <true/>
+  <key>Attributes</key>
+  <dict>
+   <key>TargetRelease</key>
+   <string>Fall2020</string>
+  </dict>
+  <key>DisplayName</key>
+  <string>AutoPlay</string>
+  <key>Enabled</key>
+  <true/>
+ </dict>
+ <key>new_playback_engine</key>
+ <dict>
+  <key>AMPFlagGroup</key>
+  <string>Music</string>
+        <key>DisplayName</key>
+        <string>New Playback Engine</string>
+        <key>AMPTestable</key>
+        <false/>
+        <key>Enabled</key>
+        <false/>
+
+ </dict>
+
+ <key>Oasis</key>
+ <dict>
+  <key>AMPFlagGroup</key>
+  <string>Music</string>
+  <key>AMPTestable</key>
+  <true/>
+        <key>Enabled</key>
+        <true/>
+  <key>AMPITFE</key>
+  <string>amoa</string>
+  <key>Attributes</key>
+  <dict>
+   <key>TargetRelease</key>
+   <string>Spring2021</string>
+  </dict>
+  <key>DisplayName</key>
+  <string>Load Test Content</string>
+  <key>Enabled</key>
+  <true/>
+ </dict>
+
+</dict>
+</plist>

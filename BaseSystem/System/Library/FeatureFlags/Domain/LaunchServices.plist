@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>app_wrappers</key>
+	<dict>
+		<key>Description</key>
+		<string>If enabled, then app wrapper functionality is turned on</string>
+		<key>DisplayName</key>
+		<string>enable app wrappers</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Radar</key>
+		<integer>59912711</integer>
+	</dict>
+	<key>launch_thru_runningboard</key>
+	<dict>
+		<key>Description</key>
+		<string>If enabled, then all applications are launched thru runningboardd indirectly, instead of thru launchd</string>
+		<key>DisplayName</key>
+		<string>Launch apps thru runningboardd</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Radar</key>
+		<integer>56390428</integer>
+	</dict>
+	<key>loginwindow_launch_workaround</key>
+	<dict>
+		<key>Description</key>
+		<string>If enabled, loginwindow will launch thru launchd, not runningboardd</string>
+		<key>DisplayName</key>
+		<string>If enabled, loginwindow will launch thru launchd, not runningboardd</string>
+		<key>Enabled</key>
+		<false/>
+		<key>Radar</key>
+		<integer>59830923</integer>
+	</dict>
+	<key>registration_multiuser_dissemination</key>
+	<dict>
+		<key>Description</key>
+		<string>If enabled, registering bundle-containerized applications is restricted to the mach bootstrap and such registrations are pushed to user sessions.</string>
+		<key>DisplayName</key>
+		<string>bundle-containerized installation multiuser support</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Radar</key>
+		<integer>57574276</integer>
+	</dict>
+</dict>
+</plist>

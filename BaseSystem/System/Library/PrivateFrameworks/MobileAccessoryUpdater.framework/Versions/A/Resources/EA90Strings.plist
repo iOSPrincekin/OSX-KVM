@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>PayloadTagNames</key>
+        <dict>
+            <key>duhf</key>
+            <string>USB Hub</string>
+            <key>dfw1</key>
+            <string>DMC</string>
+            <key>dutf</key>
+            <string>ACE/TBT</string>
+            <key>dvf1</key>
+            <string>VCOM</string>
+            <key>thrd</key>
+            <string>Harmony</string>
+            <key>ttld</key>
+            <string>BaobabTCONTrinityCabalLUTs</string>
+            <key>tcod</key>
+            <string>BaobabTCONConfig</string>
+            <key>tpld</key>
+            <string>BaobabTCONPixPipeLUTs</string>
+            <key>tprd</key>
+            <string>BaobabTCONPresets</string>
+            <key>tcon</key>
+            <string>TCON</string>
+            <key>trin</key>
+            <string>Trinity</string>
+            <key>cabl</key>
+            <string>Cabal</string>
+            <key>bklc</key>
+            <string>Backlight Controller</string>
+        </dict>
+        <key>DebugStrings</key>
+        <array>
+            <string>Update status for %s: %s</string>
+            <string>Current Firmware Version for %s: %s</string>
+        </array>
+    </dict>
+</plist>

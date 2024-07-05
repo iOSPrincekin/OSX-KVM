@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UseTransportStreamsForProxy</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>UseTransportStreamsForIDS</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>UseTransportStreamsForNW</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>UseTransportStreamsForSockets</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>ViewpointCorrection</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>ICEForceRelay</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>UseCoreMotionDetection</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2021</string>
+			<key>CodeComplete</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

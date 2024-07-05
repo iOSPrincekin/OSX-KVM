@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>pt-BR</key>
+	<array>
+		<string>pt-BR</string>
+	</array>
+	<key>pt-PT</key>
+	<array>
+		<string>pt-PT</string>
+	</array>
+	<key>zh</key>
+	<array>
+		<string>cmn-CN</string>
+		<string>yue</string>
+		<string>wuu</string>
+	</array>
+	<key>zh-Hant</key>
+	<array>
+		<string>cmn-TW</string>
+		<string>yue</string>
+		<string>wuu</string>
+	</array>
+	<key>zh-Hant-HK</key>
+	<array>
+		<string>yue</string>
+	</array>
+	<key>zh-Hant-MO</key>
+	<array>
+		<string>yue</string>
+	</array>
+	<key>zh-Hant-TW</key>
+	<array>
+		<string>cmn-TW</string>
+	</array>
+</dict>
+</plist>

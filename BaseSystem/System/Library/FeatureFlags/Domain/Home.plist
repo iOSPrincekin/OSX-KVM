@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Afroimkne234rsff23</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Allows transfer of accessory diagnostics</string>
+		<key>DisplayName</key>
+		<string>Accessory Diagnostics</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>AhSLZPuUtPcpYLVJHCtLO</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>This is the Music Alarm Feature flag.</string>
+		<key>DisplayName</key>
+		<string>Music Alarm</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>AtomicHomeArchive</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Spring2021</string>
+		</dict>
+		<key>Description</key>
+		<string>Atomic Home Archive Save</string>
+		<key>DisplayName</key>
+		<string>Atomic home archive save</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>B520</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Home B520 feature support including T/H</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>BhSLZPNUWGcpSLVJDXhtLX</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Third party HomeKit Catalyst applications</string>
+		<key>DisplayName</key>
+		<string>Catalyst</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>BoltPrimaryUser</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Winter2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Bolt Primary User</string>
+		<key>DisplayName</key>
+		<string>Bolt Primary User</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>DisableXPCNotifications</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Disables XPC notifications for configuration changes.</string>
+		<key>DisplayName</key>
+		<string>Disable XPC Notifications</string>
+		<key>Enabled</key>
+		<false/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>JMjIql4w2ryl8XrRuebT</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Home-wide audio announcements from HomePod</string>
+		<key>DisplayName</key>
+		<string>Home Announce</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>LYgIcvXzpTTap0GYj4OMwW</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Allows users to quickly control their HomeKit accessories from anywhere in the OS.</string>
+		<key>DisplayName</key>
+		<string>Home Controls</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>LuVUzqvHPFHFaKgHKAeChE</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Bolt Enablement</string>
+		<key>DisplayName</key>
+		<string>Bolt</string>
+		<key>Enabled</key>
+		<false/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>NDIQqpb8aN5jrSvCvCA4</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Allows the Wi-Fi configuration of accessories to be managed by HomeKit</string>
+		<key>DisplayName</key>
+		<string>Wi-Fi Reconfiguration</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>TVStreaming</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Set Top Box Streaming Stick Enablement</string>
+		<key>DisplayName</key>
+		<string>TV Streaming</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>Wr6cjgH4QIyDVQAA6DJCCA</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Improves user's lighting experience by changing light's color temperature based on time of day and geo location</string>
+		<key>DisplayName</key>
+		<string>Natural Lighting</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>YTZjZDBhZjI0NGI4NTJlYQ</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Enables app layer polling from resident to IP Cameras</string>
+		<key>DisplayName</key>
+		<string>Camera Reachability</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>cce7c4ecef404121ae8971</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Allows users to set a permanent audio output device on an ATV</string>
+		<key>DisplayName</key>
+		<string>Odeon</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>eDAweDQyeEI4eDREeDlGeD</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Enables face classfication in HomeKit camera video streams.</string>
+		<key>DisplayName</key>
+		<string>Familiar Faces</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>k8Y029QH96477W5rbjPi</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Allows residents to form or join thread networks</string>
+		<key>DisplayName</key>
+		<string>Resident Thread Commissioning</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>lXliCuQfDnVkysVgyzTHyz</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Winter2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Update accessory firmware via HomeKit.</string>
+		<key>DisplayName</key>
+		<string>Accessory Firmware Update</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>serverReachability</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Enables resident reachability checks via IDS Activity</string>
+		<key>DisplayName</key>
+		<string>IDS Activity Reachability</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>tPfjMDoMSXEMwiHVNVwyZe</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>HomePod Doorbell Chime</string>
+		<key>DisplayName</key>
+		<string>HomePod Doorbell Chime</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+	<key>xzp0eHW22fLXG3pMu9bt</key>
+	<dict>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+		<key>Description</key>
+		<string>Enable HAP over Thread</string>
+		<key>DisplayName</key>
+		<string>HAP over Thread</string>
+		<key>Enabled</key>
+		<true/>
+		<key>Hidden</key>
+		<false/>
+	</dict>
+</dict>
+</plist>

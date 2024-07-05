@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>default_to_templatized_app_icons</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>templatized_app_icons</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>disable_document_claim_icons</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>enable_symbol_template_icons</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>enable_app_icon_overrides</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+</dict>
+</plist>

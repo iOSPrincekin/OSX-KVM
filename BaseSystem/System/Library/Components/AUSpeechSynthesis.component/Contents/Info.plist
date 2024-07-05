@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AudioComponents</key>
+	<array>
+		<dict>
+			<key>description</key>
+			<string>Speech Synthesis audio generation</string>
+			<key>factoryFunction</key>
+			<string>AUSpeechSynthesisFactory</string>
+			<key>manufacturer</key>
+			<string>appl</string>
+			<key>name</key>
+			<string>Apple: AUSpeechSynthesis</string>
+			<key>resourceUsage</key>
+			<dict>
+				<key>temporary-exception.files.all.read-write</key>
+				<true/>
+			</dict>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>ttsp</string>
+			<key>type</key>
+			<string>augn</string>
+			<key>version</key>
+			<integer>131072</integer>
+		</dict>
+	</array>
+	<key>BuildMachineOSBuild</key>
+	<string>20A241115</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>AUSpeechSynthesis</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.apple.audiounit.speechsynthesis</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>AUSpeechSynthesis</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>9.0.66</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>9.0.66</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+	<key>DTCompiler</key>
+	<string>com.apple.compilers.llvm.clang.1_0</string>
+	<key>DTPlatformBuild</key>
+	<string>12E6178j</string>
+	<key>DTPlatformName</key>
+	<string>macosx</string>
+	<key>DTPlatformVersion</key>
+	<string>11.6</string>
+	<key>DTSDKBuild</key>
+	<string>20G162c</string>
+	<key>DTSDKName</key>
+	<string>macosx11.6internal</string>
+	<key>DTXcode</key>
+	<string>1240</string>
+	<key>DTXcodeBuild</key>
+	<string>12E6178j</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>11.6</string>
+</dict>
+</plist>

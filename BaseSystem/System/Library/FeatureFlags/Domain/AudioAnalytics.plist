@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Tracing</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>Description</key>
+		<string>Enables tracing in CAReportingService. This feature needs a plist file, which has TracePoint information.</string>
+	</dict>
+	<key>GlobalReporterLookup</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>Description</key>
+		<string>Allows any client to lookup the service type of a reporterID</string>
+	</dict>
+</dict>
+</plist>

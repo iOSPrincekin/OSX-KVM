@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AgeVerification</key>
+	<dict>
+		<key>AMPFlagGroup</key>
+		<string>Apple Media Services</string>
+		<key>AMPTestable</key>
+		<true/>
+		<key>CodeComplete</key>
+		<true/>
+		<key>DisplayName</key>
+		<string>Age Verification</string>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>EnableBundles</key>
+	<dict>
+		<key>AMPFlagGroup</key>
+		<string>Apple Media Services</string>
+		<key>AMPITFE</key>
+		<string>asb</string>
+		<key>AMPTestable</key>
+		<true/>
+		<key>Description</key>
+		<string>Enables fetching of bundles from the server when requesting marketing items</string>
+		<key>DisplayName</key>
+		<string>Enable Bundles from ODS</string>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>EngagementNFCHandling</key>
+	<dict>
+		<key>AMPFlagGroup</key>
+		<string>Apple Media Services</string>
+		<key>AMPTestable</key>
+		<false/>
+		<key>Description</key>
+		<string>Defer NFC event handling to engagementd</string>
+		<key>DisplayName</key>
+		<string>Handle NFC Events In engagementd</string>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>ForceBundles</key>
+	<dict>
+		<key>AMPFlagGroup</key>
+		<string>Apple Media Services</string>
+		<key>AMPITFE</key>
+		<string>forceasb</string>
+		<key>AMPTestable</key>
+		<true/>
+		<key>Description</key>
+		<string>Forces fetching of bundles from the server when requesting marketing items</string>
+		<key>DisplayName</key>
+		<string>Force Bundles from ODS</string>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>FraudScoresV2</key>
+	<dict>
+		<key>AMPFlagGroup</key>
+		<string>Apple Media Services</string>
+		<key>Description</key>
+		<string>Enhanced algorithm for detecting buy fraud</string>
+		<key>DisplayName</key>
+		<string>Device Fraud Scores Version 2</string>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>SandboxAccountManagement</key>
+	<dict>
+		<key>AMPFlagGroup</key>
+		<string>Apple Media Services</string>
+		<key>Description</key>
+		<string>Enables UI for additional management of Sandbox Accounts.</string>
+		<key>DisplayName</key>
+		<string>Extended Sandbox Account Management</string>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+</dict>
+</plist>

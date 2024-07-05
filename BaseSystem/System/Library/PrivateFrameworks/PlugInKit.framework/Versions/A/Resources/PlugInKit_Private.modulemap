@@ -1,0 +1,6 @@
+framework module PlugInKit_Private {
+  umbrella header "PlugInKit_Private.h"
+
+  export *
+  module * { export * }
+}

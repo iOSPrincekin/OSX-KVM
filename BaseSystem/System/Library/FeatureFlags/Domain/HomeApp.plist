@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>new_user_education</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+	</dict>
+	<key>visual_status</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+	</dict>
+	<key>extended_launch_readscomplete</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>smart_configuration</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+	</dict>
+	<key>store</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>Attributes</key>
+		<dict>
+			<key>TargetRelease</key>
+			<string>Fall2020</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

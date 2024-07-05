@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>home_automation_background_request</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>caballero</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>seymour</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>hints</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>uod</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>context_sharing</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>audio_session_coordination</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>listening_on_both_stereo_pair_units</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,52 @@
+#!/bin/sh
+
+echo "rc.prelogindata -- Arguments:[$@]"
+
+#
+# Check whether Preboot is mounted by checking if /System/Volumes/Preboot is a
+# mount-point, which is true iff its device number is different than its parent.
+#
+eval `/usr/bin/stat -s /System/Volumes`
+SYSTEM_VOLUMES_DEVICE="$st_dev"
+
+eval `/usr/bin/stat -s /System/Volumes/Preboot`
+PREBOOT_DEVICE="$st_dev"
+
+if [ $SYSTEM_VOLUMES_DEVICE = $PREBOOT_DEVICE ]; then
+	echo "Preboot is not a mount point - exiting"
+	exit
+fi
+
+#
+# XXX Eventually something else should tell us where to create these links to.
+# rdar://59122500
+#
+UUID_REGEX='.\{8\}-.\{4\}-.\{4\}-.\{4\}-.\{12\}'
+if ! SYSTEM_VOLUME_UUID=`/usr/bin/plutil -convert xml1 /SystemVolume.plist -o - | grep -o $UUID_REGEX` &&
+		! SYSTEM_VOLUME_UUID=`sysctl -n kern.targetsystemvolgroupuuid | grep -o $UUID_REGEX` &&
+		! SYSTEM_VOLUME_UUID=`sysctl -n kern.bootuuid | grep -o $UUID_REGEX`; then
+	echo "Couldn't read System Volume UUID from plist or sysctls"
+	exit
+fi
+
+echo "Setting up PreLogin for $SYSTEM_VOLUME_UUID"
+
+PRELOGINDATA_PATH="/System/Volumes/Preboot/$SYSTEM_VOLUME_UUID/PreLoginData"
+
+#
+# Symlink the libtrace logging database into PreLoginData.
+# If Preboot is read-only, just exit.
+#
+mkdir -p "$PRELOGINDATA_PATH/diagnostics"
+MKDIR_STATUS=$?
+if [ $MKDIR_STATUS -ne 0 ]; then
+	echo "Preboot is read-only - exiting"
+	exit
+fi
+
+chmod 0750 "$PRELOGINDATA_PATH/diagnostics"
+chown root:admin "$PRELOGINDATA_PATH/diagnostics"
+
+mkdir -p "$PRELOGINDATA_PATH/uuidtext"
+ln -s "$PRELOGINDATA_PATH/diagnostics" /private/var/db/diagnostics
+ln -s "$PRELOGINDATA_PATH/uuidtext" /private/var/db/uuidtext

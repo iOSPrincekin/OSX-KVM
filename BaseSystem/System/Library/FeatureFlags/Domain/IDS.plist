@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PrototypeMode</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>AbortIfNoSandbox</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>CrossAccountWhitelistBlocking</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>HomeNumber</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>HomeNumberBypassServer</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>WakingWhitelist</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>PDS</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>RegisterDuringBuddy</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>IDSSessionMultiplexer</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>AllowEmptyTrafficClasses</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>SyncConnection</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+	<key>DirectNSURLSession</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>allow_task_suspension</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>Description</key>
+		<string>Allow Catalyst apps to task-suspend in some situations.</string>
+	</dict>
+	<key>enable_skybridge</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>Description</key>
+		<string>Enable process assertions based on app lifecycle state from SkyLight.</string>
+	</dict>
+</dict>
+</plist>

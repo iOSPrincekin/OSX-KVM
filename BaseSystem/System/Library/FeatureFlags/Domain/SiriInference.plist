@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>native_flow_datetime_resolution</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>native_flow_contact_resolution</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>found_in_app_contacts</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>contact_resolver_ml_recommender</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+	</dict>
+	<key>one_shot_contact_resolution</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>Radar</key>
+		<integer>66102188</integer>
+		<key>DisplayName</key>
+		<string>One-Shot Contact Disambiguation</string>
+		<key>Description</key>
+		<string>Enhanced contact personalization.</string>
+	</dict>
+	<key>native_flow_location_resolution</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>Radar</key>
+		<integer>66691339</integer>
+		<key>DisplayName</key>
+		<string>On-Device Location Resolution</string>
+		<key>Description</key>
+		<string>On-Device Location Resolution</string>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AudioServerPlugIn_LoadingConditions</key>
+	<dict>
+		<key>IOService Matching</key>
+		<array>
+			<dict>
+				<key>IOProviderClass</key>
+				<string>IOAudio2Device</string>
+			</dict>
+		</array>
+	</dict>
+	<key>BuildMachineOSBuild</key>
+	<string>20A241115</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>MacAudio</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.apple.audio.MacAudio</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>MacAudio</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>140.6</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>140.6</string>
+	<key>CFPlugInFactories</key>
+	<dict>
+		<key>D03D8017-03A2-4852-A338-ECA21E01EA6B</key>
+		<string>MacAudioFactory</string>
+	</dict>
+	<key>CFPlugInTypes</key>
+	<dict>
+		<key>443ABAB8-E7B3-491A-B985-BEB9187030DB</key>
+		<array>
+			<string>D03D8017-03A2-4852-A338-ECA21E01EA6B</string>
+		</array>
+	</dict>
+	<key>DTCompiler</key>
+	<string>com.apple.compilers.llvm.clang.1_0</string>
+	<key>DTPlatformBuild</key>
+	<string>12E6178j</string>
+	<key>DTPlatformName</key>
+	<string>macosx</string>
+	<key>DTPlatformVersion</key>
+	<string>11.6</string>
+	<key>DTSDKBuild</key>
+	<string>20G162c</string>
+	<key>DTSDKName</key>
+	<string>macosx11.6internal</string>
+	<key>DTXcode</key>
+	<string>1240</string>
+	<key>DTXcodeBuild</key>
+	<string>12E6178j</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>11.6</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2020 Apple Inc. All rights reserved.</string>
+</dict>
+</plist>

@@ -1,0 +1,4 @@
+(if (entitlement "com.apple.private.backup")
+	(begin
+		(allow mach-lookup (global-name "com.apple.dock.remotedesktoppicture"))
+		(allow mach-lookup (global-name "com.apple.mtmd.xpc"))))

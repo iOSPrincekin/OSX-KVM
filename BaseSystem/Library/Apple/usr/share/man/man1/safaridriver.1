@@ -1,0 +1,317 @@
+.Dd 4/19/17 \" DATE
+.Dt SAFARIDRIVER 1 \" Program name and manual section number
+.Os Darwin
+.Sh NAME \" Section Header - required - don't modify
+.Nm safaridriver
+.Nd Safari WebDriver REST API service
+.Sh SYNOPSIS \" Section Header - required - don't modify
+.Nm
+.Fl p Ar port \" -p port
+.Oo Fl h | Fl \-help Oc \" [-h | --help ]
+.Op Fl \-version \" [--version ]
+.Op Fl \-enable \" [ --enable ]
+.Op Fl \-diagnose \" [ --diagnose ]
+.Sh DESCRIPTION \" Section Header - required - don't modify
+The
+.Nm
+utility is used to launch an HTTP server that implements the Selenium
+WebDriver REST API. When launched,
+.Nm
+allows for automated testing of
+web content using the version of Safari that is installed with macOS.
+.Pp
+.Nm
+supports several capabilities that can customize an automation session's behavior
+for a particular testing purpose. Capabilities are provided as arguments when requesting
+a new session.
+The capabilities supported by
+.Nm
+are listed in the
+.Sx OPTIONS
+section below. Unless noted below, the values of requested capability keys are not read
+and are assumed to be true if present, and false otherwise.
+.Pp
+To use capabilities in your tests, please refer to the relevant 3rd-party documentation to learn
+how to request extra capabilities with the WebDriver client library that you are using.
+.Sh OPTIONS
+.Ss Command line options
+.Bl -tag -width -indent
+.It Fl p , Fl - Ns Ar port Aq Ar port
+Specifies the port on which the HTTP server should listen for incoming
+connections. If the port is already in use or otherwise unavailable,
+.Nm
+will exit immediately with a non-zero return code.
+.It Fl h, Fl \-help
+Prints a usage message and exits.
+.It Fl \-version
+Prints version information and exits.
+.It Fl \-enable
+Applies configuration changes so that subsequent WebDriver sessions will run without
+further authentication. This includes checking "Enable Remote Automation" in Safari's
+.Em Develop
+menu. The user must authenticate via password for the changes to be applied.
+.Pp
+When this option is specified,
+.Nm
+exits immediately without starting up the REST API service. If the changes were
+successful or already applied,
+.Nm
+exits 0; otherwise,
+.Nm
+exits >0 and prints an error message to stderr.
+.It Fl \-diagnose
+Enables diagnostic logging for all sessions hosted by this
+.Nm
+instance. See
+.Sx DIAGNOSTICS
+for more information.
+.El \" Ends the list
+.Ss Session Creation Capabilities
+.Pp
+.Bl -tag -width -indent
+.It Ar browserName
+.Nm
+can only create WebDriver sessions for Safari. If the value of
+.Em browserName
+is not equal to `Safari', session creation will fail.
+.Pp
+Values of
+.Em browserName
+are compared case-insensitively.
+.It Ar browserVersion
+.Nm
+will only create a session using hosts whose Safari version matches the value of
+.Em browserVersion Ns .
+.Pp
+Browser version numbers are prefix-matched. For example, if the value of
+.Em browserVersion
+is `12', this will allow hosts with a Safari version of `12.0.1' or `12.1`.
+.It Ar platformName
+If the value of
+.Em platformName
+is `mac' or `macOS',
+.Nm
+will only create a session using the macOS host on which
+.Nm
+is running.
+.Pp
+If the value of
+.Em platformName
+is `iOS',
+.Nm
+will only create a session on a paired iOS device or simulator.
+.Pp
+Values of
+.Em platformName
+are compared case-insensitively.
+.It Ar safari:platformVersion
+.Nm
+will only create a session using hosts whose OS version matches the value of
+.Em safari:platformVersion Ns .
+.Pp
+OS version numbers are prefix-matched. For example, if the value of
+.Em safari:platformVersion
+is `12', this will allow hosts with an OS version of `12.0' or `12.1' but not `10.12'.
+.It Ar safari:platformBuildVersion
+.Nm
+will only create a session using hosts whose OS build version matches the value of
+.Em safari:platformBuildVersion Ns . An example of a macOS build version is `18E193'.
+.Pp
+On macOS, the OS build version can be determined by running the
+.Xr sw_vers 1
+utility.
+.It Ar safari:useSimulator
+If the value of
+.Em safari:useSimulator
+is
+.Dv true Ns ,
+.Nm
+will only use iOS Simulator hosts.
+.Pp
+If the value of
+.Em safari:useSimulator
+is
+.Dv false Ns ,
+.Nm
+will not use iOS Simulator hosts.
+.Pp
+.Em NOTE:
+An Xcode installation is required in order to run WebDriver tests on iOS Simulator hosts.
+.It Ar safari:deviceType
+If the value of
+.Em safari:deviceType
+is `iPhone',
+.Nm
+will only create a session using an iPhone device or iPhone simulator.
+.Pp
+If the value of
+.Em safari:deviceType
+is `iPad',
+.Nm
+will only create a session using an iPad device or iPad simulator.
+.Pp
+Values of
+.Em safari:deviceType
+are compared case-insensitively.
+.It Ar safari:deviceName
+.Nm
+will only create a session using hosts whose device name matches the value of
+.Em safari:deviceName Ns .
+Device names are compared case-insensitively.
+.Pp
+.Em NOTE:
+Device names for connected devices are
+shown in iTunes.
+If Xcode is installed, device names for connected devices are available via the output of
+.Xr instruments 1
+and in the Devices and Simulators window (accessed in Xcode via "Window > Devices and Simulators").
+.It Ar safari:deviceUDID
+.Nm
+will only create a session using hosts whose device UDID matches the value of
+.Em safari:deviceUDID Ns .
+Device UDIDs are compared case-insensitively.
+.Pp
+.Em NOTE:
+If Xcode is installed, UDIDs for connected devices are available via the output of
+.Xr instruments 1
+and in the Devices and Simulators window (accessed in Xcode via "Window > Devices and Simulators").
+.El \" Ends the list
+.Ss Other Capabilities
+.Bl -tag -width -indent
+.It Ar safari:automaticInspection
+This capability instructs Safari to preload the Web Inspector and JavaScript debugger in
+the background prior to returning a newly-created window. To pause the test's execution in
+JavaScript and bring up Web Inspector's Debugger tab, you can simply evaluate a
+.Ic debugger;
+statement in the test page.
+.It Ar safari:automaticProfiling
+This capability instructs Safari to preload the Web Inspector and start a Timeline recording
+in the background prior to returning a newly-created window. To view the recording, open
+the Web Inspector through Safari's
+.Em Develop
+menu.
+.It Ar safari:diagnose
+This capability requests that diagnostics be enabled for the session.
+See
+.Sx DIAGNOSTICS
+for more information.
+.It Ar webkit:WebRTC
+This capability allows a test to temporarily change Safari's policies for WebRTC and Media Capture.
+The value of the
+.Em webkit:WebRTC
+capability is a dictionary with the following sub-keys, all of which are optional:
+.Bl -ohang -offset indent
+.It Ar DisableInsecureMediaCapture
+Normally, Safari refuses to allow media capture over insecure connections. This restriction is relaxed
+by default for WebDriver sessions for testing purposes (for example, a test web server not configured for HTTPS).
+When this capability is specified, Safari will revert to the normal behavior of preventing media capture over insecure connections.
+.It Ar DisableICECandidateFiltering
+To protect a user's privacy, Safari normally filters out WebRTC ICE candidates that correspond to internal
+network addresses when capture devices are not in use. This capability suppresses ICE candidate
+filtering so that both internal and external network addresses are always sent as ICE candidates.
+.El
+.El
+.Sh EXIT STATUS
+.Ex -std \" The safaridriver utility exits 0 on success, and >0 if an error occurs.
+.Pp
+.Sh ERRORS
+When a REST API command fails,
+.Nm
+includes a detailed error message in the response. If you use a 3rd-party library
+on top of the REST API service, consult the library's documentation for how to
+access these error messages.
+.Pp
+.Sh SESSION CREATION
+.Nm
+can create WebDriver sessions using Safari on a macOS machine, a paired iOS device, or an iOS simulator.
+Capabilities listed in the
+.Sx Session Creation Capabilities
+subsection provide criteria that affect which hosts
+.Nm
+will attempt to use when handling a New Session command. A host must match all criteria to be usable.
+If no hosts match all of the criteria, then the New Session command will fail.
+If multiple hosts match all of the criteria, the order in which
+.Nm
+will use them is unspecified, except that booted simulators are used before unbooted simulators.
+.Pp
+If a simulator host matches the criteria but is not booted,
+.Nm
+will attempt to boot the simulator instance and wait for it to become usable.
+If Safari is not running on a host that otherwise matches the criteria,
+.Nm
+will automatically launch Safari and wait for it to become usable.
+If a host's Safari instance is associated with an inactive WebDriver session,
+.Nm
+will replace the old session unless the session was
+manually interrupted by the user or is being inspected by Web Inspector.
+.Pp
+.Sh NOTES
+For security reasons, Safari does not permit live media capture during a WebDriver test session.
+Instead, mock capture devices and streams with well-known contents are provided for testing purposes.
+Some media capabilities are configurable for testing; see the extension capability
+.Em webkit:WebRTC
+in the
+.Sx Other Capabilities
+subsection.
+.Pp
+For security reasons, the HTTP server accepts connections from localhost only. The
+HTTP server can accept connections from multiple test clients. Safari on macOS and iOS can only
+host one WebDriver session at a time, so it is not recommended to run multiple
+.Nm
+instances at the same time.
+.Pp
+.Nm
+is typically executed manually at the command line or automatically by a
+WebDriver client library. The Selenium project provides client libraries
+for most popular programming languages. More information is available on the
+Selenium project website:
+.Pp
+.Lk https://www.seleniumhq.org/
+.Sh SEE ALSO
+A summary of which REST API endpoints
+.Nm
+supports, as well as the Safari version in which each endpoint became available, can be found on the Apple Developer website:
+.Pp
+.Lk https://developer.apple.com/
+.Pp
+.Sh STANDARDS
+.Nm
+implements the W3C WebDriver specification:
+.Pp
+.D1
+.Lk https://www.w3.org/TR/webdriver/
+.Sh DIAGNOSTICS
+When filing a bug report against
+.Nm Ns , it is highly recommended that you capture
+and include diagnostics generated by
+.Nm Ns . This can be accomplished in several ways:
+.Pp
+To diagnose a single session, pass the
+.Em safari:diagnose
+capability when requesting a new session.
+.Pp
+To diagnose all sessions from one
+.Nm
+instance, use the
+.Fl \-diagnose
+command line option.
+.Pp
+To diagnose all sessions in all instances of
+.Nm Ns , set the
+.Ic DiagnosticsEnabled
+default in the
+.Ic com.apple.WebDriver
+domain to
+.Ic YES
+using
+.Xr defaults 1 Ns .
+.Pp
+Diagnostic files are saved to
+.Pa ~/Library/Logs/com.apple.WebDriver/
+and are uniquely named using the pid of
+.Nm
+and a timestamp.
+When using the
+.Em safari:diagnose
+capability to turn on diagnostics for a particular session, diagnostic
+files additionally include the session identifier in file names.

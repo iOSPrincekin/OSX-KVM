@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>blockingFlows</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Blocking Flows</string>
+		<key>Description</key>
+		<string>Enable blocking flows that block the incoming request with relative blocking dialog</string>
+		<key>Radar</key>
+		<integer>75634349</integer>
+	</dict>
+	<key>modifyingFlows</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Modifying Flows</string>
+		<key>Description</key>
+		<string>Enable modifying flows that modifies incoming intent/task with missing values/attributes</string>
+		<key>Radar</key>
+		<integer>73232913</integer>
+	</dict>
+	<key>nativeScenes</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Native Scenes</string>
+		<key>Description</key>
+		<string>Enables scene request processing via HomeKit native SPI</string>
+		<key>Radar</key>
+		<integer>70397713</integer>
+	</dict>
+	<key>nativeOutletSwitch</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>DisplayName</key>
+		<string>Native Scenes</string>
+		<key>Description</key>
+		<string>Enables outlet and switch request processing via HomeKit native SPI</string>
+		<key>Radar</key>
+		<integer>70397768</integer>
+	</dict>
+</dict>
+</plist>

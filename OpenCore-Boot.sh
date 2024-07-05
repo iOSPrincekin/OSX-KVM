@@ -15,6 +15,50 @@
 
 MY_OPTIONS="+ssse3,+sse4.2,+popcnt,+avx,+aes,+xsave,+xsaveopt,check"
 
+MAKE_DMG=$1
+
+DMG_NAME=BaseSystem1
+DMG_FILE=${DMG_NAME}.dmg
+DMG_SRC_DIR=BaseSystem
+if [[ $MAKE_DMG == 1 ]];then
+
+    echo "rm -rf ${DMG_FILE}"
+    rm -rf ${DMG_FILE}
+    
+    echo "hdiutil create -size 2.1g -srcfolder ${DMG_SRC_DIR} -fs HFS+ -volname "BaseSystem1" -format UDRW   ${DMG_FILE}"
+    hdiutil create -size 2.1g -srcfolder ${DMG_SRC_DIR} -fs HFS+ -volname "BaseSystem1" -format UDRW   ${DMG_FILE}
+    
+    
+    echo "hdiutil detach /Volumes/${DMG_NAME}"
+    hdiutil detach /Volumes/${DMG_NAME}
+    
+    echo "hdiutil attach ${DMG_FILE}"
+    hdiutil attach ${DMG_FILE}
+    
+    echo "bless --folder /Volumes/${DMG_NAME}/System/Library/CoreServices --file /Volumes/${DMG_NAME}/System/Library/CoreServices/boot.efi"
+    bless --folder /Volumes/${DMG_NAME}/System/Library/CoreServices --file /Volumes/${DMG_NAME}/System/Library/CoreServices/boot.efi
+    
+    echo "hdiutil detach /Volumes/${DMG_NAME}"
+    hdiutil detach /Volumes/${DMG_NAME}
+    
+    echo "hdiutil convert -format UDZO ${DMG_FILE} -o BaseSystem2.dmg"
+    hdiutil convert -format UDZO ${DMG_FILE} -o BaseSystem2.dmg
+    
+    echo "rm -rf ${DMG_FILE}"
+    rm -rf ${DMG_FILE}
+    
+    echo "mv BaseSystem2.dmg ${DMG_FILE}"
+    mv BaseSystem2.dmg ${DMG_FILE}
+    
+    echo "dmg2img -i BaseSystem1.dmg BaseSystem.img"
+    dmg2img -i BaseSystem1.dmg BaseSystem.img
+    
+    
+    qemu-system-x86_64 -accel hvf -m 4096 -cpu Penryn,kvm=on,vendor=GenuineIntel,+invtsc,vmware-cpuid-freq=on,+ssse3,+sse4.2,+popcnt,+avx,+aes,+xsave,+xsaveopt,check -machine q35 -usb -device usb-kbd -device usb-tablet -smp 4,cores=2,sockets=1 -device usb-ehci,id=ehci -device nec-usb-xhci,id=xhci -global nec-usb-xhci.msi=off -device isa-applesmc,osk='ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc' -drive if=pflash,format=raw,readonly=on,file=././OVMF_CODE.fd -smbios type=2 -device ich9-intel-hda -device hda-duplex -device ich9-ahci,id=sata -drive file=./OpenCore/OpenCore-master.iso,if=none,id=OpenCoreBoot,format=raw, -device ide-hd,bus=sata.2,drive=OpenCoreBoot -device ide-hd,bus=sata.3,drive=InstallMedia -drive id=InstallMedia,if=none,file=./BaseSystem.img,format=raw -drive id=MacHDD,if=none,file=./mac_hdd_ng.img,format=qcow2 -device ide-hd,bus=sata.4,drive=MacHDD -netdev user,id=net0 -serial stdio -device vmware-svga -debugcon file:debug.log -global isa-debugcon.iobase=0x402
+    
+    exit
+fi
+
 # This script works for Big Sur, Catalina, Mojave, and High Sierra. Tested with
 # macOS 10.15.6, macOS 10.14.6, and macOS 10.13.6.
 
@@ -57,7 +101,7 @@ Bootstrap_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/
 OpenCore_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/OpenCore/OpenCore/DEBUG/OpenCore.dll
 
 osascript -e "tell application \"Terminal\" to quit"
-osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\nlldb ${Bootstrap_dll} \\n  file ${Bootstrap_dll} \\n target modules load --file ${Bootstrap_dll} --slide 0 \\n file ${OpenCore_dll} \\n target modules load --file ${OpenCore_dll} --slide 0 \\n gdb-remote localhost:1234 \\n \"" \
+osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\nlldb ${Bootstrap_dll} \\n  target modules add ${Bootstrap_dll} \\n target modules load --file ${Bootstrap_dll} --slide 0 \\n target modules add ${OpenCore_dll} \\n target modules load --file ${OpenCore_dll} --slide 0 \\n gdb-remote localhost:1234 \\n \"" \
 -e "tell application \"Terminal\" to activate" \
 -e "tell application \"System Events\" to tell process \"Terminal\" to keystroke \"t\" using command down" \
 -e "tell application \"Terminal\" to set background color of window 1 to {0,0,0,1}" \

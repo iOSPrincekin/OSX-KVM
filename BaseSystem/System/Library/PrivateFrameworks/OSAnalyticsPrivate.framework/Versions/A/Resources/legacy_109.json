@@ -1,0 +1,77 @@
+Incident Identifier: $(metadata:incident_id)
+^(!isBeta)CrashReporter Key:   $(crashReporterKey)
+^(isBeta)Beta Identifier:     $(storeInfo.deviceIdentifierForVendor|"Unknown")
+Hardware Model:      $(modelCode)
+^(codeName)Device Model:        $(codeName)
+Process:             $(procName|"???") [$(pid)]
+Path:                $(procPath|"???")
+Identifier:          $(bundleInfo.CFBundleIdentifier|procName|"???")
+^(bundleInfo.CFBundleShortVersionString)Version:             $(bundleInfo.CFBundleShortVersionString) ($(bundleInfo.CFBundleVersion|"???"))
+^(!bundleInfo.CFBundleShortVersionString)Version:             $(bundleInfo.CFBundleVersion|"???")
+^(bundleInfo.DTAppStoreToolsBuild)AppStoreTools:       $(bundleInfo.DTAppStoreToolsBuild)
+^(storeInfo.applicationVariant)AppVariant:          $(storeInfo.applicationVariant)
+^(isBeta)Beta:                YES
+Code Type:           $(cpuType) (Native)
+Role:                $(procRole|"Unspecified")
+Parent Process:      $(parentProc|"???") [$(parentPid|"Unknown")]
+Coalition:           $(coalitionName|"<none>") [$(coalitionID)]
+^(responsiblePid)Responsible Process: $(responsibleProc) [$(responsiblePid)]
+
+Date/Time:           $(captureTime)
+Launch Time:         $(procLaunch)
+OS Version:          $(osVersion.train) ($(osVersion.build))
+Release Type:        $(osVersion.releaseType)
+^(basebandVersion)Baseband Version:    $(basebandVersion)
+^(systemID)UDID:                $(systemID)
+Report Version:      104
+
+^(exception.signal)Exception Type:  $(exception.type) ($(exception.signal))
+^(!exception.signal)Exception Type:  $(exception.type)
+^(exception.subtype)Exception Subtype: $(exception.subtype)
+^(exception.message)Exception Message: $(exception.message)
+^(exception.codes)Exception Codes: $(exception.codes)
+^(vmRegionInfo)VM Region Info: $(vmRegionInfo)
+^(simulatedCaller)Exception Note:  SIMULATED (this is NOT a crash) requested by $(simulatedCaller)
+^(!simulatedCaller&isSimulated)Exception Note:  SIMULATED (this is NOT a crash)
+^(!isSimulated&isCorpse)Exception Note:  EXC_CORPSE_NOTIFY
+^(!isSimulated&isNonFatal)Exception Note:  NON-FATAL CONDITION (this is NOT a crash)
+^(termination)Termination Reason: $(termination.namespace); [$(termination.code)]
+^(termination.reasons)$(termination.reasons)
+^(termination.details)$(termination.details)
+^(termination.byPid)Terminating Process: $(termination.byProc|"<unknown>") [$(termination.byPid)]
+^(termination)
+^(termination.byPid)Terminating Process: $(termination.byProc|"<unknown>") [$(termination.byPid)]
+^(legacyInfo.threadTriggered)Triggered by Thread:  $(faultingThread)
+^(legacyInfo.threadHighlighted)Highlighted by Thread:  $(legacyInfo.threadHighlighted)
+^(!legacyInfo.threadTriggered&!legacyInfo.threadHighlighted)Triggered by Thread:  Unknown
+
+^(asi)Application Specific Information:
+#(format_asi
+$(<value>)
+)#
+^(asi)$(format_asi#asi)
+^(asi)
+^(dyldMessages)Dyld Error Message:$(dyldMessages)
+^(dyldMessages)
+^(lastExceptionBacktrace)Last Exception Backtrace:
+^(lastExceptionBacktrace)$(lastExceptionBacktrace)
+^(lastExceptionBacktrace)
+$(threads|"Backtrace not available")
+
+$(threadState|"No thread state (register information) available")
+
+Binary Images:
+$(usedImages|"Binary images description not available")
+
+^(reportNotes)Error Formulating Crash Report:$(reportNotes)
+^(reportNotes)
+^(filteredLog)Filtered syslog:
+^(filteredLog)$(filteredLog)
+^(filteredLog)
+#(format_diagnosticOutput
+Diagnostic Output: $(<key>)
+$(<value>)
+)#
+^(diagnosticOutput)$(format_diagnosticOutput#diagnosticOutput)
+^(diagnosticOutput)
+EOF

@@ -1,0 +1,167 @@
+:root {
+    --code-background-color: hsl(0, 0%, 95%);
+    --code-border-color: hsl(0, 0%, 90%);
+    --code-text-color: hsl(0, 0%, 25%);
+
+    --warning-banner-background-color: rgb(250, 239, 181);
+    --warning-banner-text-color: rgb(96, 85, 38);
+    --warning-banner-icon: url(ExtensionPrivacyWarning.svg#light);
+}
+
+@media(prefers-color-scheme:dark) {
+    :root {
+        --code-background-color: hsl(120, 1%, 20%);
+        --code-border-color: hsl(0, 0%, 25%);
+        --code-text-color: hsl(180, 5%, 85%);
+
+        --warning-banner-background-color: rgba(133, 100, 30, 0.5);
+        --warning-banner-text-color: rgb(217, 196, 159);
+        --warning-banner-icon: url(ExtensionPrivacyWarning.svg#dark);
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+img {
+    -webkit-user-drag: none;
+}
+
+body {
+    font-family: system-ui;
+    margin: 15px;
+    cursor: default;
+    -webkit-user-select: none;
+}
+
+button {
+    -webkit-padding-start: 14px;
+    -webkit-padding-end: 14px;
+    line-height: 11px;
+    height: 21px;
+    outline-offset: -2px;
+    margin-inline-start: -1px;
+    margin-inline-end: 10px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#websiteAccess {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    font-size: 12px;
+}
+
+#websiteAccess ul {
+    margin-top: 4px;
+    margin-bottom: 0;
+    list-style-type: circle;
+}
+
+#websiteAccess li {
+    margin-top: 2px;
+    -webkit-margin-start: -11px;
+    text-indent: -3px;
+}
+
+#websiteAccess .accessCategory {
+    margin: 14px 14px 0px 14px;
+}
+
+.accessCategory .accessTitle {
+    font-weight: 700;
+    padding-bottom: 3px;
+}
+
+.accessCategory .accessTitle::before {
+    content: "• ";
+    font-size: 17px;
+    font-weight: bold;
+    -webkit-margin-start: -12px;
+    vertical-align: -1px;
+}
+
+.accessCategory .accessSubtitle {
+    color: -apple-system-secondary-label;
+}
+
+.accessCategory .accessSubtitle em {
+    color: text;
+    font-style: normal;
+}
+
+.warningBanner {
+    background-color: var(--warning-banner-background-color);
+    color: var(--warning-banner-text-color);
+    border-radius: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    -webkit-padding-start: 60px;
+    -webkit-padding-end: 30px;
+    margin-bottom: 15px;
+    background-image: var(--warning-banner-icon);
+    background-size: 33px 44px;
+    background-repeat: no-repeat;
+    background-position: 15px 25px;
+}
+
+html[dir=rtl] .warningBanner {
+    background-position-x: calc(100% - 15px);
+}
+
+.warningBanner h1 {
+    font-size: 13px;
+    margin: 0;
+    margin-bottom: 3px;
+}
+
+code {
+    color: var(--code-text-color);
+    font-family: ui-monospace;
+    padding: 0 0.2em;
+    margin: 0 -0.05em;
+    border-radius: 2px;
+    border: 1px solid hsl(0, 0%, 90.6%);
+    border-color: var(--code-border-color);
+    background-color: hsl(0, 0%, 94.9%);
+    background-color: var(--code-background-color);
+}
+
+#errors {
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    padding-top: 15px;
+}
+
+#errors ul {
+    -webkit-padding-start: 32px;
+}
+
+#errors li {
+    list-style: none;
+    position: relative;
+    margin-bottom: 6px;
+    -webkit-user-select: text;
+    cursor: text;
+}
+
+#errors li::before {
+    position: absolute;
+    left: -20px;
+    top: 0;
+    height: 16px;
+    width: 16px;
+
+    content: "";
+    background: url(ExtensionError.svg) no-repeat;
+}
+
+html[dir=rtl] #errors li::before {
+    right: -20px;
+    left: auto;
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DefaultAudioChannelLayout</key>
+	<integer>4294901760</integer>
+	<key>data</key>
+	<data>
+	AAAAAAAAAAAAAAAuAAAAAD+AAAAAAAABAAAAAAAAAALBQAAAAAAAA0BAAAAAAAAEAAAA
+	AAAAAAVAh55oAAAABkBAAAAAAAAHQAAAAAAAAAhAAAAAAAAACQAAAAAAAAAKP4AAAAAA
+	AAtClgAAAAAADEEAAAAAAAANQAAAAAAAAA5B8AAAAAAADwAAAAAAAAAQwsgAAAAAABEA
+	AAAAAAAAEkEgAAAAAAATAAAAAAAAABRBIAAAAAAAFUGgAAAAAAAWwsgAAAAAABcAAAAA
+	AAAAGECAAAAAAAAZAAAAAAAAABpBIAAAAAAAGz+AAAAAAAAcwXAAAAAAAB1CcAAAAAAA
+	HgAAAAAAAAAfP4AAAAAAACAAAAAAAAAAIQAAAAAAAAAiAAAAAAAAACMAAAAAAAAAJAAA
+	AAAAAAAlP4AAAAAAACZAQx5uAAAAJwAAAAAAAAAoAAAAAAAAAClGnEAAAAAAKgAAAAAA
+	AAArAAAAAAAAACzAQAAAc3ZvbAAAAAA=
+	</data>
+	<key>manufacturer</key>
+	<integer>1634758764</integer>
+	<key>name</key>
+	<string>headphone-aufx-ldnm-appl</string>
+	<key>subtype</key>
+	<integer>1818521197</integer>
+	<key>type</key>
+	<integer>1635083896</integer>
+	<key>version</key>
+	<integer>0</integer>
+</dict>
+</plist>

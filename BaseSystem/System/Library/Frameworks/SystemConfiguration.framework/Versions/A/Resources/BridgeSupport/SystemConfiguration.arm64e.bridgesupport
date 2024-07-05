@@ -1,0 +1,1252 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='1.0'>
+<struct name='SCDynamicStoreContext' type64='{_SCDynamicStoreContext=&quot;version&quot;q&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+<struct name='SCNetworkConnectionContext' type64='{_SCNetworkConnectionContext=&quot;version&quot;q&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+<struct name='SCNetworkReachabilityContext' type64='{_SCNetworkReachabilityContext=&quot;version&quot;q&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+<struct name='SCPreferencesContext' type64='{_SCPreferencesContext=&quot;version&quot;q&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+<cftype gettypeid_func='SCBondStatusGetTypeID' name='SCBondStatusRef' tollfree='__NSCFType' type64='^{__SCBondStatus=}'/>
+<cftype gettypeid_func='SCDynamicStoreGetTypeID' name='SCDynamicStoreRef' tollfree='__NSCFType' type64='^{__SCDynamicStore=}'/>
+<cftype gettypeid_func='SCNetworkConnectionGetTypeID' name='SCNetworkConnectionRef' tollfree='__NSCFType' type64='^{__SCNetworkConnection=}'/>
+<cftype gettypeid_func='SCNetworkInterfaceGetTypeID' name='SCNetworkInterfaceRef' tollfree='__NSCFType' type64='^{__SCNetworkInterface=}'/>
+<cftype gettypeid_func='SCNetworkProtocolGetTypeID' name='SCNetworkProtocolRef' tollfree='__NSCFType' type64='^{__SCNetworkProtocol=}'/>
+<cftype gettypeid_func='SCNetworkReachabilityGetTypeID' name='SCNetworkReachabilityRef' tollfree='__NSCFType' type64='^{__SCNetworkReachability=}'/>
+<cftype gettypeid_func='SCNetworkServiceGetTypeID' name='SCNetworkServiceRef' tollfree='__NSCFType' type64='^{__SCNetworkService=}'/>
+<cftype gettypeid_func='SCNetworkSetGetTypeID' name='SCNetworkSetRef' tollfree='__NSCFType' type64='^{__SCNetworkSet=}'/>
+<cftype gettypeid_func='SCPreferencesGetTypeID' name='SCPreferencesRef' tollfree='__NSCFType' type64='^{__SCPreferences=}'/>
+<constant name='kCFErrorDomainSystemConfiguration' type64='^{__CFString=}'/>
+<constant name='kCNNetworkInfoKeyBSSID' type64='^{__CFString=}'/>
+<constant name='kCNNetworkInfoKeySSID' type64='^{__CFString=}'/>
+<constant name='kCNNetworkInfoKeySSIDData' type64='^{__CFString=}'/>
+<constant name='kSCBondStatusDeviceAggregationStatus' type64='^{__CFString=}'/>
+<constant name='kSCBondStatusDeviceCollecting' type64='^{__CFString=}'/>
+<constant name='kSCBondStatusDeviceDistributing' type64='^{__CFString=}'/>
+<constant name='kSCCompAnyRegex' type64='^{__CFString=}'/>
+<constant name='kSCCompGlobal' type64='^{__CFString=}'/>
+<constant name='kSCCompHostNames' type64='^{__CFString=}'/>
+<constant name='kSCCompInterface' type64='^{__CFString=}'/>
+<constant name='kSCCompNetwork' type64='^{__CFString=}'/>
+<constant name='kSCCompService' type64='^{__CFString=}'/>
+<constant name='kSCCompSystem' type64='^{__CFString=}'/>
+<constant name='kSCCompUsers' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStoreDomainFile' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStoreDomainPlugin' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStoreDomainPrefs' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStoreDomainSetup' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStoreDomainState' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStorePropNetInterfaces' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStorePropNetPrimaryInterface' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStorePropNetPrimaryService' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStorePropNetServiceIDs' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStorePropSetupCurrentSet' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStorePropSetupLastUpdated' type64='^{__CFString=}'/>
+<constant name='kSCDynamicStoreUseSessionKeys' type64='^{__CFString=}'/>
+<constant name='kSCEntNet6to4' type64='^{__CFString=}'/>
+<constant name='kSCEntNetAirPort' type64='^{__CFString=}'/>
+<constant name='kSCEntNetDHCP' type64='^{__CFString=}'/>
+<constant name='kSCEntNetDNS' type64='^{__CFString=}'/>
+<constant name='kSCEntNetEthernet' type64='^{__CFString=}'/>
+<constant name='kSCEntNetFireWire' type64='^{__CFString=}'/>
+<constant name='kSCEntNetIPSec' type64='^{__CFString=}'/>
+<constant name='kSCEntNetIPv4' type64='^{__CFString=}'/>
+<constant name='kSCEntNetIPv6' type64='^{__CFString=}'/>
+<constant name='kSCEntNetInterface' type64='^{__CFString=}'/>
+<constant name='kSCEntNetL2TP' type64='^{__CFString=}'/>
+<constant name='kSCEntNetLink' type64='^{__CFString=}'/>
+<constant name='kSCEntNetModem' type64='^{__CFString=}'/>
+<constant name='kSCEntNetPPP' type64='^{__CFString=}'/>
+<constant name='kSCEntNetPPPSerial' type64='^{__CFString=}'/>
+<constant name='kSCEntNetPPPoE' type64='^{__CFString=}'/>
+<constant name='kSCEntNetPPTP' type64='^{__CFString=}'/>
+<constant name='kSCEntNetProxies' type64='^{__CFString=}'/>
+<constant name='kSCEntNetSMB' type64='^{__CFString=}'/>
+<constant name='kSCEntUsersConsoleUser' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceIPv4' type64='^{__SCNetworkInterface=}'/>
+<constant name='kSCNetworkInterfaceType6to4' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeBluetooth' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeBond' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeEthernet' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeFireWire' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeIEEE80211' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeIPSec' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeIPv4' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeIrDA' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeL2TP' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeModem' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypePPP' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypePPTP' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeSerial' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeVLAN' type64='^{__CFString=}'/>
+<constant name='kSCNetworkInterfaceTypeWWAN' type64='^{__CFString=}'/>
+<constant name='kSCNetworkProtocolTypeDNS' type64='^{__CFString=}'/>
+<constant name='kSCNetworkProtocolTypeIPv4' type64='^{__CFString=}'/>
+<constant name='kSCNetworkProtocolTypeIPv6' type64='^{__CFString=}'/>
+<constant name='kSCNetworkProtocolTypeProxies' type64='^{__CFString=}'/>
+<constant name='kSCNetworkProtocolTypeSMB' type64='^{__CFString=}'/>
+<constant name='kSCPrefCurrentSet' type64='^{__CFString=}'/>
+<constant name='kSCPrefNetworkServices' type64='^{__CFString=}'/>
+<constant name='kSCPrefSets' type64='^{__CFString=}'/>
+<constant name='kSCPrefSystem' type64='^{__CFString=}'/>
+<constant name='kSCPropInterfaceName' type64='^{__CFString=}'/>
+<constant name='kSCPropMACAddress' type64='^{__CFString=}'/>
+<constant name='kSCPropNet6to4Relay' type64='^{__CFString=}'/>
+<constant name='kSCPropNetAirPortAllowNetCreation' type64='^{__CFString=}'/>
+<constant name='kSCPropNetAirPortAuthPassword' type64='^{__CFString=}'/>
+<constant name='kSCPropNetAirPortAuthPasswordEncryption' type64='^{__CFString=}'/>
+<constant name='kSCPropNetAirPortJoinMode' type64='^{__CFString=}'/>
+<constant name='kSCPropNetAirPortPowerEnabled' type64='^{__CFString=}'/>
+<constant name='kSCPropNetAirPortPreferredNetwork' type64='^{__CFString=}'/>
+<constant name='kSCPropNetAirPortSavePasswords' type64='^{__CFString=}'/>
+<constant name='kSCPropNetDNSDomainName' type64='^{__CFString=}'/>
+<constant name='kSCPropNetDNSOptions' type64='^{__CFString=}'/>
+<constant name='kSCPropNetDNSSearchDomains' type64='^{__CFString=}'/>
+<constant name='kSCPropNetDNSSearchOrder' type64='^{__CFString=}'/>
+<constant name='kSCPropNetDNSServerAddresses' type64='^{__CFString=}'/>
+<constant name='kSCPropNetDNSServerPort' type64='^{__CFString=}'/>
+<constant name='kSCPropNetDNSServerTimeout' type64='^{__CFString=}'/>
+<constant name='kSCPropNetDNSSortList' type64='^{__CFString=}'/>
+<constant name='kSCPropNetDNSSupplementalMatchDomains' type64='^{__CFString=}'/>
+<constant name='kSCPropNetDNSSupplementalMatchOrders' type64='^{__CFString=}'/>
+<constant name='kSCPropNetEthernetMTU' type64='^{__CFString=}'/>
+<constant name='kSCPropNetEthernetMediaOptions' type64='^{__CFString=}'/>
+<constant name='kSCPropNetEthernetMediaSubType' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecAuthenticationMethod' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecConnectTime' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecLocalCertificate' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecLocalIdentifier' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecLocalIdentifierType' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecRemoteAddress' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecSharedSecret' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecSharedSecretEncryption' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecStatus' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecXAuthEnabled' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecXAuthName' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecXAuthPassword' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPSecXAuthPasswordEncryption' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv4Addresses' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv4BroadcastAddresses' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv4ConfigMethod' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv4DHCPClientID' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv4DestAddresses' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv4Router' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv4SubnetMasks' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv6Addresses' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv6ConfigMethod' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv6DestAddresses' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv6Flags' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv6PrefixLength' type64='^{__CFString=}'/>
+<constant name='kSCPropNetIPv6Router' type64='^{__CFString=}'/>
+<constant name='kSCPropNetInterfaceDeviceName' type64='^{__CFString=}'/>
+<constant name='kSCPropNetInterfaceHardware' type64='^{__CFString=}'/>
+<constant name='kSCPropNetInterfaceSubType' type64='^{__CFString=}'/>
+<constant name='kSCPropNetInterfaceSupportsModemOnHold' type64='^{__CFString=}'/>
+<constant name='kSCPropNetInterfaceType' type64='^{__CFString=}'/>
+<constant name='kSCPropNetInterfaces' type64='^{__CFString=}'/>
+<constant name='kSCPropNetL2TPIPSecSharedSecret' type64='^{__CFString=}'/>
+<constant name='kSCPropNetL2TPIPSecSharedSecretEncryption' type64='^{__CFString=}'/>
+<constant name='kSCPropNetL2TPTransport' type64='^{__CFString=}'/>
+<constant name='kSCPropNetLinkActive' type64='^{__CFString=}'/>
+<constant name='kSCPropNetLinkDetaching' type64='^{__CFString=}'/>
+<constant name='kSCPropNetLocalHostName' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemAccessPointName' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemConnectSpeed' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemConnectionPersonality' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemConnectionScript' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemDataCompression' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemDeviceContextID' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemDeviceModel' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemDeviceVendor' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemDialMode' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemErrorCorrection' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemHoldCallWaitingAudibleAlert' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemHoldDisconnectOnAnswer' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemHoldEnabled' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemHoldReminder' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemHoldReminderTime' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemNote' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemPulseDial' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemSpeaker' type64='^{__CFString=}'/>
+<constant name='kSCPropNetModemSpeed' type64='^{__CFString=}'/>
+<constant name='kSCPropNetOverridePrimary' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPACSPEnabled' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPAuthEAPPlugins' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPAuthName' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPAuthPassword' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPAuthPasswordEncryption' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPAuthPrompt' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPAuthProtocol' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCCPEnabled' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCCPMPPE128Enabled' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCCPMPPE40Enabled' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCommAlternateRemoteAddress' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCommConnectDelay' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCommDisplayTerminalWindow' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCommRedialCount' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCommRedialEnabled' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCommRedialInterval' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCommRemoteAddress' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCommTerminalScript' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPCommUseTerminalScript' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPConnectTime' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPDeviceLastCause' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPDialOnDemand' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPDisconnectOnFastUserSwitch' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPDisconnectOnIdle' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPDisconnectOnIdleTimer' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPDisconnectOnLogout' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPDisconnectOnSleep' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPDisconnectTime' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPIPCPCompressionVJ' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPIPCPUsePeerDNS' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPIdleReminder' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPIdleReminderTimer' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLCPCompressionACField' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLCPCompressionPField' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLCPEchoEnabled' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLCPEchoFailure' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLCPEchoInterval' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLCPMRU' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLCPMTU' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLCPReceiveACCM' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLCPTransmitACCM' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLastCause' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPLogfile' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPOverridePrimary' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPPlugins' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPRetryConnectTime' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPSessionTimer' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPStatus' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPUseSessionTimer' type64='^{__CFString=}'/>
+<constant name='kSCPropNetPPPVerboseLogging' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesExceptionsList' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesExcludeSimpleHostnames' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesFTPEnable' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesFTPPassive' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesFTPPort' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesFTPProxy' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesGopherEnable' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesGopherPort' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesGopherProxy' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesHTTPEnable' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesHTTPPort' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesHTTPProxy' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesHTTPSEnable' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesHTTPSPort' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesHTTPSProxy' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesProxyAutoConfigEnable' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesProxyAutoConfigJavaScript' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesProxyAutoConfigURLString' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesProxyAutoDiscoveryEnable' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesRTSPEnable' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesRTSPPort' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesRTSPProxy' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesSOCKSEnable' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesSOCKSPort' type64='^{__CFString=}'/>
+<constant name='kSCPropNetProxiesSOCKSProxy' type64='^{__CFString=}'/>
+<constant name='kSCPropNetSMBNetBIOSName' type64='^{__CFString=}'/>
+<constant name='kSCPropNetSMBNetBIOSNodeType' type64='^{__CFString=}'/>
+<constant name='kSCPropNetSMBNetBIOSScope' type64='^{__CFString=}'/>
+<constant name='kSCPropNetSMBWINSAddresses' type64='^{__CFString=}'/>
+<constant name='kSCPropNetSMBWorkgroup' type64='^{__CFString=}'/>
+<constant name='kSCPropNetServiceOrder' type64='^{__CFString=}'/>
+<constant name='kSCPropSystemComputerName' type64='^{__CFString=}'/>
+<constant name='kSCPropSystemComputerNameEncoding' type64='^{__CFString=}'/>
+<constant name='kSCPropUserDefinedName' type64='^{__CFString=}'/>
+<constant name='kSCPropUsersConsoleUserGID' type64='^{__CFString=}'/>
+<constant name='kSCPropUsersConsoleUserName' type64='^{__CFString=}'/>
+<constant name='kSCPropUsersConsoleUserUID' type64='^{__CFString=}'/>
+<constant name='kSCPropVersion' type64='^{__CFString=}'/>
+<constant name='kSCResvInactive' type64='^{__CFString=}'/>
+<constant name='kSCResvLink' type64='^{__CFString=}'/>
+<constant name='kSCValNetAirPortAuthPasswordEncryptionKeychain' type64='^{__CFString=}'/>
+<constant name='kSCValNetAirPortJoinModeAutomatic' type64='^{__CFString=}'/>
+<constant name='kSCValNetAirPortJoinModePreferred' type64='^{__CFString=}'/>
+<constant name='kSCValNetAirPortJoinModeRanked' type64='^{__CFString=}'/>
+<constant name='kSCValNetAirPortJoinModeRecent' type64='^{__CFString=}'/>
+<constant name='kSCValNetAirPortJoinModeStrongest' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPSecAuthenticationMethodCertificate' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPSecAuthenticationMethodHybrid' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPSecAuthenticationMethodSharedSecret' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPSecLocalIdentifierTypeKeyID' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPSecSharedSecretEncryptionKeychain' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPSecXAuthPasswordEncryptionKeychain' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPSecXAuthPasswordEncryptionPrompt' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv4ConfigMethodAutomatic' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv4ConfigMethodBOOTP' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv4ConfigMethodDHCP' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv4ConfigMethodINFORM' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv4ConfigMethodLinkLocal' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv4ConfigMethodManual' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv4ConfigMethodPPP' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv6ConfigMethod6to4' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv6ConfigMethodAutomatic' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv6ConfigMethodLinkLocal' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv6ConfigMethodManual' type64='^{__CFString=}'/>
+<constant name='kSCValNetIPv6ConfigMethodRouterAdvertisement' type64='^{__CFString=}'/>
+<constant name='kSCValNetInterfaceSubTypeL2TP' type64='^{__CFString=}'/>
+<constant name='kSCValNetInterfaceSubTypePPPSerial' type64='^{__CFString=}'/>
+<constant name='kSCValNetInterfaceSubTypePPPoE' type64='^{__CFString=}'/>
+<constant name='kSCValNetInterfaceSubTypePPTP' type64='^{__CFString=}'/>
+<constant name='kSCValNetInterfaceType6to4' type64='^{__CFString=}'/>
+<constant name='kSCValNetInterfaceTypeEthernet' type64='^{__CFString=}'/>
+<constant name='kSCValNetInterfaceTypeFireWire' type64='^{__CFString=}'/>
+<constant name='kSCValNetInterfaceTypeIPSec' type64='^{__CFString=}'/>
+<constant name='kSCValNetInterfaceTypePPP' type64='^{__CFString=}'/>
+<constant name='kSCValNetL2TPIPSecSharedSecretEncryptionKeychain' type64='^{__CFString=}'/>
+<constant name='kSCValNetL2TPTransportIP' type64='^{__CFString=}'/>
+<constant name='kSCValNetL2TPTransportIPSec' type64='^{__CFString=}'/>
+<constant name='kSCValNetModemDialModeIgnoreDialTone' type64='^{__CFString=}'/>
+<constant name='kSCValNetModemDialModeManual' type64='^{__CFString=}'/>
+<constant name='kSCValNetModemDialModeWaitForDialTone' type64='^{__CFString=}'/>
+<constant name='kSCValNetPPPAuthPasswordEncryptionKeychain' type64='^{__CFString=}'/>
+<constant name='kSCValNetPPPAuthPasswordEncryptionToken' type64='^{__CFString=}'/>
+<constant name='kSCValNetPPPAuthPromptAfter' type64='^{__CFString=}'/>
+<constant name='kSCValNetPPPAuthPromptBefore' type64='^{__CFString=}'/>
+<constant name='kSCValNetPPPAuthProtocolCHAP' type64='^{__CFString=}'/>
+<constant name='kSCValNetPPPAuthProtocolEAP' type64='^{__CFString=}'/>
+<constant name='kSCValNetPPPAuthProtocolMSCHAP1' type64='^{__CFString=}'/>
+<constant name='kSCValNetPPPAuthProtocolMSCHAP2' type64='^{__CFString=}'/>
+<constant name='kSCValNetPPPAuthProtocolPAP' type64='^{__CFString=}'/>
+<constant name='kSCValNetSMBNetBIOSNodeTypeBroadcast' type64='^{__CFString=}'/>
+<constant name='kSCValNetSMBNetBIOSNodeTypeHybrid' type64='^{__CFString=}'/>
+<constant name='kSCValNetSMBNetBIOSNodeTypeMixed' type64='^{__CFString=}'/>
+<constant name='kSCValNetSMBNetBIOSNodeTypePeer' type64='^{__CFString=}'/>
+<string_constant name='kSCNetworkConnectionBytesIn' value='BytesIn'/>
+<string_constant name='kSCNetworkConnectionBytesOut' value='BytesOut'/>
+<string_constant name='kSCNetworkConnectionErrorsIn' value='ErrorsIn'/>
+<string_constant name='kSCNetworkConnectionErrorsOut' value='ErrorsOut'/>
+<string_constant name='kSCNetworkConnectionPacketsIn' value='PacketsIn'/>
+<string_constant name='kSCNetworkConnectionPacketsOut' value='PacketsOut'/>
+<string_constant name='kSCNetworkConnectionSelectionOptionOnDemandHostName' value='OnDemandHostName'/>
+<string_constant name='kSCNetworkConnectionSelectionOptionOnDemandRetry' value='OnDemandRetry'/>
+<enum name='kSCBondStatusLinkInvalid' value64='1'/>
+<enum name='kSCBondStatusNoPartner' value64='2'/>
+<enum name='kSCBondStatusNotInActiveGroup' value64='3'/>
+<enum name='kSCBondStatusOK' value64='0'/>
+<enum name='kSCBondStatusUnknown' value64='999'/>
+<enum name='kSCNetworkConnectionConnected' value64='2'/>
+<enum name='kSCNetworkConnectionConnecting' value64='1'/>
+<enum name='kSCNetworkConnectionDisconnected' value64='0'/>
+<enum name='kSCNetworkConnectionDisconnecting' value64='3'/>
+<enum name='kSCNetworkConnectionInvalid' value64='-1'/>
+<enum name='kSCNetworkConnectionPPPAuthenticating' value64='5'/>
+<enum name='kSCNetworkConnectionPPPConnected' value64='8'/>
+<enum name='kSCNetworkConnectionPPPConnectingLink' value64='2'/>
+<enum name='kSCNetworkConnectionPPPDialOnTraffic' value64='3'/>
+<enum name='kSCNetworkConnectionPPPDisconnected' value64='0'/>
+<enum name='kSCNetworkConnectionPPPDisconnectingLink' value64='10'/>
+<enum name='kSCNetworkConnectionPPPHoldingLinkOff' value64='11'/>
+<enum name='kSCNetworkConnectionPPPInitializing' value64='1'/>
+<enum name='kSCNetworkConnectionPPPNegotiatingLink' value64='4'/>
+<enum name='kSCNetworkConnectionPPPNegotiatingNetwork' value64='7'/>
+<enum name='kSCNetworkConnectionPPPSuspended' value64='12'/>
+<enum name='kSCNetworkConnectionPPPTerminating' value64='9'/>
+<enum name='kSCNetworkConnectionPPPWaitingForCallBack' value64='6'/>
+<enum name='kSCNetworkConnectionPPPWaitingForRedial' value64='13'/>
+<enum name='kSCNetworkFlagsConnectionAutomatic' value64='8'/>
+<enum name='kSCNetworkFlagsConnectionRequired' value64='4'/>
+<enum name='kSCNetworkFlagsInterventionRequired' value64='16'/>
+<enum name='kSCNetworkFlagsIsDirect' value64='131072'/>
+<enum name='kSCNetworkFlagsIsLocalAddress' value64='65536'/>
+<enum name='kSCNetworkFlagsReachable' value64='2'/>
+<enum name='kSCNetworkFlagsTransientConnection' value64='1'/>
+<enum name='kSCNetworkReachabilityFlagsConnectionAutomatic' value64='8'/>
+<enum name='kSCNetworkReachabilityFlagsConnectionOnDemand' value64='32'/>
+<enum name='kSCNetworkReachabilityFlagsConnectionOnTraffic' value64='8'/>
+<enum name='kSCNetworkReachabilityFlagsConnectionRequired' value64='4'/>
+<enum name='kSCNetworkReachabilityFlagsInterventionRequired' value64='16'/>
+<enum name='kSCNetworkReachabilityFlagsIsDirect' value64='131072'/>
+<enum name='kSCNetworkReachabilityFlagsIsLocalAddress' value64='65536'/>
+<enum name='kSCNetworkReachabilityFlagsIsWWAN' value64='262144'/>
+<enum name='kSCNetworkReachabilityFlagsReachable' value64='2'/>
+<enum name='kSCNetworkReachabilityFlagsTransientConnection' value64='1'/>
+<enum name='kSCPreferencesNotificationApply' value64='2'/>
+<enum name='kSCPreferencesNotificationCommit' value64='1'/>
+<enum name='kSCStatusAccessError' value64='1003'/>
+<enum name='kSCStatusConnectionIgnore' value64='5002'/>
+<enum name='kSCStatusConnectionNoService' value64='5001'/>
+<enum name='kSCStatusFailed' value64='1001'/>
+<enum name='kSCStatusInvalidArgument' value64='1002'/>
+<enum name='kSCStatusKeyExists' value64='1005'/>
+<enum name='kSCStatusLocked' value64='1006'/>
+<enum name='kSCStatusMaxLink' value64='3006'/>
+<enum name='kSCStatusNeedLock' value64='1007'/>
+<enum name='kSCStatusNoConfigFile' value64='3003'/>
+<enum name='kSCStatusNoKey' value64='1004'/>
+<enum name='kSCStatusNoLink' value64='3004'/>
+<enum name='kSCStatusNoPrefsSession' value64='3001'/>
+<enum name='kSCStatusNoStoreServer' value64='2002'/>
+<enum name='kSCStatusNoStoreSession' value64='2001'/>
+<enum name='kSCStatusNotifierActive' value64='2003'/>
+<enum name='kSCStatusOK' value64='0'/>
+<enum name='kSCStatusPrefsBusy' value64='3002'/>
+<enum name='kSCStatusReachabilityUnknown' value64='4001'/>
+<enum name='kSCStatusStale' value64='3005'/>
+<function name='CNCopyCurrentNetworkInfo'>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__CFDictionary=}'/>
+</function>
+<function name='CNCopySupportedInterfaces'>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='CNMarkPortalOffline'>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='CNMarkPortalOnline'>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='CNSetSupportedSSIDs'>
+<arg type64='^{__CFArray=}'/>
+<retval type64='B'/>
+</function>
+<function name='DHCPClientPreferencesCopyApplicationOptions'>
+<arg type64='^{__CFString=}'/>
+<arg type64='^q' type_modifier='o'/>
+<retval c_array_length_in_arg='1' type64='*'/>
+</function>
+<function name='DHCPClientPreferencesSetApplicationOptions'>
+<arg type64='^{__CFString=}'/>
+<arg c_array_length_in_arg='2' type64='*' type_modifier='n'/>
+<arg type64='q'/>
+<retval type64='B'/>
+</function>
+<function name='DHCPInfoGetLeaseExpirationTime'>
+<arg type64='^{__CFDictionary=}'/>
+<retval type64='^{__CFDate=}'/>
+</function>
+<function name='DHCPInfoGetLeaseStartTime'>
+<arg type64='^{__CFDictionary=}'/>
+<retval type64='^{__CFDate=}'/>
+</function>
+<function name='DHCPInfoGetOptionData'>
+<arg type64='^{__CFDictionary=}'/>
+<arg type64='C'/>
+<retval type64='^{__CFData=}'/>
+</function>
+<function name='SCBondInterfaceCopyAll'>
+<arg type64='^{__SCPreferences=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCBondInterfaceCopyAvailableMemberInterfaces'>
+<arg type64='^{__SCPreferences=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCBondInterfaceCopyStatus'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval already_retained='true' type64='^{__SCBondStatus=}'/>
+</function>
+<function name='SCBondInterfaceCreate'>
+<arg type64='^{__SCPreferences=}'/>
+<retval type64='^{__SCNetworkInterface=}'/>
+</function>
+<function name='SCBondInterfaceGetMemberInterfaces'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFArray=}'/>
+</function>
+<function name='SCBondInterfaceGetOptions'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCBondInterfaceRemove'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCBondInterfaceSetLocalizedDisplayName'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCBondInterfaceSetMemberInterfaces'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFArray=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCBondInterfaceSetOptions'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCBondStatusGetInterfaceStatus'>
+<arg type64='^{__SCBondStatus=}'/>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCBondStatusGetMemberInterfaces'>
+<arg type64='^{__SCBondStatus=}'/>
+<retval type64='^{__CFArray=}'/>
+</function>
+<function name='SCBondStatusGetTypeID'>
+<retval type64='Q'/>
+</function>
+<function name='SCCopyLastError'>
+<retval already_retained='true' type64='^{__CFError=}'/>
+</function>
+<function name='SCDynamicStoreAddTemporaryValue'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^v'/>
+<retval type64='B'/>
+</function>
+<function name='SCDynamicStoreAddValue'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^v'/>
+<retval type64='B'/>
+</function>
+<function name='SCDynamicStoreCopyComputerName'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^I' type_modifier='o'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreCopyConsoleUser'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^I' type_modifier='o'/>
+<arg type64='^I' type_modifier='o'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreCopyDHCPInfo'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCDynamicStoreCopyKeyList'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCDynamicStoreCopyLocalHostName'>
+<arg type64='^{__SCDynamicStore=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreCopyLocation'>
+<arg type64='^{__SCDynamicStore=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreCopyMultiple'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFArray=}'/>
+<arg type64='^{__CFArray=}'/>
+<retval already_retained='true' type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCDynamicStoreCopyNotifiedKeys'>
+<arg type64='^{__SCDynamicStore=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCDynamicStoreCopyProxies'>
+<arg type64='^{__SCDynamicStore=}'/>
+<retval already_retained='true' type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCDynamicStoreCopyValue'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='^v'/>
+</function>
+<function name='SCDynamicStoreCreate'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__CFString=}'/>
+<arg function_pointer='true' type64='^?' type_modifier='n'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFArray=}'/>
+<arg type64='^v'/>
+<retval type64='v'/>
+</arg>
+<arg type64='^{_SCDynamicStoreContext=q^v^?^?^?}' type_modifier='n'/>
+<retval already_retained='true' type64='^{__SCDynamicStore=}'/>
+</function>
+<function name='SCDynamicStoreCreateRunLoopSource'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='q'/>
+<retval already_retained='true' type64='^{__CFRunLoopSource=}'/>
+</function>
+<function name='SCDynamicStoreCreateWithOptions'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<arg function_pointer='true' type64='^?' type_modifier='n'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFArray=}'/>
+<arg type64='^v'/>
+<retval type64='v'/>
+</arg>
+<arg type64='^{_SCDynamicStoreContext=q^v^?^?^?}' type_modifier='n'/>
+<retval already_retained='true' type64='^{__SCDynamicStore=}'/>
+</function>
+<function name='SCDynamicStoreGetTypeID'>
+<retval type64='Q'/>
+</function>
+<function name='SCDynamicStoreKeyCreate' variadic='true'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreKeyCreateComputerName'>
+<arg type64='^{__CFAllocator=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreKeyCreateConsoleUser'>
+<arg type64='^{__CFAllocator=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreKeyCreateHostNames'>
+<arg type64='^{__CFAllocator=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreKeyCreateLocation'>
+<arg type64='^{__CFAllocator=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreKeyCreateNetworkGlobalEntity'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreKeyCreateNetworkInterface'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreKeyCreateNetworkInterfaceEntity'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreKeyCreateNetworkServiceEntity'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreKeyCreateProxies'>
+<arg type64='^{__CFAllocator=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCDynamicStoreNotifyValue'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCDynamicStoreRemoveValue'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCDynamicStoreSetDispatchQueue'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='@'/>
+<retval type64='B'/>
+</function>
+<function name='SCDynamicStoreSetMultiple'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<arg type64='^{__CFArray=}'/>
+<arg type64='^{__CFArray=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCDynamicStoreSetNotificationKeys'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFArray=}'/>
+<arg type64='^{__CFArray=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCDynamicStoreSetValue'>
+<arg type64='^{__SCDynamicStore=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^v'/>
+<retval type64='B'/>
+</function>
+<function name='SCError'>
+<retval type64='i'/>
+</function>
+<function name='SCErrorString'>
+<arg type64='i'/>
+<retval type64='*'/>
+</function>
+<function name='SCNetworkCheckReachabilityByAddress'>
+<arg type64='^{sockaddr=CC[14c]}' type_modifier='n'/>
+<arg type64='I'/>
+<arg type64='^I' type_modifier='o'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkCheckReachabilityByName'>
+<arg type64='*'/>
+<arg type64='^I' type_modifier='o'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkConnectionCopyExtendedStatus'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<retval already_retained='true' type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCNetworkConnectionCopyServiceID'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCNetworkConnectionCopyStatistics'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<retval already_retained='true' type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCNetworkConnectionCopyUserOptions'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<retval already_retained='true' type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCNetworkConnectionCopyUserPreferences'>
+<arg type64='^{__CFDictionary=}'/>
+<arg type64='^^{__CFString}' type_modifier='o'/>
+<arg type64='^^{__CFDictionary}' type_modifier='o'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkConnectionCreateWithServiceID'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__CFString=}'/>
+<arg function_pointer='true' type64='^?' type_modifier='n'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<arg type64='i'/>
+<arg type64='^v'/>
+<retval type64='v'/>
+</arg>
+<arg type64='^{_SCNetworkConnectionContext=q^v^?^?^?}' type_modifier='n'/>
+<retval already_retained='true' type64='^{__SCNetworkConnection=}'/>
+</function>
+<function name='SCNetworkConnectionGetStatus'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<retval type64='i'/>
+</function>
+<function name='SCNetworkConnectionGetTypeID'>
+<retval type64='Q'/>
+</function>
+<function name='SCNetworkConnectionScheduleWithRunLoop'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<arg type64='^{__CFRunLoop=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkConnectionSetDispatchQueue'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<arg type64='@'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkConnectionStart'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<arg type64='B'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkConnectionStop'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<arg type64='B'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkConnectionUnscheduleFromRunLoop'>
+<arg type64='^{__SCNetworkConnection=}'/>
+<arg type64='^{__CFRunLoop=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkInterfaceCopyAll'>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCNetworkInterfaceCopyMTU'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^i' type_modifier='o'/>
+<arg type64='^i' type_modifier='o'/>
+<arg type64='^i' type_modifier='o'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkInterfaceCopyMediaOptions'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^^{__CFDictionary}' type_modifier='o'/>
+<arg type64='^^{__CFDictionary}' type_modifier='o'/>
+<arg type64='^^{__CFArray}' type_modifier='o'/>
+<arg type64='B'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkInterfaceCopyMediaSubTypeOptions'>
+<arg type64='^{__CFArray=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCNetworkInterfaceCopyMediaSubTypes'>
+<arg type64='^{__CFArray=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCNetworkInterfaceCreateWithInterface'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__SCNetworkInterface=}'/>
+</function>
+<function name='SCNetworkInterfaceForceConfigurationRefresh'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkInterfaceGetBSDName'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='SCNetworkInterfaceGetConfiguration'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCNetworkInterfaceGetExtendedConfiguration'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCNetworkInterfaceGetHardwareAddressString'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='SCNetworkInterfaceGetInterface'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__SCNetworkInterface=}'/>
+</function>
+<function name='SCNetworkInterfaceGetInterfaceType'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='SCNetworkInterfaceGetLocalizedDisplayName'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='SCNetworkInterfaceGetSupportedInterfaceTypes'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFArray=}'/>
+</function>
+<function name='SCNetworkInterfaceGetSupportedProtocolTypes'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFArray=}'/>
+</function>
+<function name='SCNetworkInterfaceGetTypeID'>
+<retval type64='Q'/>
+</function>
+<function name='SCNetworkInterfaceRefreshConfiguration'>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkInterfaceSetConfiguration'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkInterfaceSetExtendedConfiguration'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkInterfaceSetMTU'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='i'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkInterfaceSetMediaOptions'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFArray=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkProtocolGetConfiguration'>
+<arg type64='^{__SCNetworkProtocol=}'/>
+<retval type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCNetworkProtocolGetEnabled'>
+<arg type64='^{__SCNetworkProtocol=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkProtocolGetProtocolType'>
+<arg type64='^{__SCNetworkProtocol=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='SCNetworkProtocolGetTypeID'>
+<retval type64='Q'/>
+</function>
+<function name='SCNetworkProtocolSetConfiguration'>
+<arg type64='^{__SCNetworkProtocol=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkProtocolSetEnabled'>
+<arg type64='^{__SCNetworkProtocol=}'/>
+<arg type64='B'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkReachabilityCreateWithAddress'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{sockaddr=CC[14c]}' type_modifier='n'/>
+<retval already_retained='true' type64='^{__SCNetworkReachability=}'/>
+</function>
+<function name='SCNetworkReachabilityCreateWithAddressPair'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{sockaddr=CC[14c]}' type_modifier='n'/>
+<arg type64='^{sockaddr=CC[14c]}' type_modifier='n'/>
+<retval already_retained='true' type64='^{__SCNetworkReachability=}'/>
+</function>
+<function name='SCNetworkReachabilityCreateWithName'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='*'/>
+<retval already_retained='true' type64='^{__SCNetworkReachability=}'/>
+</function>
+<function name='SCNetworkReachabilityGetFlags'>
+<arg type64='^{__SCNetworkReachability=}'/>
+<arg type64='^I' type_modifier='o'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkReachabilityGetTypeID'>
+<retval type64='Q'/>
+</function>
+<function name='SCNetworkReachabilityScheduleWithRunLoop'>
+<arg type64='^{__SCNetworkReachability=}'/>
+<arg type64='^{__CFRunLoop=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkReachabilitySetCallback'>
+<arg type64='^{__SCNetworkReachability=}'/>
+<arg function_pointer='true' type64='^?' type_modifier='n'>
+<arg type64='^{__SCNetworkReachability=}'/>
+<arg type64='I'/>
+<arg type64='^v'/>
+<retval type64='v'/>
+</arg>
+<arg type64='^{_SCNetworkReachabilityContext=q^v^?^?^?}' type_modifier='n'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkReachabilitySetDispatchQueue'>
+<arg type64='^{__SCNetworkReachability=}'/>
+<arg type64='@'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkReachabilityUnscheduleFromRunLoop'>
+<arg type64='^{__SCNetworkReachability=}'/>
+<arg type64='^{__CFRunLoop=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkServiceAddProtocolType'>
+<arg type64='^{__SCNetworkService=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkServiceCopy'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__SCNetworkService=}'/>
+</function>
+<function name='SCNetworkServiceCopyAll'>
+<arg type64='^{__SCPreferences=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCNetworkServiceCopyProtocol'>
+<arg type64='^{__SCNetworkService=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__SCNetworkProtocol=}'/>
+</function>
+<function name='SCNetworkServiceCopyProtocols'>
+<arg type64='^{__SCNetworkService=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCNetworkServiceCreate'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval already_retained='true' type64='^{__SCNetworkService=}'/>
+</function>
+<function name='SCNetworkServiceEstablishDefaultConfiguration'>
+<arg type64='^{__SCNetworkService=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkServiceGetEnabled'>
+<arg type64='^{__SCNetworkService=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkServiceGetInterface'>
+<arg type64='^{__SCNetworkService=}'/>
+<retval type64='^{__SCNetworkInterface=}'/>
+</function>
+<function name='SCNetworkServiceGetName'>
+<arg type64='^{__SCNetworkService=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='SCNetworkServiceGetServiceID'>
+<arg type64='^{__SCNetworkService=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='SCNetworkServiceGetTypeID'>
+<retval type64='Q'/>
+</function>
+<function name='SCNetworkServiceRemove'>
+<arg type64='^{__SCNetworkService=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkServiceRemoveProtocolType'>
+<arg type64='^{__SCNetworkService=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkServiceSetEnabled'>
+<arg type64='^{__SCNetworkService=}'/>
+<arg type64='B'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkServiceSetName'>
+<arg type64='^{__SCNetworkService=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkSetAddService'>
+<arg type64='^{__SCNetworkSet=}'/>
+<arg type64='^{__SCNetworkService=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkSetContainsInterface'>
+<arg type64='^{__SCNetworkSet=}'/>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkSetCopy'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__SCNetworkSet=}'/>
+</function>
+<function name='SCNetworkSetCopyAll'>
+<arg type64='^{__SCPreferences=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCNetworkSetCopyCurrent'>
+<arg type64='^{__SCPreferences=}'/>
+<retval already_retained='true' type64='^{__SCNetworkSet=}'/>
+</function>
+<function name='SCNetworkSetCopyServices'>
+<arg type64='^{__SCNetworkSet=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCNetworkSetCreate'>
+<arg type64='^{__SCPreferences=}'/>
+<retval already_retained='true' type64='^{__SCNetworkSet=}'/>
+</function>
+<function name='SCNetworkSetGetName'>
+<arg type64='^{__SCNetworkSet=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='SCNetworkSetGetServiceOrder'>
+<arg type64='^{__SCNetworkSet=}'/>
+<retval type64='^{__CFArray=}'/>
+</function>
+<function name='SCNetworkSetGetSetID'>
+<arg type64='^{__SCNetworkSet=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='SCNetworkSetGetTypeID'>
+<retval type64='Q'/>
+</function>
+<function name='SCNetworkSetRemove'>
+<arg type64='^{__SCNetworkSet=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkSetRemoveService'>
+<arg type64='^{__SCNetworkSet=}'/>
+<arg type64='^{__SCNetworkService=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkSetSetCurrent'>
+<arg type64='^{__SCNetworkSet=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkSetSetName'>
+<arg type64='^{__SCNetworkSet=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCNetworkSetSetServiceOrder'>
+<arg type64='^{__SCNetworkSet=}'/>
+<arg type64='^{__CFArray=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesAddValue'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^v'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesApplyChanges'>
+<arg type64='^{__SCPreferences=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesCommitChanges'>
+<arg type64='^{__SCPreferences=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesCopyKeyList'>
+<arg type64='^{__SCPreferences=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCPreferencesCreate'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__SCPreferences=}'/>
+</function>
+<function name='SCPreferencesCreateWithAuthorization'>
+<arg type64='^{__CFAllocator=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{AuthorizationOpaqueRef=}'/>
+<retval already_retained='true' type64='^{__SCPreferences=}'/>
+</function>
+<function name='SCPreferencesGetSignature'>
+<arg type64='^{__SCPreferences=}'/>
+<retval type64='^{__CFData=}'/>
+</function>
+<function name='SCPreferencesGetTypeID'>
+<retval type64='Q'/>
+</function>
+<function name='SCPreferencesGetValue'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='^v'/>
+</function>
+<function name='SCPreferencesLock'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='B'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesPathCreateUniqueChild'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<retval already_retained='true' type64='^{__CFString=}'/>
+</function>
+<function name='SCPreferencesPathGetLink'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='^{__CFString=}'/>
+</function>
+<function name='SCPreferencesPathGetValue'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCPreferencesPathRemoveValue'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesPathSetLink'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesPathSetValue'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesRemoveValue'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesScheduleWithRunLoop'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFRunLoop=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesSetCallback'>
+<arg type64='^{__SCPreferences=}'/>
+<arg function_pointer='true' type64='^?' type_modifier='n'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='I'/>
+<arg type64='^v'/>
+<retval type64='v'/>
+</arg>
+<arg type64='^{_SCPreferencesContext=q^v^?^?^?}' type_modifier='n'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesSetComputerName'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='I'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesSetDispatchQueue'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='@'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesSetLocalHostName'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesSetValue'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFString=}'/>
+<arg type64='^v'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesSynchronize'>
+<arg type64='^{__SCPreferences=}'/>
+<retval type64='v'/>
+</function>
+<function name='SCPreferencesUnlock'>
+<arg type64='^{__SCPreferences=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCPreferencesUnscheduleFromRunLoop'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__CFRunLoop=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCVLANInterfaceCopyAll'>
+<arg type64='^{__SCPreferences=}'/>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCVLANInterfaceCopyAvailablePhysicalInterfaces'>
+<retval already_retained='true' type64='^{__CFArray=}'/>
+</function>
+<function name='SCVLANInterfaceCreate'>
+<arg type64='^{__SCPreferences=}'/>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFNumber=}'/>
+<retval type64='^{__SCNetworkInterface=}'/>
+</function>
+<function name='SCVLANInterfaceGetOptions'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFDictionary=}'/>
+</function>
+<function name='SCVLANInterfaceGetPhysicalInterface'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__SCNetworkInterface=}'/>
+</function>
+<function name='SCVLANInterfaceGetTag'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='^{__CFNumber=}'/>
+</function>
+<function name='SCVLANInterfaceRemove'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCVLANInterfaceSetLocalizedDisplayName'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFString=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCVLANInterfaceSetOptions'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFDictionary=}'/>
+<retval type64='B'/>
+</function>
+<function name='SCVLANInterfaceSetPhysicalInterfaceAndTag'>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__SCNetworkInterface=}'/>
+<arg type64='^{__CFNumber=}'/>
+<retval type64='B'/>
+</function>
+</signatures>

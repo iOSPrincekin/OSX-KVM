@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>_AdditionalProperties</key>
+	<dict>
+		<key>RunningBoard</key>
+		<dict>
+			<key>VariableEUID</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>_LimitLoadToBootMode</key>
+	<string>fvunlock</string>
+	<key>KeepAlive</key>
+	<true/>
+	<key>Label</key>
+	<string>com.apple.loginwindowLite</string>
+	<key>MachServices</key>
+	<dict>
+		<key>com.apple.loginwindowLite</key>
+		<true/>
+	</dict>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/System/Library/CoreServices/loginwindowLite.app/Contents/MacOS/loginwindowLite</string>
+		<string>console</string>
+	</array>
+	<key>Program</key>
+	<string>/System/Library/CoreServices/loginwindowLite.app/Contents/MacOS/loginwindowLite</string>
+	<key>ProcessType</key>
+	<string>App</string>
+	<key>RunAtLoad</key>
+	<true/>
+</dict>
+</plist>

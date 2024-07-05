@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>_LimitLoadToBootMode</key>
+	<string>migration</string>
+	<key>Label</key>
+	<string>com.apple.installandsetup.templatemigration</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/System/Installation/CDIS/templateMigrator</string>
+	</array>
+	<key>Program</key>
+	<string>/System/Installation/CDIS/templateMigrator</string>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>ProcessType</key>
+	<string>Interactive</string>
+</dict>
+</plist>

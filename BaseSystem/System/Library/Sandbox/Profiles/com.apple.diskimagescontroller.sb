@@ -1,0 +1,73 @@
+;;; Copyright (c) 2019 Apple Inc.  All Rights reserved.
+;;;
+;;; WARNING: The sandbox rules in this file currently constitute
+;;; Apple System Private Interface and are subject to change at any time and
+;;; without notice.
+;;;
+(version 1)
+
+(import "system.sb")
+
+(import "com.apple.corefoundation.sb")
+(corefoundation)
+
+(define (home-regex home-relative-regex)
+       (regex (string-append "^" (regex-quote (param "_HOME")) home-relative-regex)))
+(define (home-literal home-relative-literal)
+       (literal (string-append (param "_HOME") home-relative-literal)))
+
+;;; Allow driver access for creating a DiskImages device
+(allow iokit-open (iokit-user-client-class "DIDeviceCreatorUserClient"))
+
+;;; Allow accessing DiskImages2 agents & daemons
+(allow mach-lookup
+	(global-name "com.apple.diskimagesiod.xpc")
+	(global-name "com.apple.diskimagesiod.ram.xpc"))
+
+;;; maxfilesperproc is required by [NSFileHandle initialize] that happens as part of XPC protocol setup
+;;; sse4_2 is required by APFS::crc32c_init as part of MediaKit's MKRecordAPFSRuns
+;;; logicalcpu is needed to calculate queue depth (2 x # CPUs in the system)
+;;; queue_depth is needed to read the queue depth override value
+(allow sysctl-read
+	(sysctl-name "kern.maxfilesperproc")
+	(sysctl-name "hw.optional.sse4_2")
+	(sysctl-name "hw.logicalcpu")
+	(sysctl-name "debug.didevice_queue_depth"))
+
+;;; Required by XPC dispatching (_xpc_bundle_resolve_sync calls getattrlist on our executable)
+(allow file-read-metadata)
+
+;;; Preferences
+(allow file-read*
+	(literal "/Library/Preferences/.GlobalPreferences.plist")
+	(home-regex #"/Library/Preferences/ByHost/\.GlobalPreferences\.")
+	(home-literal "/Library/Preferences/.GlobalPreferences.plist"))
+
+;;; *** SecPasswordAction Exceptions Start ***
+
+(allow file-read*
+	(literal      	"/Library/Preferences/com.apple.security-common.plist")
+	(home-literal 	"/Library/Preferences/com.apple.security.plist")
+	(literal     	"/Library/Preferences/com.apple.security.plist")
+	(regex 			"/private/var/folders/*")
+	(literal 		"/private/var/db/mds")
+	(literal 		"/private/var/db/mds/system")
+	(literal 		"/private/var/db/mds/system/mdsDirectory.db")
+	(literal 		"/private/var/db/mds/system/mdsObject.db")
+	(literal 		"/private/var/db/DetachedSignatures")
+	(home-literal 	"/Library/Keychains/login.keychain-db")
+	(literal 		"/Library/Keychains/login.keychain")
+	(literal 		"/Library/Keychains/System.keychain"))
+
+(allow authorization-right-obtain
+	(right-name 	"com.apple.builtin.generic-unlock"))
+
+(allow file-write* file-read*
+    (subpath 		"/private/var/folders/")
+	(home-regex 	"/Library/Keychains/*")
+	(literal 		"/private/var/db/mds/system/mds.lock"))
+
+ (allow mach-lookup
+     (global-name 	"com.apple.SecurityServer"))
+
+;;; *** SecPasswordAction Exceptions End ***

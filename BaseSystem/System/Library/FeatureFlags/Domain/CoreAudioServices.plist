@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>sss_rtaid</key>
+	<dict>
+		<key>Enabled</key>
+		<true/>
+		<key>Description</key>
+		<string>Use Real-Time Audio Issue Detector (RTAID) to monitor System Sound audio statistics</string>
+	</dict>
+	<key>new_auio</key>
+	<dict>
+		<key>Enabled</key>
+		<false/>
+		<key>Description</key>
+		<string>Use new AUIO implementation of AUHAL audio I/O unit.</string>
+	</dict>
+</dict>
+</plist>
