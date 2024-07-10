@@ -303,6 +303,8 @@ cd /Volumes/
 
 sudo cp -aRLH macOS\ Base\ System /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM
 
+cd /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM
+
 sudo rm -rf BaseSystem
 
 sudo mv macOS\ Base\ System BaseSystem
