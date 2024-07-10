@@ -282,3 +282,143 @@ software). Also, a long time back, I had to completely wipe my (then) brand new
 `OS X` kernel kept crashing on it!
 
 Backstory: I was a (poor) student in Canada in a previous life and Apple made [my work on cracking Apple Keychains](https://github.com/openwall/john/blob/bleeding-jumbo/src/keychain_fmt_plug.c) a lot harder than it needed to be. This is how I got interested in Hackintosh systems.
+
+
+
+# 自定义开发
+
+## 1.生成自己的固件文件夹 BaseSystem
+
+
+1.使用 fetch-macOS-v2.py -v 下载 dmg
+fetch-macOS-v2.py -v
+
+2.将 /Volumes/macOS Base System 内容复制到 BaseSystem 文件夹
+
+cd /Volumes/
+
+sudo cp -aRLH macOS\ Base\ System /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM/BaseSystem
+
+cd /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM/BaseSystem 
+
+mv  macOS\ Base\ System ../
+
+cd ../ 
+
+mv macOS\ Base\ System BaseSystem
+
+
+## 2.使用 ./OpenCore-Boot.sh 1 命令 将 BaseSystem 文件夹内容生成 dmg
+
+
+./OpenCore-Boot.sh 1
+
+
+rm -rf BaseSystem1.dmg
+hdiutil create -size 2.1g -srcfolder BaseSystem -fs HFS+ -volname BaseSystem1 -format UDRW   BaseSystem1.dmg
+/Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM/BaseSystem: Authentication error
+..............................................................
+created: /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM/BaseSystem1.dmg
+hdiutil detach /Volumes/BaseSystem1
+hdiutil: detach failed - No such file or directory
+hdiutil attach BaseSystem1.dmg
+/dev/disk4          	GUID_partition_scheme
+/dev/disk4s1        	EFI
+/dev/disk4s2        	Apple_HFS                      	/Volumes/BaseSystem1
+bless --folder /Volumes/BaseSystem1/System/Library/CoreServices --file /Volumes/BaseSystem1/System/Library/CoreServices/boot.efi
+hdiutil detach /Volumes/BaseSystem1
+"disk4" ejected.
+rm -rf BaseSystem_tmp.dmg
+hdiutil convert -format UDZO BaseSystem1.dmg -o BaseSystem_tmp.dmg
+Preparing imaging engine…
+Reading Protective Master Boot Record (MBR : 0)…
+   (CRC32 $58370188: Protective Master Boot Record (MBR : 0))
+Reading GPT Header (Primary GPT Header : 1)…
+   (CRC32 $02D26567: GPT Header (Primary GPT Header : 1))
+Reading GPT Partition Data (Primary GPT Table : 2)…
+   (CRC32 $0AD3C4C4: GPT Partition Data (Primary GPT Table : 2))
+Reading  (Apple_Free : 3)…
+   (CRC32 $00000000:  (Apple_Free : 3))
+Reading EFI System Partition (C12A7328-F81F-11D2-BA4B-00A0C93EC93B : 4)…
+......
+   (CRC32 $B54B659C: EFI System Partition (C12A7328-F81F-11D2-BA4B-00A0C93EC93B : 4))
+Reading disk image (Apple_HFS : 5)…
+.............................................................
+   (CRC32 $160A8AD4: disk image (Apple_HFS : 5))
+Reading  (Apple_Free : 6)…
+.................................................................
+   (CRC32 $00000000:  (Apple_Free : 6))
+Reading GPT Partition Data (Backup GPT Table : 7)…
+.................................................................
+   (CRC32 $0AD3C4C4: GPT Partition Data (Backup GPT Table : 7))
+Reading GPT Header (Backup GPT Header : 8)…
+.................................................................
+   (CRC32 $2241E421: GPT Header (Backup GPT Header : 8))
+Adding resources…
+.................................................................
+Elapsed Time: 31.848s
+File size: 718319927 bytes, Checksum: CRC32 $059DAA0F
+Sectors processed: 4404019, 3946156 compressed
+Speed: 60.5MB/s
+Savings: 68.1%
+created: /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM/BaseSystem_tmp.dmg
+rm -rf BaseSystem1.dmg
+mv BaseSystem_tmp.dmg BaseSystem1.dmg
+dmg2img -i BaseSystem1.dmg BaseSystem.img
+
+dmg2img v1.6.7 (c) vu1tur (to@vu1tur.eu.org)
+
+BaseSystem1.dmg --> BaseSystem.img
+
+
+decompressing:
+opening partition 0 ...             100.00%  ok
+opening partition 1 ...             100.00%  ok
+opening partition 2 ...             100.00%  ok
+opening partition 3 ...             100.00%  ok
+opening partition 4 ...             100.00%  ok
+opening partition 5 ...             100.00%  ok
+opening partition 6 ...             100.00%  ok
+opening partition 7 ...             100.00%  ok
+opening partition 8 ...             100.00%  ok
+
+Archive successfully decompressed as BaseSystem.img
+qemu-system-x86_64: warning: host doesn't support requested feature: CPUID.80000007H:EDX.invtsc [bit 8]
+qemu-system-x86_64: warning: host doesn't support requested feature: CPUID.80000007H:EDX.invtsc [bit 8]
+qemu-system-x86_64: warning: host doesn't support requested feature: CPUID.80000007H:EDX.invtsc [bit 8]
+qemu-system-x86_64: warning: host doesn't support requested feature: CPUID.80000007H:EDX.invtsc [bit 8]
+audio: Could not create a backend for voice `adc'
+qemu-system-x86_64: warning: netdev net0 has no peer
+BdsDxe: loading Boot0001 "UEFI QEMU HARDDISK QM00017 " from PciRoot(0x0)/Pci(0x4,0x0)/Sata(0x2,0xFFFF,0x0)
+BdsDxe: starting Boot0001 "UEFI QEMU HARDDISK QM00017 " from PciRoot(0x0)/Pci(0x4,0x0)/Sata(0x2,0xFFFF,0x0)
+BS: Starting OpenCore application...
+BS: Booter path - \EFI\BOOT\BOOTX64.EFI
+OCFS: Trying to locate filesystem on 7E3C8E98 7E763C98
+OCFS: Filesystem DP - \EFI\BOOT\BOOTX64.EFI
+BS: Trying to load OpenCore image...
+BS: Relative path - EFI
+BS: Startup path - EFI\OpenCore.efi (0)
+BS: Fallback to absolute path - EFI\OC\OpenCore.efi
+BS: Read OpenCore image of 839680 bytes
+OCM: Loaded image at 7D838E98 handle
+OCM: Loaded image has DeviceHandle 7E3C8E98 FilePath 7D838F18 ours DevicePath 7D839618
+OC: Starting OpenCore...
+OC: Booter path - EFI\OC\OpenCore.efi
+OCFS: Trying to locate filesystem on 7E3C8E98 7D838F18
+OCFS: Filesystem DP - EFI\OC\OpenCore.efi
+OC: Absolute booter path - EFI\OC\OpenCore.efi
+OC: Storage root EFI\OC\OpenCore.efi
+OCST: Missing vault data, ignoring...
+OC: OcMiscEarlyInit...
+OC: Loaded configuration of 43485 bytes
+OC: Got 32 drivers
+OC: Watchdog status is 1
+#[EB|LOG:EXITBS:END] _
+#[EB.BST.FBS|-]
+#[EB|B:BOOT]
+#[EB|LOG:HANDOFF TO XNU] _
+======== End of efiboot serial output. ========
+
+
+
+
