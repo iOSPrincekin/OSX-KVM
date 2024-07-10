@@ -17,11 +17,12 @@ MY_OPTIONS="+ssse3,+sse4.2,+popcnt,+avx,+aes,+xsave,+xsaveopt,check"
 
 MAKE_DMG=$1
 
-DMG_NAME=BaseSystem1
-DMG_FILE=${DMG_NAME}.dmg
-DMG_SRC_DIR=BaseSystem
-if [[ $MAKE_DMG == 1 ]];then
 
+if [[ $MAKE_DMG == 1 ]];then
+    DMG_SRC_DIR=BaseSystem
+    DMG_NAME=BaseSystem1
+    DMG_FILE=${DMG_NAME}.dmg
+    
     echo "rm -rf ${DMG_FILE}"
     rm -rf ${DMG_FILE}
     
@@ -41,17 +42,106 @@ if [[ $MAKE_DMG == 1 ]];then
     echo "hdiutil detach /Volumes/${DMG_NAME}"
     hdiutil detach /Volumes/${DMG_NAME}
     
-    echo "hdiutil convert -format UDZO ${DMG_FILE} -o BaseSystem2.dmg"
-    hdiutil convert -format UDZO ${DMG_FILE} -o BaseSystem2.dmg
+    echo "rm -rf BaseSystem_tmp.dmg"
+    rm -rf BaseSystem_tmp.dmg
+    
+    echo "hdiutil convert -format UDZO ${DMG_FILE} -o BaseSystem_tmp.dmg"
+    hdiutil convert -format UDZO ${DMG_FILE} -o BaseSystem_tmp.dmg
     
     echo "rm -rf ${DMG_FILE}"
     rm -rf ${DMG_FILE}
     
-    echo "mv BaseSystem2.dmg ${DMG_FILE}"
-    mv BaseSystem2.dmg ${DMG_FILE}
+    echo "mv BaseSystem_tmp.dmg ${DMG_FILE}"
+    mv BaseSystem_tmp.dmg ${DMG_FILE}
     
-    echo "dmg2img -i BaseSystem1.dmg BaseSystem.img"
-    dmg2img -i BaseSystem1.dmg BaseSystem.img
+    echo "dmg2img -i ${DMG_FILE} BaseSystem.img"
+    dmg2img -i ${DMG_FILE} BaseSystem.img
+    
+    
+    qemu-system-x86_64 -accel hvf -m 4096 -cpu Penryn,kvm=on,vendor=GenuineIntel,+invtsc,vmware-cpuid-freq=on,+ssse3,+sse4.2,+popcnt,+avx,+aes,+xsave,+xsaveopt,check -machine q35 -usb -device usb-kbd -device usb-tablet -smp 4,cores=2,sockets=1 -device usb-ehci,id=ehci -device nec-usb-xhci,id=xhci -global nec-usb-xhci.msi=off -device isa-applesmc,osk='ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc' -drive if=pflash,format=raw,readonly=on,file=././OVMF_CODE.fd -smbios type=2 -device ich9-intel-hda -device hda-duplex -device ich9-ahci,id=sata -drive file=./OpenCore/OpenCore-master.iso,if=none,id=OpenCoreBoot,format=raw, -device ide-hd,bus=sata.2,drive=OpenCoreBoot -device ide-hd,bus=sata.3,drive=InstallMedia -drive id=InstallMedia,if=none,file=./BaseSystem.img,format=raw -drive id=MacHDD,if=none,file=./mac_hdd_ng.img,format=qcow2 -device ide-hd,bus=sata.4,drive=MacHDD -netdev user,id=net0 -serial stdio -device vmware-svga -debugcon file:debug.log -global isa-debugcon.iobase=0x402
+    
+    exit
+    
+elif [[ $MAKE_DMG == 2 ]];then
+    DMG_SRC_DIR=/Volumes/macOS\ Base\ System/
+    DMG_NAME=BaseSystem1
+    DMG_FILE=${DMG_NAME}.dmg
+    
+    echo "rm -rf ${DMG_FILE}"
+    rm -rf ${DMG_FILE}
+    
+    echo "hdiutil create -size 2.1g -srcfolder \"${DMG_SRC_DIR}\" -fs HFS+ -volname "BaseSystem1" -format UDRW   ${DMG_FILE}"
+    hdiutil create -size 2.1g -srcfolder /Volumes/macOS\ Base\ System/ -fs HFS+ -volname "BaseSystem1" -format UDRW   ${DMG_FILE}
+    
+    echo "hdiutil detach /Volumes/${DMG_NAME}"
+    hdiutil detach /Volumes/${DMG_NAME}
+    
+    echo "hdiutil attach ${DMG_FILE}"
+    hdiutil attach ${DMG_FILE}
+    
+    echo "bless --folder /Volumes/${DMG_NAME}/System/Library/CoreServices --file /Volumes/${DMG_NAME}/System/Library/CoreServices/boot.efi"
+    bless --folder /Volumes/${DMG_NAME}/System/Library/CoreServices --file /Volumes/${DMG_NAME}/System/Library/CoreServices/boot.efi
+    
+    echo "hdiutil detach /Volumes/${DMG_NAME}"
+    hdiutil detach /Volumes/${DMG_NAME}
+    exit;
+    echo "rm -rf BaseSystem_tmp.dmg"
+    rm -rf BaseSystem_tmp.dmg
+    
+    echo "hdiutil convert -format UDZO ${DMG_FILE} -o BaseSystem_tmp.dmg"
+    hdiutil convert -format UDZO ${DMG_FILE} -o BaseSystem_tmp.dmg
+    
+    echo "rm -rf ${DMG_FILE}"
+    rm -rf ${DMG_FILE}
+    
+    echo "mv BaseSystem_tmp.dmg ${DMG_FILE}"
+    mv BaseSystem_tmp.dmg ${DMG_FILE}
+    
+    echo "dmg2img -i ${DMG_FILE} BaseSystem.img"
+    dmg2img -i ${DMG_FILE} BaseSystem.img
+    
+    
+    qemu-system-x86_64 -accel hvf -m 4096 -cpu Penryn,kvm=on,vendor=GenuineIntel,+invtsc,vmware-cpuid-freq=on,+ssse3,+sse4.2,+popcnt,+avx,+aes,+xsave,+xsaveopt,check -machine q35 -usb -device usb-kbd -device usb-tablet -smp 4,cores=2,sockets=1 -device usb-ehci,id=ehci -device nec-usb-xhci,id=xhci -global nec-usb-xhci.msi=off -device isa-applesmc,osk='ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc' -drive if=pflash,format=raw,readonly=on,file=././OVMF_CODE.fd -smbios type=2 -device ich9-intel-hda -device hda-duplex -device ich9-ahci,id=sata -drive file=./OpenCore/OpenCore-master.iso,if=none,id=OpenCoreBoot,format=raw, -device ide-hd,bus=sata.2,drive=OpenCoreBoot -device ide-hd,bus=sata.3,drive=InstallMedia -drive id=InstallMedia,if=none,file=./BaseSystem.img,format=raw -drive id=MacHDD,if=none,file=./mac_hdd_ng.img,format=qcow2 -device ide-hd,bus=sata.4,drive=MacHDD -netdev user,id=net0 -serial stdio -device vmware-svga -debugcon file:debug.log -global isa-debugcon.iobase=0x402
+    
+    exit
+    
+else
+
+    DMG_NAME=BaseSystem100
+    DMG_FILE=${DMG_NAME}.dmg
+    MOUNT_NAME=BaseSystem1
+    
+    
+    echo "hdiutil detach /Volumes/${MOUNT_NAME}"
+    hdiutil detach /Volumes/${MOUNT_NAME}
+    
+    echo "rm -rf ${DMG_FILE}"
+    rm -rf ${DMG_FILE}
+    
+    echo "cp BaseSystem3.dmg ${DMG_FILE}"
+    cp BaseSystem3.dmg ${DMG_FILE}
+    
+    echo "hdiutil attach ${DMG_FILE}"
+    hdiutil attach ${DMG_FILE}
+    
+    echo "bless --folder /Volumes/${MOUNT_NAME}/System/Library/CoreServices --file /Volumes/${MOUNT_NAME}/System/Library/CoreServices/boot.efi"
+    bless --folder /Volumes/${MOUNT_NAME}/System/Library/CoreServices --file /Volumes/${MOUNT_NAME}/System/Library/CoreServices/boot.efi
+    
+    echo "hdiutil detach /Volumes/${MOUNT_NAME}"
+    hdiutil detach /Volumes/${MOUNT_NAME}
+    
+    echo "rm -rf BaseSystem_tmp.dmg"
+    rm -rf BaseSystem_tmp.dmg
+    
+    echo "hdiutil convert -format UDZO ${DMG_FILE} -o BaseSystem_tmp.dmg"
+    hdiutil convert -format UDZO ${DMG_FILE} -o BaseSystem_tmp.dmg
+    
+    
+    echo "mv BaseSystem_tmp.dmg ${DMG_FILE}"
+    mv BaseSystem_tmp.dmg ${DMG_FILE}
+    
+    echo "dmg2img -i ${DMG_FILE} BaseSystem.img"
+    dmg2img -i ${DMG_FILE} BaseSystem.img
     
     
     qemu-system-x86_64 -accel hvf -m 4096 -cpu Penryn,kvm=on,vendor=GenuineIntel,+invtsc,vmware-cpuid-freq=on,+ssse3,+sse4.2,+popcnt,+avx,+aes,+xsave,+xsaveopt,check -machine q35 -usb -device usb-kbd -device usb-tablet -smp 4,cores=2,sockets=1 -device usb-ehci,id=ehci -device nec-usb-xhci,id=xhci -global nec-usb-xhci.msi=off -device isa-applesmc,osk='ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc' -drive if=pflash,format=raw,readonly=on,file=././OVMF_CODE.fd -smbios type=2 -device ich9-intel-hda -device hda-duplex -device ich9-ahci,id=sata -drive file=./OpenCore/OpenCore-master.iso,if=none,id=OpenCoreBoot,format=raw, -device ide-hd,bus=sata.2,drive=OpenCoreBoot -device ide-hd,bus=sata.3,drive=InstallMedia -drive id=InstallMedia,if=none,file=./BaseSystem.img,format=raw -drive id=MacHDD,if=none,file=./mac_hdd_ng.img,format=qcow2 -device ide-hd,bus=sata.4,drive=MacHDD -netdev user,id=net0 -serial stdio -device vmware-svga -debugcon file:debug.log -global isa-debugcon.iobase=0x402
