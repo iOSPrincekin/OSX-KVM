@@ -293,25 +293,29 @@ Backstory: I was a (poor) student in Canada in a previous life and Apple made [m
 1.使用 fetch-macOS-v2.py -v 下载 dmg
 fetch-macOS-v2.py -v
 
+
 2.将 /Volumes/macOS Base System 内容复制到 BaseSystem 文件夹
+
+
+hdiutil attach BaseSystem.dmg
 
 cd /Volumes/
 
-sudo cp -aRLH macOS\ Base\ System /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM/BaseSystem
+sudo cp -aRLH macOS\ Base\ System /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM
 
-cd /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM/BaseSystem 
+sudo rm -rf BaseSystem
 
-mv  macOS\ Base\ System ../
-
-cd ../ 
-
-mv macOS\ Base\ System BaseSystem
+sudo mv macOS\ Base\ System BaseSystem
 
 
 ## 2.使用 ./OpenCore-Boot.sh 1 命令 将 BaseSystem 文件夹内容生成 dmg
 
 
 ./OpenCore-Boot.sh 1
+
+
+the command logs:
+
 
 
 rm -rf BaseSystem1.dmg
