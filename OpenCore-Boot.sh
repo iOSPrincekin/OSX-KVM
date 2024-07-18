@@ -105,7 +105,7 @@ elif [[ $MAKE_DMG == 2 ]];then
     
     exit
     
-else
+elif [[ $MAKE_DMG == 3 ]];then
 
     DMG_NAME=BaseSystem100
     DMG_FILE=${DMG_NAME}.dmg
