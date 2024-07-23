@@ -426,5 +426,39 @@ OC: Watchdog status is 1
 ======== End of efiboot serial output. ========
 
 
+## 3. 通过 gAppleBootPolicyPredefinedPaths 添加 #define APPLE_BOOTER_DEFAULT_FILE_NAME  L"\\System\\Library\\CoreServices\\boot.efi" 作为启动项
 
+```
+    //
+    // No entries, or only entry pre-created from boot entry protocol,
+    // so process this directory with Apple Bless.
+    //
+    if (IsDefaultEntryProtocolPartition || IsListEmpty (&FileSystem->BootEntries)) {
+      AddBootEntryFromBless (
+        BootContext,
+        FileSystem,
+        gAppleBootPolicyPredefinedPaths,
+        gAppleBootPolicyNumPredefinedPaths,
+        FALSE,
+        FALSE
+        );
+    }
+```
+
+
+
+
+## 4.查看硬盘信息
+
+```
+ hdiutil imageinfo BaseSystem.dmg
+```
+
+```
+diskutil info /Volumes/BaseSystem1/
+```
+
+```
+ dmg2img -l -v /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM/BaseSystem.dmg
+```
 
