@@ -462,3 +462,490 @@ diskutil info /Volumes/BaseSystem1/
  dmg2img -l -v /Users/lee/Desktop/Computer_Systems/Macos/OSX-KVM/BaseSystem.dmg
 ```
 
+
+## 5.使用LLDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
+
+```
+003ffff0  0f 20 c0 a8 01 74 05 e9  2c ff ff ff e9 11 ff 90  |. ...t..,.......|
+```
+对应源码是
+
+/Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/OvmfPkg/ResetVector/Ia16/ResetVectorVtf0.asm
+
+```
+
+%ifdef ARCH_IA32
+    nop
+    nop
+    jmp     EarlyBspInitReal16
+
+%else
+
+    mov     eax, cr0
+    test    al, 1
+    jz      .Real
+BITS 32
+    jmp     Main32
+BITS 16
+.Real:
+    jmp     EarlyBspInitReal16
+
+%endif
+
+
+```
+
+启动流程1： 0xfffffff0 -> EarlyBspInitReal16 -> Main16-> EarlyInit16、TransitionFromReal16To32BitFlat -> jumpTo32BitAndLandHere-> 
+    mov     eax, SEC_DEFAULT_CR4
+    mov     cr4, eax
+
+启动流程2： 0xfffffff0 -> Main32 -> InitTdx-> ReloadFlat32
+
+
+### 1.从 0xfffffffc 跳转到 0xffffff10
+
+
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000fffc
+->  0xfffc: addb   %al, (%rax)
+    0xfffe: addb   %al, (%rax)
+    0x10000: addb   %al, (%rax)
+    0x10002: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000ff10
+->  0xff10: addb   %al, (%rax)
+    0xff12: addb   %al, (%rax)
+    0xff14: addb   %al, (%rax)
+    0xff16: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+
+```
+
+对应地址hex
+```
+003fff10  bf 42 50 eb 05 66 89 c4  eb 02 eb f9 e9 71 ff c6  |.BP..f.......q..|
+
+```
+
+源代码是
+
+```
+
+BITS    16
+
+;
+; @param[out] DI    'BP' to indicate boot-strap processor
+;
+EarlyBspInitReal16:
+    mov     di, 'BP'
+    jmp     short Main16
+
+```
+### 2.从 0xffffff13 跳转到 0xffffff1a
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000ff13
+->  0xff13: addb   %al, (%rax)
+    0xff15: addb   %al, (%rax)
+    0xff17: addb   %al, (%rax)
+    0xff19: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000ff1a
+->  0xff1a: addb   %al, (%rax)
+    0xff1c: addb   %al, (%rax)
+    0xff1e: addb   %al, (%rax)
+    0xff20: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+```
+
+对应地址hex
+
+```
+
+003fff10  bf 42 50 eb 05 66 89 c4  eb 02 eb f9 e9 71 ff c6  |.BP..f.......q..|
+
+```
+
+汇编是
+
+16 位
+
+```
+0xffffff10:  BF 42 50    mov di, 0x5042
+0xffffff13:  EB 05       jmp 0xa
+0xffffff15:  66 89 C4    mov esp, eax
+0xffffff18:  EB 02       jmp 0xc
+0xffffff1a:  EB F9       jmp 5
+0xffffff1c:  E9 71 FF    jmp 0xff80
+
+```
+
+对应源码是
+
+```
+
+EarlyBspInitReal16:
+    mov     di, 'BP'
+    jmp     short Main16
+
+```
+
+### 3.从 0xffffff1a 到 0xffffff15
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000ff1a
+->  0xff1a: addb   %al, (%rax)
+    0xff1c: addb   %al, (%rax)
+    0xff1e: addb   %al, (%rax)
+    0xff20: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000ff15
+->  0xff15: addb   %al, (%rax)
+    0xff17: addb   %al, (%rax)
+    0xff19: addb   %al, (%rax)
+    0xff1b: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+
+```
+
+
+对应地址hex
+
+```
+
+003fff10  bf 42 50 eb 05 66 89 c4  eb 02 eb f9 e9 71 ff c6  |.BP..f.......q..|
+
+```
+
+汇编是
+
+16 位
+
+```
+0xffffff10:  BF 42 50    mov di, 0x5042
+0xffffff13:  EB 05       jmp 0xa
+0xffffff15:  66 89 C4    mov esp, eax
+0xffffff18:  EB 02       jmp 0xc
+0xffffff1a:  EB F9       jmp 5
+0xffffff1c:  E9 71 FF    jmp 0xff80
+
+```
+
+对应源码是
+
+```
+Main16:
+    OneTimeCall EarlyInit16
+
+```
+
+
+```
+;
+; Modified:  EAX
+;
+; @param[in]  EAX   Initial value of the EAX register (BIST: Built-in Self Test)
+; @param[out] ESP   Initial value of the EAX register (BIST: Built-in Self Test)
+;
+EarlyInit16:
+    ;
+    ; ESP -  Initial value of the EAX register (BIST: Built-in Self Test)
+    ;
+    mov     esp, eax
+
+    debugInitialize
+
+    OneTimeCallRet EarlyInit16
+
+```
+
+### 4.从 0xffffff18 到 0xffffff1c
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000ff18
+->  0xff18: addb   %al, (%rax)
+    0xff1a: addb   %al, (%rax)
+    0xff1c: addb   %al, (%rax)
+    0xff1e: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000ff1c
+->  0xff1c: addb   %al, (%rax)
+    0xff1e: addb   %al, (%rax)
+    0xff20: addb   %al, (%rax)
+    0xff22: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb) 
+
+```
+
+对应地址hex
+
+```
+
+003fff10  bf 42 50 eb 05 66 89 c4  eb 02 eb f9 e9 71 ff c6  |.BP..f.......q..|
+
+```
+
+汇编是
+
+16 位
+
+```
+0xffffff10:  BF 42 50    mov di, 0x5042
+0xffffff13:  EB 05       jmp 0xa
+0xffffff15:  66 89 C4    mov esp, eax
+0xffffff18:  EB 02       jmp 0xc
+0xffffff1a:  EB F9       jmp 5
+0xffffff1c:  E9 71 FF    jmp 0xff80
+
+```
+
+对应源码是
+
+```
+    OneTimeCallRet EarlyInit16
+
+```
+
+```
+Main16:
+    OneTimeCall EarlyInit16
+
+    ;
+    ; Transition the processor from 16-bit real mode to 32-bit flat mode
+    ;
+    OneTimeCall TransitionFromReal16To32BitFlat
+
+```
+
+### 5.从 0xffffff1c 到 0xfffffe90
+```
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000ff1c
+->  0xff1c: addb   %al, (%rax)
+    0xff1e: addb   %al, (%rax)
+    0xff20: addb   %al, (%rax)
+    0xff22: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000fe90
+->  0xfe90: addb   %al, (%rax)
+    0xfe92: addb   %al, (%rax)
+    0xfe94: addb   %al, (%rax)
+    0xfe96: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+
+```
+
+
+对应地址hex
+
+```
+
+003fff10  bf 42 50 eb 05 66 89 c4  eb 02 eb f9 e9 71 ff c6  |.BP..f.......q..|
+
+```
+
+汇编是
+
+16 位
+
+```
+0xffffff10:  BF 42 50    mov di, 0x5042
+0xffffff13:  EB 05       jmp 0xa
+0xffffff15:  66 89 C4    mov esp, eax
+0xffffff18:  EB 02       jmp 0xc
+0xffffff1a:  EB F9       jmp 5
+0xffffff1c:  E9 71 FF    jmp 0xff80
+
+```
+
+对应源码是
+
+```
+    OneTimeCall TransitionFromReal16To32BitFlat
+```
+
+
+```
+
+TransitionFromReal16To32BitFlat:
+
+    debugShowPostCode POSTCODE_16BIT_MODE
+
+    cli
+
+    mov     bx, 0xf000
+    mov     ds, bx
+
+    mov     bx, ADDR16_OF(gdtr)
+
+o32 lgdt    [cs:bx]
+
+    mov     eax, SEC_DEFAULT_CR0
+    mov     cr0, eax
+
+    jmp     LINEAR_CODE_SEL:dword ADDR_OF(jumpTo32BitAndLandHere)
+BITS    32
+jumpTo32BitAndLandHere:
+
+```
+
+### 6.从 0xfffffea7 跳到 0xfffffeaf
+```
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x000000000000fea7
+->  0xfea7: addb   %al, (%rax)
+    0xfea9: addb   %al, (%rax)
+    0xfeab: addb   %al, (%rax)
+    0xfead: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffeaf
+->  0xfffffeaf: movl   $0x640, %eax              ; imm = 0x640 
+    0xfffffeb4: movq   %rax, %cr4
+    0xfffffeb7: movw   $0x18, %ax
+    0xfffffebb: movl   %eax, %ds
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+
+```
+
+
+对应地址hex
+
+16位
+```
+
+003ffea0  23 00 00 00 0f 22 c0 66  ea af fe ff ff 10 00 b8  |#....".f........|
+
+```
+
+32位
+```
+003ffea0  --------------------------------------------- b8  |#....".f........|
+
+003ffeb0  40 06 00 00 0f 22 e0 66  b8 18 00 8e d8 8e c0 8e  |@....".f........|
+
+```
+汇编是
+
+16 位
+```
+0x0000000000000000:  23 00                      and  ax, word ptr [bx + si]
+0x0000000000000002:  00 00                      add  byte ptr [bx + si], al
+0x0000000000000004:  0F 22 C0                   mov  cr0, eax
+0x0000000000000007:  66 EA AF FE FF FF 10 00    ljmp 0x10:0xfffffeaf
+
+```
+
+32 位
+
+```
+0x0000000000000000:  B8 40 06 00 00    mov eax, 0x640
+0x0000000000000005:  0F 22 E0          mov cr4, eax
+0x0000000000000008:  66 B8 18 00       mov ax, 0x18
+0x000000000000000c:  8E D8             mov ds, eax
+0x000000000000000e:  8E C0             mov es, eax
+```
+
+对应源码是
+
+```
+    jmp     LINEAR_CODE_SEL:dword ADDR_OF(jumpTo32BitAndLandHere)
+
+```
+
+```
+BITS    32
+jumpTo32BitAndLandHere:
+
+    mov     eax, SEC_DEFAULT_CR4
+    mov     cr4, eax
+
+    debugShowPostCode POSTCODE_32BIT_MODE
+
+    mov     ax, LINEAR_SEL
+    mov     ds, ax
+    mov     es, ax
+    mov     fs, ax
+    mov     gs, ax
+    mov     ss, ax
+
+    OneTimeCallRet TransitionFromReal16To32BitFlat
+
+
+```
+
+
+## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
+
+
+## 7.开机第一条指令的分析
+
+https://blog.51cto.com/u_16099264/8344097
+
+```
+而一种比较特殊的情况是在80386 CPU复位的时候，隐藏寄存器中的段基址被初始化为FFFF0000h,直接和EIP(FFF0h)相加则得到了第一条指令地址0xFFFFFFF0
+
+```
+
+
+```
+ 开机时CPU进入实模式，8086以及80286的寻址方式为段寄存器左移4位+偏移地址（IP中的值）。第一条指令为FFFF0h,位于1M字节的往下第16个字节的地方。而到了80386，段寄存器由一个段选择子、基地址、长度和访问属性构成（80286就有了，不过是一个过渡阶段，还是以386为主，资料记载比较多），无论是在实模式还是在保护模式下，访问物理内存的方法都是段寄存器中隐藏部分的段基址与EIP相加得到的地址。
+        80386 CPU在保护模式下由段选择子在段描述符表中取出基地址，然后放到CS寄存器中隐藏部分的段基址中，再和EIP偏移地址相加得到（下次直接从隐藏寄存器中取出相加即可，提高速度）。在实模式下，则是由16位的段选择子左移4位写入到副本寄存器中基地址，再由此基址和IP相加得到，后续程序只需要使用Jmp IP指令，CPU直接从副本寄存器中的基地址取出与IP作相加运算即可，无需在使用CS左移4位的方式，来提供速度。
+        而一种比较特殊的情况是在80386 CPU复位的时候，隐藏寄存器中的段基址被初始化为FFFF0000h,直接和EIP(FFF0h)相加则得到了第一条指令地址0xFFFFFFF0。实模式下，本来只能访问1M的物理空间，而现在却到了4G-16字节处，显然超出了实模式的1M寻址范围限制，其内部电路强行把FFFF0000写入到了隐藏寄存器中的段基址，当代码第一次尝试修改CS寄存器后，CPU的寻址范围才会被限制在1M以内。
+
+
+```
+
+
+### 传统BIOS的启动
+
+
+《操作系统真象还原》 P56
+
+```
+按理说，既然让 CPU 去执行 0xFFFF0 处的内容(目前还不知道其是指令，还是数据)，此内容应该是指 令才行，否则这地址处的内容若是数据，而不是指令，CPU 硬是把它当成指令来译码的话，一定会弄巧成拙 铸成大错。现在咱们又有了新的推断，物理地址 0xFFFF0 处应该是指令，继续探索。
+继续看第二个框框，里面有条指令jmp far f000:e05b，这是条跳转指令，也就是证明了在内存物理 地址 0xFFFF0 处的内容是一条跳转指令，我们的判断是正确的。那 CPU 的执行流是跳到哪里了呢?段基 址 0xf000 左移 4 位+0xe05b，即跳向了 0xfe05b 处，这是 BIOS 代码真正开始的地方。
+第三个框框 cs:f000，其意义是 cs 寄存器的值是 f000，与我们刚刚所说的加电时强制将 cs 置为 f000 是吻合的，正确。
+接下来 BIOS 便马不停蹄地检测内存、显卡等外设信息，当检测通过，并初始化好硬件后，开始在内 存中 0x000~0x3FF 处建立数据结构，中断向量表 IVT 并填写中断例程。
+  好了，终于到了接力的时刻，这是这场接力赛的第一棒，它将交给谁呢?咱们下回再说。
+
+2.2.3 为什么是 0x7c00
+```
