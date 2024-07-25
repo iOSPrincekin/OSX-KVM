@@ -912,6 +912,550 @@ jumpTo32BitAndLandHere:
 
 ```
 
+### 7.从 0xfffffec5 跳转到 0xffffff1f
+
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffec5
+->  0xfffffec5: jmp    0xffffff1f
+    0xfffffec7: nop    
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff1f
+->  0xffffff1f: movb   $0x0, 0x80b000(%rip)
+    0xffffff26: jmp    0xffffff2d
+    0xffffff28: jmp    0xfffffa64
+    0xffffff2d: jmp    0xfffff4f0
+Target 0: (Bootstrap.dll) stopped.
+
+```
+
+对应地址hex
+
+```
+003ffeb0  --------------------------------------------- 8e  |@....".f........|
+003ffec0  e0 8e e8 8e d0 eb 58 90  3f 00 d0 fe ff ff 90 90  |......X.?.......|
+```
+
+
+```
+003fff10  bf 42 50 eb 05 66 89 c4  eb 02 eb f9 e9 71 ff c6  |.BP..f.......q..|
+
+```
+
+汇编是
+
+32 位
+```
+0xfffffebf:  8E E0    mov fs, eax
+0xfffffec1:  8E E8    mov gs, eax
+0xfffffec3:  8E D0    mov ss, eax
+0xfffffec5:  EB 58    jmp 0x60
+0xfffffec7:  90       nop 
+
+```
+
+
+
+16 位
+
+```
+0xffffff10:  BF 42 50    mov di, 0x5042
+0xffffff13:  EB 05       jmp 0xa
+0xffffff15:  66 89 C4    mov esp, eax
+0xffffff18:  EB 02       jmp 0xc
+0xffffff1a:  EB F9       jmp 5
+0xffffff1c:  E9 71 FF    jmp 0xff80
+
+```
+
+
+源代码是
+
+```
+
+BITS    16
+
+;
+; @param[out] DI    'BP' to indicate boot-strap processor
+;
+EarlyBspInitReal16:
+    mov     di, 'BP'
+    jmp     short Main16
+
+```
+
+```
+
+EarlyBspInitReal16:
+    mov     di, 'BP'
+    jmp     short Main16
+
+```
+
+
+```
+
+BITS    16
+
+;
+; Modified:  EBX, ECX, EDX, EBP
+;
+; @param[in,out]  RAX/EAX  Initial value of the EAX register
+;                          (BIST: Built-in Self Test)
+; @param[in,out]  DI       'BP': boot-strap processor, or
+;                          'AP': application processor
+; @param[out]     RBP/EBP  Address of Boot Firmware Volume (BFV)
+; @param[out]     DS       Selector allowing flat access to all addresses
+; @param[out]     ES       Selector allowing flat access to all addresses
+; @param[out]     FS       Selector allowing flat access to all addresses
+; @param[out]     GS       Selector allowing flat access to all addresses
+; @param[out]     SS       Selector allowing flat access to all addresses
+;
+; @return         None  This routine jumps to SEC and does not return
+;
+Main16:
+    OneTimeCall EarlyInit16
+
+    ;
+    ; Transition the processor from 16-bit real mode to 32-bit flat mode
+    ;
+    OneTimeCall TransitionFromReal16To32BitFlat
+
+BITS    32
+
+    ; Clear the WorkArea header. The SEV probe routines will populate the
+    ; work area when detected.
+    mov     byte[WORK_AREA_GUEST_TYPE], 0
+
+%ifdef ARCH_X64
+
+    jmp SearchBfv
+
+;
+; Entry point of Main32
+;
+Main32:
+    OneTimeCall InitTdx
+
+SearchBfv:
+
+```
+
+### 7.从 0xffffff26 跳转到 0xffffff2d
+
+
+```
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff26
+->  0xffffff26: jmp    0xffffff2d
+    0xffffff28: jmp    0xfffffa64
+    0xffffff2d: jmp    0xfffff4f0
+    0xffffff32: jmp    0xfffff567
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff2d
+->  0xffffff2d: jmp    0xfffff4f0
+    0xffffff32: jmp    0xfffff567
+    0xffffff37: jmp    0xfffff710
+    0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
+Target 0: (Bootstrap.dll) stopped.
+
+```
+
+即 jmp SearchBfv
+
+对应源代码是
+
+```
+%ifdef ARCH_X64
+
+    jmp SearchBfv
+
+;
+; Entry point of Main32
+;
+Main32:
+    OneTimeCall InitTdx
+
+SearchBfv:
+
+%endif
+
+    ;
+    ; Search for the Boot Firmware Volume (BFV)
+    ;
+    OneTimeCall Flat32SearchForBfvBase
+
+```
+
+### 8.从0xffffff2d跳到 0xfffff4f0
+
+```
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff2d
+->  0xffffff2d: jmp    0xfffff4f0
+    0xffffff32: jmp    0xfffff567
+    0xffffff37: jmp    0xfffff710
+    0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff4f0
+->  0xfffff4f0: xorl   %eax, %eax
+    0xfffff4f2: subl   $0x1000, %eax             ; imm = 0x1000 
+    0xfffff4f7: cmpl   $0xff000000, %eax         ; imm = 0xFF000000 
+    0xfffff4fc: jb     0xfffff557
+Target 0: (Bootstrap.dll) stopped.
+
+
+```
+
+对应源代码是
+
+```
+
+    OneTimeCall Flat32SearchForBfvBase
+
+
+```
+
+/Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/UefiCpuPkg/ResetVector/Vtf0/Ia32/SearchForBfvBase.asm
+
+```
+
+BITS    32
+
+;
+; Modified:  EAX, EBX
+; Preserved: EDI, ESP
+;
+; @param[out]  EBP  Address of Boot Firmware Volume (BFV)
+;
+Flat32SearchForBfvBase:
+
+    xor     eax, eax
+searchingForBfvHeaderLoop:
+    ;
+    ; We check for a firmware volume at every 4KB address in the top 16MB
+    ; just below 4GB.  (Addresses at 0xffHHH000 where H is any hex digit.)
+    ;
+    sub     eax, 0x1000
+    cmp     eax, 0xff000000
+    jb      searchedForBfvHeaderButNotFound
+
+    ;
+    ; Check FFS3 GUID
+    ;
+    cmp     dword [eax + 0x10], FFS3_GUID_DWORD0
+    jne     searchingForFfs2Guid
+    cmp     dword [eax + 0x14], FFS3_GUID_DWORD1
+    jne     searchingForFfs2Guid
+    cmp     dword [eax + 0x18], FFS3_GUID_DWORD2
+    jne     searchingForFfs2Guid
+    cmp     dword [eax + 0x1c], FFS3_GUID_DWORD3
+    jne     searchingForFfs2Guid
+    jmp     checkingFvLength
+
+```
+
+```
+003ff500  10 7a c0 73 54 75 1d 81  78 14 cb 3d ca 4d 75 14  |.z.sTu..x..=.Mu.|
+003ff510  81 78 18 bd 6f 1e 96 75  0b 81 78 1c 89 e7 34 9a  |.x..o..u..x...4.|
+```
+
+### 9. 从 0xfffff546 跳转到 0xfffff548
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff53f
+->  0xfffff53f: cmpl   $0xd32dc385, 0x1c(%rax)   ; imm = 0xD32DC385 
+    0xfffff546: jne    0xfffff4f2
+    0xfffff548: cmpl   $0x0, 0x24(%rax)
+    0xfffff54c: jne    0xfffff4f2
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff546
+->  0xfffff546: jne    0xfffff4f2
+    0xfffff548: cmpl   $0x0, 0x24(%rax)
+    0xfffff54c: jne    0xfffff4f2
+    0xfffff54e: movl   %eax, %ebx
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff548
+->  0xfffff548: cmpl   $0x0, 0x24(%rax)
+    0xfffff54c: jne    0xfffff4f2
+    0xfffff54e: movl   %eax, %ebx
+    0xfffff550: addl   0x20(%rax), %ebx
+Target 0: (Bootstrap.dll) stopped.
+
+
+```
+
+对应源代码是  checkingFvLength:
+ 
+
+```
+
+searchingForFfs2Guid:
+    ;
+    ; Check FFS2 GUID
+    ;
+    cmp     dword [eax + 0x10], FFS2_GUID_DWORD0
+    jne     searchingForBfvHeaderLoop
+    cmp     dword [eax + 0x14], FFS2_GUID_DWORD1
+    jne     searchingForBfvHeaderLoop
+    cmp     dword [eax + 0x18], FFS2_GUID_DWORD2
+    jne     searchingForBfvHeaderLoop
+    cmp     dword [eax + 0x1c], FFS2_GUID_DWORD3
+    jne     searchingForBfvHeaderLoop
+
+checkingFvLength:
+    ;
+    ; Check FV Length
+    ;
+    cmp     dword [eax + 0x24], 0
+    jne     searchingForBfvHeaderLoop
+    mov     ebx, eax
+    add     ebx, dword [eax + 0x20]
+    jnz     searchingForBfvHeaderLoop
+
+    jmp     searchedForBfvHeaderAndItWasFound
+
+
+```
+
+```
+003cc000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+003cc010  78 e5 8c 8c 3d 8a 1c 4f  99 35 89 61 85 c3 2d d3  |x...=..O.5.a..-.|
+003cc020  00 40 03 00 00 00 00 00  5f 46 56 48 ff fe 04 00  |.@......_FVH....|
+```
+
+### 10.从0xfffff562 跳到 0xffffff32,返回到     OneTimeCall Flat32SearchForSecEntryPoint 的下一条指令
+
+```
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff560
+->  0xfffff560: movl   %eax, %ebp
+    0xfffff562: jmp    0xffffff32
+    0xfffff567: xorl   %ebx, %ebx
+    0xfffff569: movl   %ebx, %esi
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff562
+->  0xfffff562: jmp    0xffffff32
+    0xfffff567: xorl   %ebx, %ebx
+    0xfffff569: movl   %ebx, %esi
+    0xfffff56b: movl   %ebp, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff32
+->  0xffffff32: jmp    0xfffff567
+    0xffffff37: jmp    0xfffff710
+    0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
+    0xffffff41: andq   %rax, %rsi
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff567
+->  0xfffff567: xorl   %ebx, %ebx
+    0xfffff569: movl   %ebx, %esi
+    0xfffff56b: movl   %ebp, %eax
+    0xfffff56d: movw   0x30(%rbp), %bx
+Target 0: (Bootstrap.dll) stopped.
+
+```
+
+```
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff2d
+->  0xffffff2d: jmp    0xfffff4f0
+    0xffffff32: jmp    0xfffff567
+    0xffffff37: jmp    0xfffff710
+    0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff4f0
+->  0xfffff4f0: xorl   %eax, %eax
+    0xfffff4f2: subl   $0x1000, %eax             ; imm = 0x1000 
+    0xfffff4f7: cmpl   $0xff000000, %eax         ; imm = 0xFF000000 
+    0xfffff4fc: jb     0xfffff557
+Target 0: (Bootstrap.dll) stopped.
+
+
+```
+
+对应源代码是
+
+```
+
+    OneTimeCall Flat32SearchForBfvBase
+
+
+```
+
+```
+
+BITS    32
+
+%define EFI_FV_FILETYPE_SECURITY_CORE         0x03
+
+;
+; Modified:  EAX, EBX, ECX, EDX
+; Preserved: EDI, EBP, ESP
+;
+; @param[in]   EBP  Address of Boot Firmware Volume (BFV)
+; @param[out]  ESI  SEC Core Entry Point Address
+;
+Flat32SearchForSecEntryPoint:
+
+    ;
+    ; Initialize EBP and ESI to 0
+    ;
+    xor     ebx, ebx
+    mov     esi, ebx
+
+    ;
+    ; Pass over the BFV header
+    ;
+    mov     eax, ebp
+    mov     bx, [ebp + 0x30]
+    add     eax, ebx
+    jc      secEntryPointWasNotFound
+
+    jmp     searchingForFfsFileHeaderLoop
+
+```
+
+
+### 11.从 0xfffff4fe 跳转到  0xfffff524
+
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff4fe
+->  0xfffff4fe: cmpl   $0x5473c07a, 0x10(%rax)   ; imm = 0x5473C07A 
+    0xfffff505: jne    0xfffff524
+    0xfffff507: cmpl   $0x4dca3dcb, 0x14(%rax)   ; imm = 0x4DCA3DCB 
+    0xfffff50e: jne    0xfffff524
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff505
+->  0xfffff505: jne    0xfffff524
+    0xfffff507: cmpl   $0x4dca3dcb, 0x14(%rax)   ; imm = 0x4DCA3DCB 
+    0xfffff50e: jne    0xfffff524
+    0xfffff510: cmpl   $0x961e6fbd, 0x18(%rax)   ; imm = 0x961E6FBD 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff524
+->  0xfffff524: cmpl   $0x8c8ce578, 0x10(%rax)   ; imm = 0x8C8CE578 
+    0xfffff52b: jne    0xfffff4f2
+    0xfffff52d: cmpl   $0x4f1c8a3d, 0x14(%rax)   ; imm = 0x4F1C8A3D 
+    0xfffff534: jne    0xfffff4f2
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff52b
+->  0xfffff52b: jne    0xfffff4f2
+    0xfffff52d: cmpl   $0x4f1c8a3d, 0x14(%rax)   ; imm = 0x4F1C8A3D 
+    0xfffff534: jne    0xfffff4f2
+    0xfffff536: cmpl   $0x61893599, 0x18(%rax)   ; imm = 0x61893599 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff52d
+->  0xfffff52d: cmpl   $0x4f1c8a3d, 0x14(%rax)   ; imm = 0x4F1C8A3D 
+    0xfffff534: jne    0xfffff4f2
+    0xfffff536: cmpl   $0x61893599, 0x18(%rax)   ; imm = 0x61893599 
+    0xfffff53d: jne    0xfffff4f2
+Target 0: (Bootstrap.dll) stopped.
+```
+
+对应源代码是 jne     searchingForFfs2Guid
+
+
+```
+    cmp     dword [eax + 0x10], FFS3_GUID_DWORD0
+    jne     searchingForFfs2Guid
+
+```
+
+```
+
+searchingForBfvHeaderLoop:
+    ;
+    ; We check for a firmware volume at every 4KB address in the top 16MB
+    ; just below 4GB.  (Addresses at 0xffHHH000 where H is any hex digit.)
+    ;
+    sub     eax, 0x1000
+    cmp     eax, 0xff000000
+    jb      searchedForBfvHeaderButNotFound
+
+    ;
+    ; Check FFS3 GUID
+    ;
+    cmp     dword [eax + 0x10], FFS3_GUID_DWORD0
+    jne     searchingForFfs2Guid
+    cmp     dword [eax + 0x14], FFS3_GUID_DWORD1
+    jne     searchingForFfs2Guid
+    cmp     dword [eax + 0x18], FFS3_GUID_DWORD2
+    jne     searchingForFfs2Guid
+    cmp     dword [eax + 0x1c], FFS3_GUID_DWORD3
+    jne     searchingForFfs2Guid
+    jmp     checkingFvLength
+
+searchingForFfs2Guid:
+    ;
+    ; Check FFS2 GUID
+    ;
+    cmp     dword [eax + 0x10], FFS2_GUID_DWORD0
+    jne     searchingForBfvHeaderLoop
+    cmp     dword [eax + 0x14], FFS2_GUID_DWORD1
+    jne     searchingForBfvHeaderLoop
+    cmp     dword [eax + 0x18], FFS2_GUID_DWORD2
+    jne     searchingForBfvHeaderLoop
+    cmp     dword [eax + 0x1c], FFS2_GUID_DWORD3
+    jne     searchingForBfvHeaderLoop
+
+
+```
 
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
