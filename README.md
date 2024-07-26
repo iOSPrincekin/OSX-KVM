@@ -1457,6 +1457,198 @@ searchingForFfs2Guid:
 
 ```
 
+### 12.在 Flat32SearchForSecEntryPoint 方法中循环几次后，在 0xfffcc08a 找到了  readyToTryFfsFileAtEcx
+
+```
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff5a0
+->  0xfffff5a0: cmpb   $0x3, 0x12(%rax)
+    0xfffff5a4: jne    0xfffff5ac
+    0xfffff5a6: jmp    0xfffff5bf
+    0xfffff5a8: testl  %eax, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x $rax
+(unsigned long) 0x00000000fffcc078
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff5a4
+->  0xfffff5a4: jne    0xfffff5ac
+    0xfffff5a6: jmp    0xfffff5bf
+    0xfffff5a8: testl  %eax, %eax
+    0xfffff5aa: jne    0xfffff5b2
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff5a6
+->  0xfffff5a6: jmp    0xfffff5bf
+    0xfffff5a8: testl  %eax, %eax
+    0xfffff5aa: jne    0xfffff5b2
+    0xfffff5ac: movl   %ecx, %eax
+Target 0: (Bootstrap.dll) stopped.
+
+```
+
+对应源码是
+
+```
+
+jumpSinceWeFoundTheLastFfsFile:
+
+    ;
+    ; There seems to be a valid file at eax
+    ;
+    cmp     byte [eax + 0x12], EFI_FV_FILETYPE_SECURITY_CORE ; Check File Type
+    jne     readyToTryFfsFileAtEcx
+
+fileTypeIsSecCore:
+    OneTimeCall GetEntryPointOfFfsFile
+    test    eax, eax
+    jnz     doneSeachingForSecEntryPoint
+
+readyToTryFfsFileAtEcx:
+    ;
+    ; Try the next FFS file at ECX
+    ;
+    mov     eax, ecx
+    jmp     searchingForFfsFileHeaderLoop
+
+
+```
+
+### 13.从 0xfffff5a6 跳转到 0xfffff5bf
+
+```
+
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff5a4
+->  0xfffff5a4: jne    0xfffff5ac
+    0xfffff5a6: jmp    0xfffff5bf
+    0xfffff5a8: testl  %eax, %eax
+    0xfffff5aa: jne    0xfffff5b2
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff5a6
+->  0xfffff5a6: jmp    0xfffff5bf
+    0xfffff5a8: testl  %eax, %eax
+    0xfffff5aa: jne    0xfffff5b2
+    0xfffff5ac: movl   %ecx, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x 0x00000000fffcc078 + 12
+(unsigned int) 0xfffcc084
+(lldb) p/x 0x00000000fffcc078 + 0x12
+(unsigned int) 0xfffcc08a
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff5bf
+->  0xfffff5bf: testl  %eax, %eax
+    0xfffff5c1: je     0xfffff622
+    0xfffff5c3: addl   $0x18, %eax
+    0xfffff5c6: cmpl   %ecx, %eax
+Target 0: (Bootstrap.dll) stopped.
+
+```
+
+对应源码是     OneTimeCall GetEntryPointOfFfsFile
+
+```
+
+jumpSinceWeFoundTheLastFfsFile:
+
+    ;
+    ; There seems to be a valid file at eax
+    ;
+    cmp     byte [eax + 0x12], EFI_FV_FILETYPE_SECURITY_CORE ; Check File Type
+    jne     readyToTryFfsFileAtEcx
+
+fileTypeIsSecCore:
+    OneTimeCall GetEntryPointOfFfsFile
+    test    eax, eax
+    jnz     doneSeachingForSecEntryPoint
+
+```
+
+### 14.从 0xfffff5f3 跳转到 0xfffff5f5
+
+```
+
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff5ee
+->  0xfffff5ee: cmpw   $0x5a4d, (%rax)           ; imm = 0x5A4D 
+    0xfffff5f3: jne    0xfffff622
+    0xfffff5f5: movzwl 0x3c(%rax), %ebx
+    0xfffff5f9: addl   %eax, %ebx
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff5f3
+->  0xfffff5f3: jne    0xfffff622
+    0xfffff5f5: movzwl 0x3c(%rax), %ebx
+    0xfffff5f9: addl   %eax, %ebx
+    0xfffff5fb: cmpl   $0x4550, (%rbx)           ; imm = 0x4550 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff5f5
+->  0xfffff5f5: movzwl 0x3c(%rax), %ebx
+    0xfffff5f9: addl   %eax, %ebx
+    0xfffff5fb: cmpl   $0x4550, (%rbx)           ; imm = 0x4550 
+    0xfffff601: jne    0xfffff622
+Target 0: (Bootstrap.dll) stopped.
+
+
+```
+
+对应源代码是  getEntryPointOfFfsFileFoundPeFile
+其中 getEntryPointOfFfsFileFoundPe32Section 方法对应的内容在编译时应该被处理了，删除了部分内容
+
+
+```
+
+
+getEntryPointOfFfsFileFoundPe32Section:
+    add     eax, 4       ; EAX = Start of PE or UE image
+
+    cmp     word [eax], 'MZ'
+    je      getEntryPointOfFfsFileFoundPeFile
+
+    cmp     word [eax], 'UE'
+    jne     getEntryPointOfFfsFileErrorReturn
+    
+    ; *EntryPoint = (VOID *)((UINTN)UeData + UeHdr.EntryPointAddress)
+    mov     ebx, dword [eax + 0x4]
+    add     eax, ebx
+    jmp     getEntryPointOfFfsFileReturn
+
+getEntryPointOfFfsFileFoundPeFile:
+    movzx   ebx, word [eax + 0x3c]
+    add     ebx, eax
+
+    ; if (Hdr.Pe32->Signature == EFI_IMAGE_NT_SIGNATURE)
+    cmp     dword [ebx], `PE\x00\x00`
+    jne     getEntryPointOfFfsFileErrorReturn
+
+    ; *EntryPoint = (VOID *)((UINTN)Pe32Data +
+    ;   (UINTN)(Hdr.Pe32->OptionalHeader.AddressOfEntryPoint & 0x0ffffffff));
+    add     eax, [ebx + 0x4 + 0x14 + 0x10]
+    jmp     getEntryPointOfFfsFileReturn
+
+
+```
+
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 
