@@ -595,7 +595,7 @@ Target 0: (Bootstrap.dll) stopped.
 
 ```
 
-对应源码是
+对应源码是 jmp     short Main16
 
 ```
 
@@ -733,7 +733,7 @@ Target 0: (Bootstrap.dll) stopped.
     OneTimeCallRet EarlyInit16
 
 ```
-
+往回跳到 TransitionFromReal16To32BitFlat 
 ```
 Main16:
     OneTimeCall EarlyInit16
@@ -1056,17 +1056,17 @@ Process 1 stopped
 * thread #1, stop reason = instruction step into
     frame #0: 0x00000000ffffff26
 ->  0xffffff26: jmp    0xffffff2d
-    0xffffff28: jmp    0xfffffa64
-    0xffffff2d: jmp    0xfffff4f0
-    0xffffff32: jmp    0xfffff567
+    0xffffff28: jmp    0xfffffa73
+    0xffffff2d: jmp    0xfffff670
+    0xffffff32: jmp    0xfffff6e7
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
     frame #0: 0x00000000ffffff2d
-->  0xffffff2d: jmp    0xfffff4f0
-    0xffffff32: jmp    0xfffff567
-    0xffffff37: jmp    0xfffff710
+->  0xffffff2d: jmp    0xfffff670
+    0xffffff32: jmp    0xfffff6e7
+    0xffffff37: jmp    0xfffff880
     0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
 Target 0: (Bootstrap.dll) stopped.
 
@@ -1098,28 +1098,28 @@ SearchBfv:
 
 ```
 
-### 8.从0xffffff2d跳到 0xfffff4f0
+### 8.从0xffffff2d跳到 0xfffff670
 
 ```
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
     frame #0: 0x00000000ffffff2d
-->  0xffffff2d: jmp    0xfffff4f0
-    0xffffff32: jmp    0xfffff567
-    0xffffff37: jmp    0xfffff710
+->  0xffffff2d: jmp    0xfffff670
+    0xffffff32: jmp    0xfffff6e7
+    0xffffff37: jmp    0xfffff880
     0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff4f0
-->  0xfffff4f0: xorl   %eax, %eax
-    0xfffff4f2: subl   $0x1000, %eax             ; imm = 0x1000 
-    0xfffff4f7: cmpl   $0xff000000, %eax         ; imm = 0xFF000000 
-    0xfffff4fc: jb     0xfffff557
+    frame #0: 0x00000000fffff670
+->  0xfffff670: xorl   %eax, %eax
+    0xfffff672: subl   $0x1000, %eax             ; imm = 0x1000 
+    0xfffff677: cmpl   $0xff000000, %eax         ; imm = 0xFF000000 
+    0xfffff67c: jb     0xfffff6d7
 Target 0: (Bootstrap.dll) stopped.
-
+(lldb)  
 
 ```
 
@@ -1176,36 +1176,37 @@ searchingForBfvHeaderLoop:
 003ff510  81 78 18 bd 6f 1e 96 75  0b 81 78 1c 89 e7 34 9a  |.x..o..u..x...4.|
 ```
 
-### 9. 从 0xfffff546 跳转到 0xfffff548
+### 9. 从 0xfffff6c6 跳转到 0xfffff6c8
 ```
-
-(lldb)  
+(lldb) si
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff53f
-->  0xfffff53f: cmpl   $0xd32dc385, 0x1c(%rax)   ; imm = 0xD32DC385 
-    0xfffff546: jne    0xfffff4f2
-    0xfffff548: cmpl   $0x0, 0x24(%rax)
-    0xfffff54c: jne    0xfffff4f2
+    frame #0: 0x00000000fffff6bf
+->  0xfffff6bf: cmpl   $0xd32dc385, 0x1c(%rax)   ; imm = 0xD32DC385 
+    0xfffff6c6: jne    0xfffff672
+    0xfffff6c8: cmpl   $0x0, 0x24(%rax)
+    0xfffff6cc: jne    0xfffff672
 Target 0: (Bootstrap.dll) stopped.
-(lldb)  
+(lldb) c
+Process 1 resuming
+Process 1 stopped
+* thread #1, stop reason = breakpoint 3.1
+    frame #0: 0x00000000fffff6c6
+->  0xfffff6c6: jne    0xfffff672
+    0xfffff6c8: cmpl   $0x0, 0x24(%rax)
+    0xfffff6cc: jne    0xfffff672
+    0xfffff6ce: movl   %eax, %ebx
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff546
-->  0xfffff546: jne    0xfffff4f2
-    0xfffff548: cmpl   $0x0, 0x24(%rax)
-    0xfffff54c: jne    0xfffff4f2
-    0xfffff54e: movl   %eax, %ebx
+    frame #0: 0x00000000fffff6c8
+->  0xfffff6c8: cmpl   $0x0, 0x24(%rax)
+    0xfffff6cc: jne    0xfffff672
+    0xfffff6ce: movl   %eax, %ebx
+    0xfffff6d0: addl   0x20(%rax), %ebx
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff548
-->  0xfffff548: cmpl   $0x0, 0x24(%rax)
-    0xfffff54c: jne    0xfffff4f2
-    0xfffff54e: movl   %eax, %ebx
-    0xfffff550: addl   0x20(%rax), %ebx
-Target 0: (Bootstrap.dll) stopped.
 
 
 ```
@@ -1249,45 +1250,47 @@ checkingFvLength:
 003cc020  00 40 03 00 00 00 00 00  5f 46 56 48 ff fe 04 00  |.@......_FVH....|
 ```
 
-### 10.从0xfffff562 跳到 0xffffff32,返回到     OneTimeCall Flat32SearchForSecEntryPoint 的下一条指令
+### 10.0xfffff6e2 跳到 0xffffff32,返回到     OneTimeCall Flat32SearchForSecEntryPoint 的下一条指令
 
 ```
+
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff560
-->  0xfffff560: movl   %eax, %ebp
-    0xfffff562: jmp    0xffffff32
-    0xfffff567: xorl   %ebx, %ebx
-    0xfffff569: movl   %ebx, %esi
+    frame #0: 0x00000000fffff6e0
+->  0xfffff6e0: movl   %eax, %ebp
+    0xfffff6e2: jmp    0xffffff32
+    0xfffff6e7: xorl   %ebx, %ebx
+    0xfffff6e9: movl   %ebx, %esi
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff562
-->  0xfffff562: jmp    0xffffff32
-    0xfffff567: xorl   %ebx, %ebx
-    0xfffff569: movl   %ebx, %esi
-    0xfffff56b: movl   %ebp, %eax
+    frame #0: 0x00000000fffff6e2
+->  0xfffff6e2: jmp    0xffffff32
+    0xfffff6e7: xorl   %ebx, %ebx
+    0xfffff6e9: movl   %ebx, %esi
+    0xfffff6eb: movl   %ebp, %eax
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
     frame #0: 0x00000000ffffff32
-->  0xffffff32: jmp    0xfffff567
-    0xffffff37: jmp    0xfffff710
+->  0xffffff32: jmp    0xfffff6e7
+    0xffffff37: jmp    0xfffff880
     0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
     0xffffff41: andq   %rax, %rsi
 Target 0: (Bootstrap.dll) stopped.
-(lldb)  
+(lldb) si
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff567
-->  0xfffff567: xorl   %ebx, %ebx
-    0xfffff569: movl   %ebx, %esi
-    0xfffff56b: movl   %ebp, %eax
-    0xfffff56d: movw   0x30(%rbp), %bx
+    frame #0: 0x00000000fffff6e7
+->  0xfffff6e7: xorl   %ebx, %ebx
+    0xfffff6e9: movl   %ebx, %esi
+    0xfffff6eb: movl   %ebp, %eax
+    0xfffff6ed: movw   0x30(%rbp), %bx
 Target 0: (Bootstrap.dll) stopped.
+(lldb)  
 
 ```
 
@@ -1314,11 +1317,30 @@ Target 0: (Bootstrap.dll) stopped.
 
 ```
 
-对应源代码是
+对应源代码是 OneTimeCall Flat32SearchForBfvBase 的下一条指令
 
 ```
 
+BITS    32
+
+    ;
+    ; Search for the Boot Firmware Volume (BFV)
+    ;
     OneTimeCall Flat32SearchForBfvBase
+
+    ;
+    ; EBP - Start of BFV
+    ;
+
+    ;
+    ; Search for the SEC entry point
+    ;
+    OneTimeCall Flat32SearchForSecEntryPoint
+
+    ;
+    ; ESI - SEC Core entry point
+    ; EBP - Start of BFV
+    ;
 
 
 ```
@@ -1457,39 +1479,37 @@ searchingForFfs2Guid:
 
 ```
 
-### 12.在 Flat32SearchForSecEntryPoint 方法中循环几次后，在 0xfffcc08a 找到了  readyToTryFfsFileAtEcx
+### 12.在 Flat32SearchForSecEntryPoint 方法中，在 0xfffff72c 找到了  readyToTryFfsFileAtEcx
 
 ```
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5a0
-->  0xfffff5a0: cmpb   $0x3, 0x12(%rax)
-    0xfffff5a4: jne    0xfffff5ac
-    0xfffff5a6: jmp    0xfffff5bf
-    0xfffff5a8: testl  %eax, %eax
+    frame #0: 0x00000000fffff720
+->  0xfffff720: cmpb   $0x3, 0x12(%rax)
+    0xfffff724: jne    0xfffff72c
+    0xfffff726: jmp    0xfffff73f
+    0xfffff728: testl  %eax, %eax
 Target 0: (Bootstrap.dll) stopped.
-(lldb) p/x $rax
-(unsigned long) 0x00000000fffcc078
-(lldb) si
+(lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5a4
-->  0xfffff5a4: jne    0xfffff5ac
-    0xfffff5a6: jmp    0xfffff5bf
-    0xfffff5a8: testl  %eax, %eax
-    0xfffff5aa: jne    0xfffff5b2
+    frame #0: 0x00000000fffff724
+->  0xfffff724: jne    0xfffff72c
+    0xfffff726: jmp    0xfffff73f
+    0xfffff728: testl  %eax, %eax
+    0xfffff72a: jne    0xfffff732
 Target 0: (Bootstrap.dll) stopped.
-(lldb) si
+(lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5a6
-->  0xfffff5a6: jmp    0xfffff5bf
-    0xfffff5a8: testl  %eax, %eax
-    0xfffff5aa: jne    0xfffff5b2
-    0xfffff5ac: movl   %ecx, %eax
+    frame #0: 0x00000000fffff72c
+->  0xfffff72c: movl   %ecx, %eax
+    0xfffff72e: jmp    0xfffff6fa
+    0xfffff730: xorl   %eax, %eax
+    0xfffff732: movl   %eax, %esi
 Target 0: (Bootstrap.dll) stopped.
-
+(lldb)  
 ```
 
 对应源码是
@@ -1519,41 +1539,40 @@ readyToTryFfsFileAtEcx:
 
 ```
 
-### 13.从 0xfffff5a6 跳转到 0xfffff5bf
+### 13.从 0xfffff726 跳转到 0xfffff73f
 
 ```
-
-(lldb) si
+(lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5a4
-->  0xfffff5a4: jne    0xfffff5ac
-    0xfffff5a6: jmp    0xfffff5bf
-    0xfffff5a8: testl  %eax, %eax
-    0xfffff5aa: jne    0xfffff5b2
+    frame #0: 0x00000000fffff72c
+->  0xfffff72c: movl   %ecx, %eax
+    0xfffff72e: jmp    0xfffff6fa
+    0xfffff730: xorl   %eax, %eax
+    0xfffff732: movl   %eax, %esi
+Target 0: (Bootstrap.dll) stopped.
+(lldb) b 0xfffff726
+Breakpoint 4: address = 0x00000000fffff726
+(lldb) c
+Process 1 resuming
+Process 1 stopped
+* thread #1, stop reason = breakpoint 4.1
+    frame #0: 0x00000000fffff726
+->  0xfffff726: jmp    0xfffff73f
+    0xfffff728: testl  %eax, %eax
+    0xfffff72a: jne    0xfffff732
+    0xfffff72c: movl   %ecx, %eax
 Target 0: (Bootstrap.dll) stopped.
 (lldb) si
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5a6
-->  0xfffff5a6: jmp    0xfffff5bf
-    0xfffff5a8: testl  %eax, %eax
-    0xfffff5aa: jne    0xfffff5b2
-    0xfffff5ac: movl   %ecx, %eax
+    frame #0: 0x00000000fffff73f
+->  0xfffff73f: testl  %eax, %eax
+    0xfffff741: je     0xfffff790
+    0xfffff743: addl   $0x18, %eax
+    0xfffff746: cmpl   %ecx, %eax
 Target 0: (Bootstrap.dll) stopped.
-(lldb) p/x 0x00000000fffcc078 + 12
-(unsigned int) 0xfffcc084
-(lldb) p/x 0x00000000fffcc078 + 0x12
-(unsigned int) 0xfffcc08a
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5bf
-->  0xfffff5bf: testl  %eax, %eax
-    0xfffff5c1: je     0xfffff622
-    0xfffff5c3: addl   $0x18, %eax
-    0xfffff5c6: cmpl   %ecx, %eax
-Target 0: (Bootstrap.dll) stopped.
+(lldb)  
 
 ```
 
@@ -1576,47 +1595,120 @@ fileTypeIsSecCore:
 
 ```
 
-### 14.从 0xfffff5f3 跳转到 0xfffff5f5
+```
+GetEntryPointOfFfsFile:
+    test    eax, eax
+    jz      getEntryPointOfFfsFileErrorReturn
+    add     eax, 0x18       ; EAX = Start of section
 
 ```
 
+### 14.从 0xfffff765 -> 0xfffff795 -> 0xfffff795 -> 0xfffff728
+
+```
+
+(lldb) b 0xfffff765
+Breakpoint 1: address = 0x00000000fffff765
+(lldb) c
+Process 1 resuming
+Process 1 stopped
+* thread #1, stop reason = breakpoint 1.1
+    frame #0: 0x00000000fffff765
+->  0xfffff765: addl   $0x4, %eax
+    0xfffff768: cmpw   $0x5a4d, (%rax)           ; imm = 0x5A4D 
+    0xfffff76d: je     0xfffff77d
+    0xfffff76f: cmpw   $0x4555, (%rax)           ; imm = 0x4555 
+Target 0: (Bootstrap.dll) stopped.
 (lldb) si
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5ee
-->  0xfffff5ee: cmpw   $0x5a4d, (%rax)           ; imm = 0x5A4D 
-    0xfffff5f3: jne    0xfffff622
-    0xfffff5f5: movzwl 0x3c(%rax), %ebx
-    0xfffff5f9: addl   %eax, %ebx
+    frame #0: 0x00000000fffff768
+->  0xfffff768: cmpw   $0x5a4d, (%rax)           ; imm = 0x5A4D 
+    0xfffff76d: je     0xfffff77d
+    0xfffff76f: cmpw   $0x4555, (%rax)           ; imm = 0x4555 
+    0xfffff774: jne    0xfffff790
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5f3
-->  0xfffff5f3: jne    0xfffff622
-    0xfffff5f5: movzwl 0x3c(%rax), %ebx
-    0xfffff5f9: addl   %eax, %ebx
-    0xfffff5fb: cmpl   $0x4550, (%rbx)           ; imm = 0x4550 
+    frame #0: 0x00000000fffff76d
+->  0xfffff76d: je     0xfffff77d
+    0xfffff76f: cmpw   $0x4555, (%rax)           ; imm = 0x4555 
+    0xfffff774: jne    0xfffff790
+    0xfffff776: movl   0x4(%rax), %ebx
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5f5
-->  0xfffff5f5: movzwl 0x3c(%rax), %ebx
-    0xfffff5f9: addl   %eax, %ebx
-    0xfffff5fb: cmpl   $0x4550, (%rbx)           ; imm = 0x4550 
-    0xfffff601: jne    0xfffff622
+    frame #0: 0x00000000fffff76f
+->  0xfffff76f: cmpw   $0x4555, (%rax)           ; imm = 0x4555 
+    0xfffff774: jne    0xfffff790
+    0xfffff776: movl   0x4(%rax), %ebx
+    0xfffff779: addl   %ebx, %eax
 Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff774
+->  0xfffff774: jne    0xfffff790
+    0xfffff776: movl   0x4(%rax), %ebx
+    0xfffff779: addl   %ebx, %eax
+    0xfffff77b: jmp    0xfffff795
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff776
+->  0xfffff776: movl   0x4(%rax), %ebx
+    0xfffff779: addl   %ebx, %eax
+    0xfffff77b: jmp    0xfffff795
+    0xfffff77d: movzwl 0x3c(%rax), %ebx
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff779
+->  0xfffff779: addl   %ebx, %eax
+    0xfffff77b: jmp    0xfffff795
+    0xfffff77d: movzwl 0x3c(%rax), %ebx
+    0xfffff781: addl   %eax, %ebx
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff77b
+->  0xfffff77b: jmp    0xfffff795
+    0xfffff77d: movzwl 0x3c(%rax), %ebx
+    0xfffff781: addl   %eax, %ebx
+    0xfffff783: cmpl   $0x4550, (%rbx)           ; imm = 0x4550 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff795
+->  0xfffff795: jmp    0xfffff728
+    0xfffff797: nop    
+    0xfffff798: nop    
+    0xfffff799: nop    
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff728
+->  0xfffff728: testl  %eax, %eax
+    0xfffff72a: jne    0xfffff732
+    0xfffff72c: movl   %ecx, %eax
+    0xfffff72e: jmp    0xfffff6fa
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
 
 
 ```
 
-对应源代码是  getEntryPointOfFfsFileFoundPeFile
-其中 getEntryPointOfFfsFileFoundPe32Section 方法对应的内容在编译时应该被处理了，删除了部分内容
+对应源代码是  getEntryPointOfFfsFileFoundPe32Section->getEntryPointOfFfsFileReturn->    OneTimeCallRet GetEntryPointOfFfsFile ->fileTypeIsSecCore
 
 
 ```
-
 
 getEntryPointOfFfsFileFoundPe32Section:
     add     eax, 4       ; EAX = Start of PE or UE image
@@ -1645,6 +1737,20 @@ getEntryPointOfFfsFileFoundPeFile:
     add     eax, [ebx + 0x4 + 0x14 + 0x10]
     jmp     getEntryPointOfFfsFileReturn
 
+getEntryPointOfFfsFileErrorReturn:
+    mov     eax, 0
+
+getEntryPointOfFfsFileReturn:
+    OneTimeCallRet GetEntryPointOfFfsFile
+
+```
+
+```
+
+fileTypeIsSecCore:
+    OneTimeCall GetEntryPointOfFfsFile
+    test    eax, eax
+    jnz     doneSeachingForSecEntryPoint
 
 ```
 
