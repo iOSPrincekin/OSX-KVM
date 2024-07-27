@@ -1755,175 +1755,93 @@ fileTypeIsSecCore:
 ```
 
 
-### 15.从 0xfffff627 跳转到  0xfffff5a8
+### 15.从 0xfffff736 -> 0xfffff73a -> 0xffffff37 -> 0xfffff880 -> 0xfffff90e -> 0xfffffa7c
 
 ```
-
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff606
-->  0xfffff606: jmp    0xfffff627
-    0xfffff608: addl   $0x4, %eax
-    0xfffff60b: movl   %eax, %ebx
-    0xfffff60d: cmpw   $0x5a56, (%rbx)           ; imm = 0x5A56 
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff627
-->  0xfffff627: jmp    0xfffff5a8
-    0xfffff62c: nop    
-    0xfffff62d: nop    
-    0xfffff62e: nop    
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5a8
-->  0xfffff5a8: testl  %eax, %eax
-    0xfffff5aa: jne    0xfffff5b2
-    0xfffff5ac: movl   %ecx, %eax
-    0xfffff5ae: jmp    0xfffff57a
-Target 0: (Bootstrap.dll) stopped.
-(lldb)  
-
-
-```
-
-对应源码是     返回到GetEntryPointOfFfsFile 调用的地方 OneTimeCallRet GetEntryPointOfFfsFile
-
-
-```
-
-getEntryPointOfFfsFileFoundPeFile:
-    movzx   ebx, word [eax + 0x3c]
-    add     ebx, eax
-
-    ; if (Hdr.Pe32->Signature == EFI_IMAGE_NT_SIGNATURE)
-    cmp     dword [ebx], `PE\x00\x00`
-    jne     getEntryPointOfFfsFileErrorReturn
-
-    ; *EntryPoint = (VOID *)((UINTN)Pe32Data +
-    ;   (UINTN)(Hdr.Pe32->OptionalHeader.AddressOfEntryPoint & 0x0ffffffff));
-    add     eax, [ebx + 0x4 + 0x14 + 0x10]
-    jmp     getEntryPointOfFfsFileReturn
-
-getEntryPointOfFfsFileErrorReturn:
-    mov     eax, 0
-
-getEntryPointOfFfsFileReturn:
-    OneTimeCallRet GetEntryPointOfFfsFile
-
-
-```
-
- 返回到GetEntryPointOfFfsFile 调用的地方 
-
-```
-fileTypeIsSecCore:
-    OneTimeCall GetEntryPointOfFfsFile
-    test    eax, eax
-    jnz     doneSeachingForSecEntryPoint
-
-```
-
-
-### 16. 从 0xfffff5aa->0xfffff5b2->0xfffff5b6->0xfffff5ba->0xffffff37
-
-```
-
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5a8
-->  0xfffff5a8: testl  %eax, %eax
-    0xfffff5aa: jne    0xfffff5b2
-    0xfffff5ac: movl   %ecx, %eax
-    0xfffff5ae: jmp    0xfffff57a
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5aa
-->  0xfffff5aa: jne    0xfffff5b2
-    0xfffff5ac: movl   %ecx, %eax
-    0xfffff5ae: jmp    0xfffff57a
-    0xfffff5b0: xorl   %eax, %eax
+    frame #0: 0x00000000fffff732
+->  0xfffff732: movl   %eax, %esi
+    0xfffff734: testl  %esi, %esi
+    0xfffff736: jne    0xfffff73a
+    0xfffff738: je     0xfffff738
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5b2
-->  0xfffff5b2: movl   %eax, %esi
-    0xfffff5b4: testl  %esi, %esi
-    0xfffff5b6: jne    0xfffff5ba
-    0xfffff5b8: je     0xfffff5b8
-Target 0: (Bootstrap.dll) stopped.
-(lldb) p/x $eax
-(unsigned int) 0xfffcdfd1
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5b4
-->  0xfffff5b4: testl  %esi, %esi
-    0xfffff5b6: jne    0xfffff5ba
-    0xfffff5b8: je     0xfffff5b8
-    0xfffff5ba: jmp    0xffffff37
+    frame #0: 0x00000000fffff734
+->  0xfffff734: testl  %esi, %esi
+    0xfffff736: jne    0xfffff73a
+    0xfffff738: je     0xfffff738
+    0xfffff73a: jmp    0xffffff37
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5b6
-->  0xfffff5b6: jne    0xfffff5ba
-    0xfffff5b8: je     0xfffff5b8
-    0xfffff5ba: jmp    0xffffff37
-    0xfffff5bf: testl  %eax, %eax
+    frame #0: 0x00000000fffff736
+->  0xfffff736: jne    0xfffff73a
+    0xfffff738: je     0xfffff738
+    0xfffff73a: jmp    0xffffff37
+    0xfffff73f: testl  %eax, %eax
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff5ba
-->  0xfffff5ba: jmp    0xffffff37
-    0xfffff5bf: testl  %eax, %eax
-    0xfffff5c1: je     0xfffff622
-    0xfffff5c3: addl   $0x18, %eax
+    frame #0: 0x00000000fffff73a
+->  0xfffff73a: jmp    0xffffff37
+    0xfffff73f: testl  %eax, %eax
+    0xfffff741: je     0xfffff790
+    0xfffff743: addl   $0x18, %eax
 Target 0: (Bootstrap.dll) stopped.
 (lldb) si
 Process 1 stopped
 * thread #1, stop reason = instruction step into
     frame #0: 0x00000000ffffff37
-->  0xffffff37: jmp    0xfffff710
+->  0xffffff37: jmp    0xfffff880
     0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
     0xffffff41: andq   %rax, %rsi
     0xffffff44: andq   %rax, %rbp
 Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff880
+->  0xfffff880: jmp    0xfffff90e
+    0xfffff885: movq   %cr4, %rax
+    0xfffff888: btsl   $0x5, %eax
+    0xfffff88c: movq   %rax, %cr4
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff90e
+->  0xfffff90e: jmp    0xfffffa7c
+    0xfffff913: cmpl   $0x1, %eax
+    0xfffff916: je     0xfffff92b
+    0xfffff918: cmpl   $0x2, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffa7c
+->  0xfffffa7c: xorl   %eax, %eax
+    0xfffffa7e: cmpb   $0x2, 0x80b000(%rip)
+    0xfffffa85: jne    0xfffffa8f
+    0xfffffa87: xorl   %edx, %edx
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+
 ```
-
-
-
 
 对应源码是 jnz     doneSeachingForSecEntryPoint ->     jnz     secCoreEntryPointWasFound ->   OneTimeCallRet Flat32SearchForSecEntryPoint
-->    OneTimeCall Transition32FlatTo64Flat
+->    OneTimeCall Transition32FlatTo64Flat ->     OneTimeCall SetCr3ForPageTables64->     OneTimeCall   CheckTdxFeaturesBeforeBuildPagetables
+
+
+
 
 
 ```
-
-fileTypeIsSecCore:
-    OneTimeCall GetEntryPointOfFfsFile
-    test    eax, eax
-    jnz     doneSeachingForSecEntryPoint
-
-readyToTryFfsFileAtEcx:
-    ;
-    ; Try the next FFS file at ECX
-    ;
-    mov     eax, ecx
-    jmp     searchingForFfsFileHeaderLoop
-
-secEntryPointWasNotFound:
-    xor     eax, eax
-
 doneSeachingForSecEntryPoint:
     mov     esi, eax
 
@@ -1941,10 +1859,13 @@ secCoreEntryPointWasFound:
     debugShowPostCode POSTCODE_SEC_FOUND
 
     OneTimeCallRet Flat32SearchForSecEntryPoint
-```
 
 ```
 
+
+
+
+```
 BITS    32
 
     ;
@@ -1985,65 +1906,24 @@ BITS    32
     ;
     OneTimeCall Transition32FlatTo64Flat
 
-```
-
-### 17. 0xffffff37-> 0xfffff710->0xfffff79e->0xfffffa6d
-
-```
-
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000ffffff37
-->  0xffffff37: jmp    0xfffff710
-    0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
-    0xffffff41: andq   %rax, %rsi
-    0xffffff44: andq   %rax, %rbp
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff710
-->  0xfffff710: jmp    0xfffff79e
-    0xfffff715: movq   %cr4, %rax
-    0xfffff718: btsl   $0x5, %eax
-    0xfffff71c: movq   %rax, %cr4
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff79e
-->  0xfffff79e: jmp    0xfffffa6d
-    0xfffff7a3: cmpl   $0x1, %eax
-    0xfffff7a6: je     0xfffff907
-    0xfffff7ac: cmpl   $0x2, %eax
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffa6d
-->  0xfffffa6d: xorl   %eax, %eax
-    0xfffffa6f: cmpb   $0x2, 0x80b000(%rip)
-    0xfffffa76: jne    0xfffffa80
-    0xfffffa78: xorl   %edx, %edx
-Target 0: (Bootstrap.dll) stopped.
-(lldb)  
-
-
-```
-
-
-对应源码是 Transition32FlatTo64Flat->SetCr3ForPageTables64->CheckTdxFeaturesBeforeBuildPagetables
-
-```
+BITS    64
 
     ;
-    ; Transition the processor from 32-bit flat mode to 64-bit flat mode
+    ; Some values were calculated in 32-bit mode.  Make sure the upper
+    ; 32-bits of 64-bit registers are zero for these values.
     ;
-    OneTimeCall Transition32FlatTo64Flat
+    mov     rax, 0x00000000ffffffff
+    and     rsi, rax
+    and     rbp, rax
+    and     rsp, rax
+
 ```
 
 ```
+
+;
+; Modified:  EAX, ECX, EDX
+;
 Transition32FlatTo64Flat:
 
     OneTimeCall SetCr3ForPageTables64
@@ -2052,22 +1932,16 @@ Transition32FlatTo64Flat:
     bts     eax, 5                      ; enable PAE
     mov     cr4, eax
 
-    mov     ecx, 0xc0000080
-    rdmsr
-    bts     eax, 8                      ; set LME
-    wrmsr
-
-    mov     eax, cr0
-    bts     eax, 31                     ; set PG
-    mov     cr0, eax                    ; enable paging
-
-    jmp     LINEAR_CODE64_SEL:ADDR_OF(jumpTo64BitAndLandHere)
 
 ```
 
-
-
 ```
+%define TDX_BSP         1
+%define TDX_AP          2
+
+;
+; Modified:  EAX, EBX, ECX, EDX
+;
 SetCr3ForPageTables64:
     ; Check the TDX features.
     ; If it is TDX APs, then jump to SetCr3 directly.
@@ -2087,10 +1961,17 @@ SetCr3ForPageTables64:
     ; The mask will be saved in the EDX and applied during the
     ; the page table build below.
     OneTimeCall   GetSevCBitMaskAbove31
-```
 
 ```
 
+```
+
+;
+;
+; Modified:  EAX, EDX
+;
+; 0-NonTdx, 1-TdxBsp, 2-TdxAps
+;
 CheckTdxFeaturesBeforeBuildPagetables:
     xor     eax, eax
     cmp     byte[WORK_AREA_GUEST_TYPE], VM_GUEST_TDX
@@ -2100,66 +1981,72 @@ CheckTdxFeaturesBeforeBuildPagetables:
     mov     al, byte[TDX_WORK_AREA_PGTBL_READY]
     inc     eax
 
-
 ```
 
-
-### 18.0xfffffa6d->0xfffffa80->0xfffff7a3
-
+### 16. 0xfffffa85-> 0xfffffa8f -> 0xfffff913 ->  cmpl   $0x1, %eax
 
 ```
 
 (lldb) si
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffa6d
-->  0xfffffa6d: xorl   %eax, %eax
-    0xfffffa6f: cmpb   $0x2, 0x80b000(%rip)
-    0xfffffa76: jne    0xfffffa80
-    0xfffffa78: xorl   %edx, %edx
+    frame #0: 0x00000000fffffa7c
+->  0xfffffa7c: xorl   %eax, %eax
+    0xfffffa7e: cmpb   $0x2, 0x80b000(%rip)
+    0xfffffa85: jne    0xfffffa8f
+    0xfffffa87: xorl   %edx, %edx
 Target 0: (Bootstrap.dll) stopped.
 (lldb) si
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffa6f
-->  0xfffffa6f: cmpb   $0x2, 0x80b000(%rip)
-    0xfffffa76: jne    0xfffffa80
-    0xfffffa78: xorl   %edx, %edx
-    0xfffffa7a: movabsb -0x2e116bfff7f4ffc, %al
+    frame #0: 0x00000000fffffa7e
+->  0xfffffa7e: cmpb   $0x2, 0x80b000(%rip)
+    0xfffffa85: jne    0xfffffa8f
+    0xfffffa87: xorl   %edx, %edx
+    0xfffffa89: movabsb -0x18016bfff7f4ffc, %al
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffa76
-->  0xfffffa76: jne    0xfffffa80
-    0xfffffa78: xorl   %edx, %edx
-    0xfffffa7a: movabsb -0x2e116bfff7f4ffc, %al
+    frame #0: 0x00000000fffffa85
+->  0xfffffa85: jne    0xfffffa8f
+    0xfffffa87: xorl   %edx, %edx
+    0xfffffa89: movabsb -0x18016bfff7f4ffc, %al
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffa8f
+->  0xfffffa8f: jmp    0xfffff913
+    0xfffffa94: cmpb   $0x2, 0x80b000(%rip)
+    0xfffffa9b: jne    0xfffffaa4
+    0xfffffa9d: movb   $0x1, 0x80b004(%rip)
 Target 0: (Bootstrap.dll) stopped.
 (lldb) si
 Process 1 stopped
 * thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffa80
-->  0xfffffa80: jmp    0xfffff7a3
-    0xfffffa85: movb   $0x1, 0x80b004(%rip)
-    0xfffffa8c: jmp    0xfffff9a4
-    0xfffffa91: xorl   %eax, %eax
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff7a3
-->  0xfffff7a3: cmpl   $0x1, %eax
-    0xfffff7a6: je     0xfffff907
-    0xfffff7ac: cmpl   $0x2, %eax
-    0xfffff7af: je     0xfffff9a6
+    frame #0: 0x00000000fffff913
+->  0xfffff913: cmpl   $0x1, %eax
+    0xfffff916: je     0xfffff92b
+    0xfffff918: cmpl   $0x2, %eax
+    0xfffff91b: je     0xfffff9b5
 Target 0: (Bootstrap.dll) stopped.
 (lldb)  
 
-```
-
-对应源码是     OneTimeCallRet CheckTdxFeaturesBeforeBuildPagetables ->     cmp       eax, TDX_BSP
 
 ```
+
+对应源码是 CheckTdxFeaturesBeforeBuildPagetables-> NotTdx->     OneTimeCallRet CheckTdxFeaturesBeforeBuildPagetables
+->     cmp       eax, TDX_BSP
+
+
+```
+;
+;
+; Modified:  EAX, EDX
+;
+; 0-NonTdx, 1-TdxBsp, 2-TdxAps
+;
 CheckTdxFeaturesBeforeBuildPagetables:
     xor     eax, eax
     cmp     byte[WORK_AREA_GUEST_TYPE], VM_GUEST_TDX
@@ -2173,81 +2060,15 @@ NotTdx:
     OneTimeCallRet CheckTdxFeaturesBeforeBuildPagetables
 
 
-```
 
 ```
-
-SetCr3ForPageTables64:
-    ; Check the TDX features.
-    ; If it is TDX APs, then jump to SetCr3 directly.
-    ; In TD guest the initialization is done by BSP, including building
-    ; the page tables. APs will spin on until byte[TDX_WORK_AREA_PGTBL_READY]
-    ; is set.
-    OneTimeCall   CheckTdxFeaturesBeforeBuildPagetables
-    cmp       eax, TDX_BSP
-    je        ClearOvmfPageTables
-    cmp       eax, TDX_AP
-    je        SetCr3
 
 
 ```
 
-### 19. 0xfffff7b5->0xfffffb9a
-
-```
-(lldb)  
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff7ac
-->  0xfffff7ac: cmpl   $0x2, %eax
-    0xfffff7af: je     0xfffff9a6
-    0xfffff7b5: jmp    0xfffffb9a
-    0xfffff7ba: cmpb   $0x1, 0x80b000(%rip)
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff7af
-->  0xfffff7af: je     0xfffff9a6
-    0xfffff7b5: jmp    0xfffffb9a
-    0xfffff7ba: cmpb   $0x1, 0x80b000(%rip)
-    0xfffff7c1: je     0xfffff864
-Target 0: (Bootstrap.dll) stopped.
-(lldb)  
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff7b5
-->  0xfffff7b5: jmp    0xfffffb9a
-    0xfffff7ba: cmpb   $0x1, 0x80b000(%rip)
-    0xfffff7c1: je     0xfffff864
-    0xfffff7c7: movl   $0x1800, %ecx             ; imm = 0x1800 
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffb9a
-->  0xfffffb9a: movl   $0x19, %ecx
-    0xfffffb9f: movl   $0x80b004, %eax           ; imm = 0x80B004 
-    0xfffffba4: movb   $0x0, (%rax)
-    0xfffffba7: loop   0xfffffba4
-Target 0: (Bootstrap.dll) stopped.
-
-* thread #1, stop reason = breakpoint 2.1
-    frame #0: 0x00000000fffffbb4
-->  0xfffffbb4: lidtq  %cs:(%rax)
-    0xfffffbb8: movl   $0x80000000, %eax         ; imm = 0x80000000 
-    0xfffffbbd: cpuid  
-    0xfffffbbf: cmpl   $0x8000001f, %eax         ; imm = 0x8000001F 
-Target 0: (Bootstrap.dll) stopped.
-(lldb) p/x $rax
-(unsigned long) 0x00000000fffffd76
-
-```
-
-对应源码是     OneTimeCall   CheckSevFeatures
-
-
-```
+;
+; Modified:  EAX, EBX, ECX, EDX
+;
 SetCr3ForPageTables64:
     ; Check the TDX features.
     ; If it is TDX APs, then jump to SetCr3 directly.
@@ -2267,7 +2088,251 @@ SetCr3ForPageTables64:
     ; The mask will be saved in the EDX and applied during the
     ; the page table build below.
     OneTimeCall   GetSevCBitMaskAbove31
+
+
 ```
+
+
+### 17.0xfffff921->0xfffffba3->0xfffffbb3->0xfffffbcd->0xfffffc2d->0xfffffc3a->0xfffff926
+
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff921
+->  0xfffff921: jmp    0xfffffba3
+    0xfffff926: jmp    0xfffffb8d
+    0xfffff92b: movl   $0x1800, %ecx             ; imm = 0x1800 
+    0xfffff930: xorl   %eax, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffba3
+->  0xfffffba3: movl   $0x19, %ecx
+    0xfffffba8: movl   $0x80b004, %eax           ; imm = 0x80B004 
+    0xfffffbad: movb   $0x0, (%rax)
+    0xfffffbb0: loop   0xfffffbad
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffba8
+->  0xfffffba8: movl   $0x80b004, %eax           ; imm = 0x80B004 
+    0xfffffbad: movb   $0x0, (%rax)
+    0xfffffbb0: loop   0xfffffbad
+    0xfffffbb3: movl   $0x820000, %esp           ; imm = 0x820000 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbad
+->  0xfffffbad: movb   $0x0, (%rax)
+    0xfffffbb0: loop   0xfffffbad
+    0xfffffbb3: movl   $0x820000, %esp           ; imm = 0x820000 
+    0xfffffbb8: movl   $0xfffffd7e, %eax         ; imm = 0xFFFFFD7E 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbb0
+->  0xfffffbb0: loop   0xfffffbad
+    0xfffffbb3: movl   $0x820000, %esp           ; imm = 0x820000 
+    0xfffffbb8: movl   $0xfffffd7e, %eax         ; imm = 0xFFFFFD7E 
+    0xfffffbbd: lidtq  %cs:(%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbb1
+->  0xfffffbb1: loop   0xfffffbad
+    0xfffffbb3: movl   $0x820000, %esp           ; imm = 0x820000 
+    0xfffffbb8: movl   $0xfffffd7e, %eax         ; imm = 0xFFFFFD7E 
+    0xfffffbbd: lidtq  %cs:(%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbad
+->  0xfffffbad: movb   $0x0, (%rax)
+    0xfffffbb0: loop   0xfffffbad
+    0xfffffbb3: movl   $0x820000, %esp           ; imm = 0x820000 
+    0xfffffbb8: movl   $0xfffffd7e, %eax         ; imm = 0xFFFFFD7E 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbb0
+->  0xfffffbb0: loop   0xfffffbad
+    0xfffffbb3: movl   $0x820000, %esp           ; imm = 0x820000 
+    0xfffffbb8: movl   $0xfffffd7e, %eax         ; imm = 0xFFFFFD7E 
+    0xfffffbbd: lidtq  %cs:(%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb) b 0xfffffbb3
+Breakpoint 2: address = 0x00000000fffffbb3
+(lldb) c
+Process 1 resuming
+Process 1 stopped
+* thread #1, stop reason = breakpoint 2.1
+    frame #0: 0x00000000fffffbb3
+->  0xfffffbb3: movl   $0x820000, %esp           ; imm = 0x820000 
+    0xfffffbb8: movl   $0xfffffd7e, %eax         ; imm = 0xFFFFFD7E 
+    0xfffffbbd: lidtq  %cs:(%rax)
+    0xfffffbc1: movl   $0x80000000, %eax         ; imm = 0x80000000 
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbb8
+->  0xfffffbb8: movl   $0xfffffd7e, %eax         ; imm = 0xFFFFFD7E 
+    0xfffffbbd: lidtq  %cs:(%rax)
+    0xfffffbc1: movl   $0x80000000, %eax         ; imm = 0x80000000 
+    0xfffffbc6: cpuid  
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbbd
+->  0xfffffbbd: lidtq  %cs:(%rax)
+    0xfffffbc1: movl   $0x80000000, %eax         ; imm = 0x80000000 
+    0xfffffbc6: cpuid  
+    0xfffffbc8: cmpl   $0x8000001f, %eax         ; imm = 0x8000001F 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbc1
+->  0xfffffbc1: movl   $0x80000000, %eax         ; imm = 0x80000000 
+    0xfffffbc6: cpuid  
+    0xfffffbc8: cmpl   $0x8000001f, %eax         ; imm = 0x8000001F 
+    0xfffffbcd: jl     0xfffffc2d
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbc6
+->  0xfffffbc6: cpuid  
+    0xfffffbc8: cmpl   $0x8000001f, %eax         ; imm = 0x8000001F 
+    0xfffffbcd: jl     0xfffffc2d
+    0xfffffbcf: movl   $0x8000001f, %eax         ; imm = 0x8000001F 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbc8
+->  0xfffffbc8: cmpl   $0x8000001f, %eax         ; imm = 0x8000001F 
+    0xfffffbcd: jl     0xfffffc2d
+    0xfffffbcf: movl   $0x8000001f, %eax         ; imm = 0x8000001F 
+    0xfffffbd4: cpuid  
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffbcd
+->  0xfffffbcd: jl     0xfffffc2d
+    0xfffffbcf: movl   $0x8000001f, %eax         ; imm = 0x8000001F 
+    0xfffffbd4: cpuid  
+    0xfffffbd6: btl    $0x1, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffc2d
+->  0xfffffc2d: cmpb   $0x0, 0x80b01c(%rip)
+    0xfffffc34: je     0xfffffc3a
+    0xfffffc36: cli    
+    0xfffffc37: hlt    
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffc34
+->  0xfffffc34: je     0xfffffc3a
+    0xfffffc36: cli    
+    0xfffffc37: hlt    
+    0xfffffc38: jmp    0xfffffc36
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffc3a
+->  0xfffffc3a: xorl   %eax, %eax
+    0xfffffc3c: pushq  %rax
+    0xfffffc3d: movl   $0xfffffd84, %eax         ; imm = 0xFFFFFD84 
+    0xfffffc42: lidtq  %cs:(%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffc3c
+->  0xfffffc3c: pushq  %rax
+    0xfffffc3d: movl   $0xfffffd84, %eax         ; imm = 0xFFFFFD84 
+    0xfffffc42: lidtq  %cs:(%rax)
+    0xfffffc46: popq   %rax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffc3d
+->  0xfffffc3d: movl   $0xfffffd84, %eax         ; imm = 0xFFFFFD84 
+    0xfffffc42: lidtq  %cs:(%rax)
+    0xfffffc46: popq   %rax
+    0xfffffc47: movl   $0x0, %esp
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffc42
+->  0xfffffc42: lidtq  %cs:(%rax)
+    0xfffffc46: popq   %rax
+    0xfffffc47: movl   $0x0, %esp
+    0xfffffc4c: jmp    0xfffff926
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffc46
+->  0xfffffc46: popq   %rax
+    0xfffffc47: movl   $0x0, %esp
+    0xfffffc4c: jmp    0xfffff926
+    0xfffffc51: movl   $0x1, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffc47
+->  0xfffffc47: movl   $0x0, %esp
+    0xfffffc4c: jmp    0xfffff926
+    0xfffffc51: movl   $0x1, %eax
+    0xfffffc56: shll   $0x10, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffc4c
+->  0xfffffc4c: jmp    0xfffff926
+    0xfffffc51: movl   $0x1, %eax
+    0xfffffc56: shll   $0x10, %eax
+    0xfffffc59: orl    $0x1100, %eax             ; imm = 0x1100 
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff926
+->  0xfffff926: jmp    0xfffffb8d
+    0xfffff92b: movl   $0x1800, %ecx             ; imm = 0x1800 
+    0xfffff930: xorl   %eax, %eax
+    0xfffff932: movl   %eax, 0x7ffffc(,%rcx,4)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+
+
+
+```
+
+对应源码是 CheckSevFeatures->NoSev->NoSevPass->SevExit->OneTimeCallRet CheckSevFeatures->  OneTimeCall   GetSevCBitMaskAbove31
+
 
 ```
 
@@ -2333,133 +2398,11 @@ ClearSevEsWorkArea:
     bt        eax, 1
     jnc       GetSevEncBit
 
-```
-
-```
-    mov       eax, ADDR_OF(Idtr)
-    lidt      [cs:eax]
-```
-    对应中断描述符的位置是 
-
-```
-Process 1 resuming
-Process 1 stopped
-* thread #1, stop reason = breakpoint 2.1
-    frame #0: 0x00000000fffffbb4
-->  0xfffffbb4: lidtq  %cs:(%rax)
-    0xfffffbb8: movl   $0x80000000, %eax         ; imm = 0x80000000 
-    0xfffffbbd: cpuid  
-    0xfffffbbf: cmpl   $0x8000001f, %eax         ; imm = 0x8000001F 
-Target 0: (Bootstrap.dll) stopped.
-(lldb) p/x $rax
-(unsigned long) 0x00000000fffffd76
-(lldb) x/100 0x00000000fffffd76
-0xfffffd76: 0xfd9000ff 0x0000ffff 0x00000000 0x90909090
-0xfffffd86: 0x90909090 0x90909090 0x00009090 0x8e000010
-0xfffffd96: 0x00000000 0x8e000010 0x00000000 0x8e000010
-0xfffffda6: 0x00000000 0x8e000010 0x00000000 0x8e000010
-0xfffffdb6: 0x00000000 0x8e000010 0x00000000 0x8e000010
-0xfffffdc6: 0x00000000 0x8e000010 0x00000000 0x8e000010
-```
-
-
-专业术语
-
-SEV and SEV-ES
-
-https://www.amd.com/en/developer/sev.html
-
-### 20.0xfffffc43
-```
-
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffc33
-->  0xfffffc33: pushq  %rax
-    0xfffffc34: movl   $0xfffffd7c, %eax         ; imm = 0xFFFFFD7C 
-    0xfffffc39: lidtq  %cs:(%rax)
-    0xfffffc3d: popq   %rax
-Target 0: (Bootstrap.dll) stopped.
-(lldb)  
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffc34
-->  0xfffffc34: movl   $0xfffffd7c, %eax         ; imm = 0xFFFFFD7C 
-    0xfffffc39: lidtq  %cs:(%rax)
-    0xfffffc3d: popq   %rax
-    0xfffffc3e: movl   $0x0, %esp
-Target 0: (Bootstrap.dll) stopped.
-(lldb)  
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffc39
-->  0xfffffc39: lidtq  %cs:(%rax)
-    0xfffffc3d: popq   %rax
-    0xfffffc3e: movl   $0x0, %esp
-    0xfffffc43: jmp    0xfffff7ba
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffc3d
-->  0xfffffc3d: popq   %rax
-    0xfffffc3e: movl   $0x0, %esp
-    0xfffffc43: jmp    0xfffff7ba
-    0xfffffc48: movl   $0x1, %eax
-Target 0: (Bootstrap.dll) stopped.
-(lldb)  
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffc3e
-->  0xfffffc3e: movl   $0x0, %esp
-    0xfffffc43: jmp    0xfffff7ba
-    0xfffffc48: movl   $0x1, %eax
-    0xfffffc4d: shll   $0x10, %eax
-Target 0: (Bootstrap.dll) stopped.
-(lldb)  
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffffc43
-->  0xfffffc43: jmp    0xfffff7ba
-    0xfffffc48: movl   $0x1, %eax
-    0xfffffc4d: shll   $0x10, %eax
-    0xfffffc50: orl    $0x1100, %eax             ; imm = 0x1100 
-Target 0: (Bootstrap.dll) stopped.
-(lldb) si
-Process 1 stopped
-* thread #1, stop reason = instruction step into
-    frame #0: 0x00000000fffff7ba
-->  0xfffff7ba: cmpb   $0x1, 0x80b000(%rip)
-    0xfffff7c1: je     0xfffff864
-    0xfffff7c7: movl   $0x1800, %ecx             ; imm = 0x1800 
-    0xfffff7cc: xorl   %eax, %eax
-Target 0: (Bootstrap.dll) stopped.
-
-```
-
-
-对应源码是     OneTimeCallRet CheckSevFeatures
 
 
 ```
 
-SevExit:
-    ;
-    ; Clear exception handlers and stack
-    ;
-    push      eax
-    mov       eax, ADDR_OF(IdtrClear)
-    lidt      [cs:eax]
-    pop       eax
-    mov       esp, 0
-
-    OneTimeCallRet CheckSevFeatures
-
 ```
-
-```
-
 SetCr3ForPageTables64:
     ; Check the TDX features.
     ; If it is TDX APs, then jump to SetCr3 directly.
@@ -2479,6 +2422,1227 @@ SetCr3ForPageTables64:
     ; The mask will be saved in the EDX and applied during the
     ; the page table build below.
     OneTimeCall   GetSevCBitMaskAbove31
+
+ClearOvmfPageTables:
+    ;
+    ; For OVMF, build some initial page tables at
+    ; PcdOvmfSecPageTablesBase - (PcdOvmfSecPageTablesBase + 0x6000).
+    ;
+    ; This range should match with PcdOvmfSecPageTablesSize which is
+    ; declared in the FDF files.
+    ;
+    ; At the end of PEI, the pages tables will be rebuilt into a
+    ; more permanent location by DxeIpl.
+    ;
+
+    mov     ecx, 6 * 0x1000 / 4
+    xor     eax, eax
+```
+
+
+专业术语
+
+SEV and SEV-ES
+
+https://www.amd.com/en/developer/sev.html
+
+
+### 18.0xfffff926->0xfffffb8d->0xfffffb9e->0xfffff92b
+```
+
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff926
+->  0xfffff926: jmp    0xfffffb8d
+    0xfffff92b: movl   $0x1800, %ecx             ; imm = 0x1800 
+    0xfffff930: xorl   %eax, %eax
+    0xfffff932: movl   %eax, 0x7ffffc(,%rcx,4)
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffb8d
+->  0xfffffb8d: xorl   %edx, %edx
+    0xfffffb8f: cmpb   $0x1, 0x80b000(%rip)
+    0xfffffb96: jne    0xfffffb9e
+    0xfffffb98: movl   0x80b018(%rip), %edx
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffb8f
+->  0xfffffb8f: cmpb   $0x1, 0x80b000(%rip)
+    0xfffffb96: jne    0xfffffb9e
+    0xfffffb98: movl   0x80b018(%rip), %edx
+    0xfffffb9e: jmp    0xfffff92b
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffb96
+->  0xfffffb96: jne    0xfffffb9e
+    0xfffffb98: movl   0x80b018(%rip), %edx
+    0xfffffb9e: jmp    0xfffff92b
+    0xfffffba3: movl   $0x19, %ecx
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffb9e
+->  0xfffffb9e: jmp    0xfffff92b
+    0xfffffba3: movl   $0x19, %ecx
+    0xfffffba8: movl   $0x80b004, %eax           ; imm = 0x80B004 
+    0xfffffbad: movb   $0x0, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff92b
+->  0xfffff92b: movl   $0x1800, %ecx             ; imm = 0x1800 
+    0xfffff930: xorl   %eax, %eax
+    0xfffff932: movl   %eax, 0x7ffffc(,%rcx,4)
+    0xfffff939: loop   0xfffff932
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+
+
+```
+
+对应源代码是 GetSevCBitMaskAbove31->GetSevCBitMaskAbove31Exit->OneTimeCallRet GetSevCBitMaskAbove31->mov     ecx, 6 * 0x1000 / 4
+
+```
+
+; Check if SEV is enabled, and get the C-bit mask above 31.
+; Modified: EDX
+;
+; The value is returned in the EDX
+GetSevCBitMaskAbove31:
+    xor       edx, edx
+
+    ; Check if SEV is enabled
+    cmp       byte[WORK_AREA_GUEST_TYPE], 1
+    jnz       GetSevCBitMaskAbove31Exit
+
+    mov       edx, dword[SEV_ES_WORK_AREA_ENC_MASK + 4]
+
+GetSevCBitMaskAbove31Exit:
+    OneTimeCallRet GetSevCBitMaskAbove31
+
+```
+
+```
+
+    ; If SEV is enabled, the C-bit position is always above 31.
+    ; The mask will be saved in the EDX and applied during the
+    ; the page table build below.
+    OneTimeCall   GetSevCBitMaskAbove31
+
+ClearOvmfPageTables:
+    ;
+    ; For OVMF, build some initial page tables at
+    ; PcdOvmfSecPageTablesBase - (PcdOvmfSecPageTablesBase + 0x6000).
+    ;
+    ; This range should match with PcdOvmfSecPageTablesSize which is
+    ; declared in the FDF files.
+    ;
+    ; At the end of PEI, the pages tables will be rebuilt into a
+    ; more permanent location by DxeIpl.
+    ;
+
+    mov     ecx, 6 * 0x1000 / 4
+    xor     eax, eax
+
+```
+
+### 19.0xfffff9ab->0xfffffb2d->0xfffffb88->0xfffff9b0
+
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff98b
+->  0xfffff98b: movl   $0x800, %ecx              ; imm = 0x800 
+    0xfffff990: movl   %ecx, %eax
+    0xfffff992: shlq   $0x15, %rax
+    0xfffff996: addl   $0xe3, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff990
+->  0xfffff990: movl   %ecx, %eax
+    0xfffff992: shlq   $0x15, %rax
+    0xfffff996: addl   $0xe3, %eax
+    0xfffff99b: movl   %eax, 0x801ff8(,%rcx,8)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff992
+->  0xfffff992: shlq   $0x15, %rax
+    0xfffff996: addl   $0xe3, %eax
+    0xfffff99b: movl   %eax, 0x801ff8(,%rcx,8)
+    0xfffff9a2: movl   %edx, 0x801ffc(,%rcx,8)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff993
+->  0xfffff993: shll   $0x15, %eax
+    0xfffff996: addl   $0xe3, %eax
+    0xfffff99b: movl   %eax, 0x801ff8(,%rcx,8)
+    0xfffff9a2: movl   %edx, 0x801ffc(,%rcx,8)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff996
+->  0xfffff996: addl   $0xe3, %eax
+    0xfffff99b: movl   %eax, 0x801ff8(,%rcx,8)
+    0xfffff9a2: movl   %edx, 0x801ffc(,%rcx,8)
+    0xfffff9a9: loop   0xfffff990
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff99b
+->  0xfffff99b: movl   %eax, 0x801ff8(,%rcx,8)
+    0xfffff9a2: movl   %edx, 0x801ffc(,%rcx,8)
+    0xfffff9a9: loop   0xfffff990
+    0xfffff9ab: jmp    0xfffffb2d
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff9a2
+->  0xfffff9a2: movl   %edx, 0x801ffc(,%rcx,8)
+    0xfffff9a9: loop   0xfffff990
+    0xfffff9ab: jmp    0xfffffb2d
+    0xfffff9b0: jmp    0xfffffa94
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff9a9
+->  0xfffff9a9: loop   0xfffff990
+    0xfffff9ab: jmp    0xfffffb2d
+    0xfffff9b0: jmp    0xfffffa94
+    0xfffff9b5: movl   $0x800000, %eax           ; imm = 0x800000 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff990
+->  0xfffff990: movl   %ecx, %eax
+    0xfffff992: shlq   $0x15, %rax
+    0xfffff996: addl   $0xe3, %eax
+    0xfffff99b: movl   %eax, 0x801ff8(,%rcx,8)
+Target 0: (Bootstrap.dll) stopped.
+(lldb) b 0xfffff9ab
+Breakpoint 4: address = 0x00000000fffff9ab
+(lldb) c
+Process 1 resuming
+Process 1 stopped
+* thread #1, stop reason = breakpoint 4.1
+    frame #0: 0x00000000fffff9ab
+->  0xfffff9ab: jmp    0xfffffb2d
+    0xfffff9b0: jmp    0xfffffa94
+    0xfffff9b5: movl   $0x800000, %eax           ; imm = 0x800000 
+    0xfffff9ba: movq   %rax, %cr3
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffb2d
+->  0xfffffb2d: cmpb   $0x1, 0x80b000(%rip)
+    0xfffffb34: jne    0xfffffb88
+    0xfffffb36: movl   $0x1, %ecx
+    0xfffffb3b: btl    %ecx, 0x80b004(%rip)
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffb34
+->  0xfffffb34: jne    0xfffffb88
+    0xfffffb36: movl   $0x1, %ecx
+    0xfffffb3b: btl    %ecx, 0x80b004(%rip)
+    0xfffffb42: jae    0xfffffb88
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffb88
+->  0xfffffb88: jmp    0xfffff9b0
+    0xfffffb8d: xorl   %edx, %edx
+    0xfffffb8f: cmpb   $0x1, 0x80b000(%rip)
+    0xfffffb96: jne    0xfffffb9e
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff9b0
+->  0xfffff9b0: jmp    0xfffffa94
+    0xfffff9b5: movl   $0x800000, %eax           ; imm = 0x800000 
+    0xfffff9ba: movq   %rax, %cr3
+    0xfffff9bd: jmp    0xfffff885
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+
+
+
+```
+
+对应源码是     OneTimeCall   SevClearPageEncMaskForGhcbPage ->    jnz       SevClearPageEncMaskForGhcbPageExit->    OneTimeCallRet SevClearPageEncMaskForGhcbPage->    OneTimeCall   TdxPostBuildPageTables
+
+
+
+```
+
+clearPageTablesMemoryLoop:
+    mov     dword[ecx * 4 + PT_ADDR (0) - 4], eax
+    loop    clearPageTablesMemoryLoop
+
+    ;
+    ; Top level Page Directory Pointers (1 * 512GB entry)
+    ;
+    mov     dword[PT_ADDR (0)], PT_ADDR (0x1000) + PAGE_PDP_ATTR
+    mov     dword[PT_ADDR (4)], edx
+
+    ;
+    ; Next level Page Directory Pointers (4 * 1GB entries => 4GB)
+    ;
+    mov     dword[PT_ADDR (0x1000)], PT_ADDR (0x2000) + PAGE_PDP_ATTR
+    mov     dword[PT_ADDR (0x1004)], edx
+    mov     dword[PT_ADDR (0x1008)], PT_ADDR (0x3000) + PAGE_PDP_ATTR
+    mov     dword[PT_ADDR (0x100C)], edx
+    mov     dword[PT_ADDR (0x1010)], PT_ADDR (0x4000) + PAGE_PDP_ATTR
+    mov     dword[PT_ADDR (0x1014)], edx
+    mov     dword[PT_ADDR (0x1018)], PT_ADDR (0x5000) + PAGE_PDP_ATTR
+    mov     dword[PT_ADDR (0x101C)], edx
+
+    ;
+    ; Page Table Entries (2048 * 2MB entries => 4GB)
+    ;
+    mov     ecx, 0x800
+pageTableEntriesLoop:
+    mov     eax, ecx
+    dec     eax
+    shl     eax, 21
+    add     eax, PAGE_2M_PDE_ATTR
+    mov     [ecx * 8 + PT_ADDR (0x2000 - 8)], eax
+    mov     [(ecx * 8 + PT_ADDR (0x2000 - 8)) + 4], edx
+    loop    pageTableEntriesLoop
+
+    ; Clear the C-bit from the GHCB page if the SEV-ES is enabled.
+    OneTimeCall   SevClearPageEncMaskForGhcbPage
+
+    ; TDX will do some PostBuildPages task, such as setting
+    ; byte[TDX_WORK_AREA_PGTBL_READY].
+    OneTimeCall   TdxPostBuildPageTables
+
+
+
+```
+
+```
+
+; If SEV-ES is enabled then initialize and make the GHCB page shared
+SevClearPageEncMaskForGhcbPage:
+    ; Check if SEV is enabled
+    cmp       byte[WORK_AREA_GUEST_TYPE], 1
+    jnz       SevClearPageEncMaskForGhcbPageExit
+
+    ; Check if SEV-ES is enabled
+    mov       ecx, 1
+    bt        [SEV_ES_WORK_AREA_STATUS_MSR], ecx
+    jnc       SevClearPageEncMaskForGhcbPageExit
+
+    ;
+    ; The initial GHCB will live at GHCB_BASE and needs to be un-encrypted.
+    ; This requires the 2MB page for this range be broken down into 512 4KB
+    ; pages.  All will be marked encrypted, except for the GHCB.
+    ;
+    mov     ecx, (GHCB_BASE >> 21)
+    mov     eax, GHCB_PT_ADDR + PAGE_PDP_ATTR
+    mov     [ecx * 8 + PT_ADDR (0x2000)], eax
+
+    ;
+    ; Page Table Entries (512 * 4KB entries => 2MB)
+    ;
+    mov     ecx, 512
+pageTableEntries4kLoop:
+    mov     eax, ecx
+    dec     eax
+    shl     eax, 12
+    add     eax, GHCB_BASE & 0xFFE0_0000
+    add     eax, PAGE_4K_PDE_ATTR
+    mov     [ecx * 8 + GHCB_PT_ADDR - 8], eax
+    mov     [(ecx * 8 + GHCB_PT_ADDR - 8) + 4], edx
+    loop    pageTableEntries4kLoop
+
+    ;
+    ; Clear the encryption bit from the GHCB entry
+    ;
+    mov     ecx, (GHCB_BASE & 0x1F_FFFF) >> 12
+    mov     [ecx * 8 + GHCB_PT_ADDR + 4], strict dword 0
+
+SevClearPageEncMaskForGhcbPageExit:
+    OneTimeCallRet SevClearPageEncMaskForGhcbPage
+
+```
+
+```
+
+; If SEV-ES is enabled then initialize and make the GHCB page shared
+SevClearPageEncMaskForGhcbPage:
+    ; Check if SEV is enabled
+    cmp       byte[WORK_AREA_GUEST_TYPE], 1
+    jnz       SevClearPageEncMaskForGhcbPageExit
+
+    ; Check if SEV-ES is enabled
+    mov       ecx, 1
+    bt        [SEV_ES_WORK_AREA_STATUS_MSR], ecx
+    jnc       SevClearPageEncMaskForGhcbPageExit
+
+    ;
+    ; The initial GHCB will live at GHCB_BASE and needs to be un-encrypted.
+    ; This requires the 2MB page for this range be broken down into 512 4KB
+    ; pages.  All will be marked encrypted, except for the GHCB.
+    ;
+    mov     ecx, (GHCB_BASE >> 21)
+    mov     eax, GHCB_PT_ADDR + PAGE_PDP_ATTR
+    mov     [ecx * 8 + PT_ADDR (0x2000)], eax
+
+    ;
+    ; Page Table Entries (512 * 4KB entries => 2MB)
+    ;
+    mov     ecx, 512
+pageTableEntries4kLoop:
+    mov     eax, ecx
+    dec     eax
+    shl     eax, 12
+    add     eax, GHCB_BASE & 0xFFE0_0000
+    add     eax, PAGE_4K_PDE_ATTR
+    mov     [ecx * 8 + GHCB_PT_ADDR - 8], eax
+    mov     [(ecx * 8 + GHCB_PT_ADDR - 8) + 4], edx
+    loop    pageTableEntries4kLoop
+
+    ;
+    ; Clear the encryption bit from the GHCB entry
+    ;
+    mov     ecx, (GHCB_BASE & 0x1F_FFFF) >> 12
+    mov     [ecx * 8 + GHCB_PT_ADDR + 4], strict dword 0
+
+SevClearPageEncMaskForGhcbPageExit:
+    OneTimeCallRet SevClearPageEncMaskForGhcbPage
+
+```
+
+### 20.0xfffff9b0->0xfffffaa4->0xfffff9b5->0xfffff885->movq   %cr4, %rax
+
+```
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff9b0
+->  0xfffff9b0: jmp    0xfffffa94
+    0xfffff9b5: movl   $0x800000, %eax           ; imm = 0x800000 
+    0xfffff9ba: movq   %rax, %cr3
+    0xfffff9bd: jmp    0xfffff885
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffa94
+->  0xfffffa94: cmpb   $0x2, 0x80b000(%rip)
+    0xfffffa9b: jne    0xfffffaa4
+    0xfffffa9d: movb   $0x1, 0x80b004(%rip)
+    0xfffffaa4: jmp    0xfffff9b5
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffa9b
+->  0xfffffa9b: jne    0xfffffaa4
+    0xfffffa9d: movb   $0x1, 0x80b004(%rip)
+    0xfffffaa4: jmp    0xfffff9b5
+    0xfffffaa9: xorl   %eax, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffaa4
+->  0xfffffaa4: jmp    0xfffff9b5
+    0xfffffaa9: xorl   %eax, %eax
+    0xfffffaab: cmpb   $0x2, 0x80b000(%rip)
+    0xfffffab2: jne    0xfffffab9
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff9b5
+->  0xfffff9b5: movl   $0x800000, %eax           ; imm = 0x800000 
+    0xfffff9ba: movq   %rax, %cr3
+    0xfffff9bd: jmp    0xfffff885
+    0xfffff9c2: movl   $0x0, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff9ba
+->  0xfffff9ba: movq   %rax, %cr3
+    0xfffff9bd: jmp    0xfffff885
+    0xfffff9c2: movl   $0x0, %eax
+    0xfffff9c7: cpuid  
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff9bd
+->  0xfffff9bd: jmp    0xfffff885
+    0xfffff9c2: movl   $0x0, %eax
+    0xfffff9c7: cpuid  
+    0xfffff9c9: cmpl   $0x756e6547, %ebx         ; imm = 0x756E6547 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff885
+->  0xfffff885: movq   %cr4, %rax
+    0xfffff888: btsl   $0x5, %eax
+    0xfffff88c: movq   %rax, %cr4
+    0xfffff88f: xorl   %ebx, %ebx
+Target 0: (Bootstrap.dll) stopped.
+
+```
+
+对应源代码是     OneTimeCall   TdxPostBuildPageTables->ExitTdxPostBuildPageTables->    OneTimeCallRet TdxPostBuildPageTables->    mov     eax, PT_ADDR (0)
+
+
+
+```
+;
+; Set byte[TDX_WORK_AREA_PGTBL_READY] to 1
+;
+TdxPostBuildPageTables:
+    cmp     byte[WORK_AREA_GUEST_TYPE], VM_GUEST_TDX
+    jne     ExitTdxPostBuildPageTables
+    mov     byte[TDX_WORK_AREA_PGTBL_READY], 1
+
+ExitTdxPostBuildPageTables:
+    OneTimeCallRet TdxPostBuildPageTables
+```
+
+```
+
+pageTableEntriesLoop:
+    mov     eax, ecx
+    dec     eax
+    shl     eax, 21
+    add     eax, PAGE_2M_PDE_ATTR
+    mov     [ecx * 8 + PT_ADDR (0x2000 - 8)], eax
+    mov     [(ecx * 8 + PT_ADDR (0x2000 - 8)) + 4], edx
+    loop    pageTableEntriesLoop
+
+    ; Clear the C-bit from the GHCB page if the SEV-ES is enabled.
+    OneTimeCall   SevClearPageEncMaskForGhcbPage
+
+    ; TDX will do some PostBuildPages task, such as setting
+    ; byte[TDX_WORK_AREA_PGTBL_READY].
+    OneTimeCall   TdxPostBuildPageTables
+
+SetCr3:
+    ;
+    ; Set CR3 now that the paging structures are available
+    ;
+    mov     eax, PT_ADDR (0)
+    mov     cr3, eax
+
+    OneTimeCallRet SetCr3ForPageTables64
+
+
+```
+
+```
+
+BITS    32
+
+;
+; Modified:  EAX, ECX, EDX
+;
+Transition32FlatTo64Flat:
+
+    OneTimeCall SetCr3ForPageTables64
+
+    mov     eax, cr4
+    bts     eax, 5                      ; enable PAE
+    mov     cr4, eax
+
+    ;
+    ; In TDX LME has already been set. So we're done and jump to enable
+    ; paging directly if Tdx is enabled.
+    ; EBX is cleared because in the later it will be used to check if
+    ; the second step of the SEV-ES mitigation is to be performed.
+    ;
+    xor     ebx, ebx
+    OneTimeCall IsTdxEnabled
+    test    eax, eax
+    jnz     EnablePaging
+
+    mov     ecx, 0xc0000080
+    rdmsr
+    bts     eax, 8                      ; set LME
+    wrmsr
+
+    ;
+    ; SEV-ES mitigation check support
+    ;
+    xor     ebx, ebx
+
+    mov     ecx, 1
+    bt      [SEV_ES_WORK_AREA_STATUS_MSR], ecx
+    jnc     EnablePaging
+
+    ;
+    ; SEV-ES is active, perform a quick sanity check against the reported
+    ; encryption bit position. This is to help mitigate against attacks where
+    ; the hypervisor reports an incorrect encryption bit position.
+    ;
+    ; This is the first step in a two step process. Before paging is enabled
+    ; writes to memory are encrypted. Using the RDRAND instruction (available
+    ; on all SEV capable processors), write 64-bits of random data to the
+    ; SEV_ES_WORK_AREA and maintain the random data in registers (register
+    ; state is protected under SEV-ES). This will be used in the second step.
+    ;
+
+```
+
+### 21.0xfffff891->0xfffffaa9->0xfffffab9->0xfffff896->0xfffff8b5->0xfffff8d2->    frame #0: 0x00000000fffff8dc->0xfffff8f9->0xfffff909->0xffffff3c
+
+
+```
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff885
+->  0xfffff885: movq   %cr4, %rax
+    0xfffff888: btsl   $0x5, %eax
+    0xfffff88c: movq   %rax, %cr4
+    0xfffff88f: xorl   %ebx, %ebx
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff888
+->  0xfffff888: btsl   $0x5, %eax
+    0xfffff88c: movq   %rax, %cr4
+    0xfffff88f: xorl   %ebx, %ebx
+    0xfffff891: jmp    0xfffffaa9
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff88c
+->  0xfffff88c: movq   %rax, %cr4
+    0xfffff88f: xorl   %ebx, %ebx
+    0xfffff891: jmp    0xfffffaa9
+    0xfffff896: testl  %eax, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff88f
+->  0xfffff88f: xorl   %ebx, %ebx
+    0xfffff891: jmp    0xfffffaa9
+    0xfffff896: testl  %eax, %eax
+    0xfffff898: jne    0xfffff8d2
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff891
+->  0xfffff891: jmp    0xfffffaa9
+    0xfffff896: testl  %eax, %eax
+    0xfffff898: jne    0xfffff8d2
+    0xfffff89a: movl   $0xc0000080, %ecx         ; imm = 0xC0000080 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffaa9
+->  0xfffffaa9: xorl   %eax, %eax
+    0xfffffaab: cmpb   $0x2, 0x80b000(%rip)
+    0xfffffab2: jne    0xfffffab9
+    0xfffffab4: movl   $0x1, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffaab
+->  0xfffffaab: cmpb   $0x2, 0x80b000(%rip)
+    0xfffffab2: jne    0xfffffab9
+    0xfffffab4: movl   $0x1, %eax
+    0xfffffab9: jmp    0xfffff896
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffab2
+->  0xfffffab2: jne    0xfffffab9
+    0xfffffab4: movl   $0x1, %eax
+    0xfffffab9: jmp    0xfffff896
+    0xfffffabe: nop    
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffffab9
+->  0xfffffab9: jmp    0xfffff896
+    0xfffffabe: nop    
+    0xfffffabf: nop    
+    0xfffffac0: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff896
+->  0xfffff896: testl  %eax, %eax
+    0xfffff898: jne    0xfffff8d2
+    0xfffff89a: movl   $0xc0000080, %ecx         ; imm = 0xC0000080 
+    0xfffff89f: rdmsr  
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff898
+->  0xfffff898: jne    0xfffff8d2
+    0xfffff89a: movl   $0xc0000080, %ecx         ; imm = 0xC0000080 
+    0xfffff89f: rdmsr  
+    0xfffff8a1: btsl   $0x8, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff89a
+->  0xfffff89a: movl   $0xc0000080, %ecx         ; imm = 0xC0000080 
+    0xfffff89f: rdmsr  
+    0xfffff8a1: btsl   $0x8, %eax
+    0xfffff8a5: wrmsr  
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff89f
+->  0xfffff89f: rdmsr  
+    0xfffff8a1: btsl   $0x8, %eax
+    0xfffff8a5: wrmsr  
+    0xfffff8a7: xorl   %ebx, %ebx
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8a1
+->  0xfffff8a1: btsl   $0x8, %eax
+    0xfffff8a5: wrmsr  
+    0xfffff8a7: xorl   %ebx, %ebx
+    0xfffff8a9: movl   $0x1, %ecx
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8a5
+->  0xfffff8a5: wrmsr  
+    0xfffff8a7: xorl   %ebx, %ebx
+    0xfffff8a9: movl   $0x1, %ecx
+    0xfffff8ae: btl    %ecx, 0x80b004(%rip)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8a7
+->  0xfffff8a7: xorl   %ebx, %ebx
+    0xfffff8a9: movl   $0x1, %ecx
+    0xfffff8ae: btl    %ecx, 0x80b004(%rip)
+    0xfffff8b5: jae    0xfffff8d2
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8a9
+->  0xfffff8a9: movl   $0x1, %ecx
+    0xfffff8ae: btl    %ecx, 0x80b004(%rip)
+    0xfffff8b5: jae    0xfffff8d2
+    0xfffff8b7: rdrandl %ecx
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8ae
+->  0xfffff8ae: btl    %ecx, 0x80b004(%rip)
+    0xfffff8b5: jae    0xfffff8d2
+    0xfffff8b7: rdrandl %ecx
+    0xfffff8ba: jae    0xfffff8b7
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8b5
+->  0xfffff8b5: jae    0xfffff8d2
+    0xfffff8b7: rdrandl %ecx
+    0xfffff8ba: jae    0xfffff8b7
+    0xfffff8bc: movl   %ecx, 0x80b00c(%rip)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8d2
+->  0xfffff8d2: movq   %cr0, %rax
+    0xfffff8d5: btsl   $0x1f, %eax
+    0xfffff8d9: movq   %rax, %cr0
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8d5
+->  0xfffff8d5: btsl   $0x1f, %eax
+    0xfffff8d9: movq   %rax, %cr0
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8d9
+->  0xfffff8d9: movq   %rax, %cr0
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8dc
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8e3
+->  0xfffff8e3: testl  %ebx, %ebx
+    0xfffff8e5: je     0xfffff8f9
+    0xfffff8e7: cmpl   %ecx, 0x80b00c
+    0xfffff8ee: jne    0xfffff905
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8e5
+->  0xfffff8e5: je     0xfffff8f9
+    0xfffff8e7: cmpl   %ecx, 0x80b00c
+    0xfffff8ee: jne    0xfffff905
+    0xfffff8f0: cmpl   %edx, 0x80b010
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff8f9
+->  0xfffff8f9: cmpl   $0xfff63d81, -0xa(%rip)   ; imm = 0xFFF63D81 
+    0xfffff903: je     0xfffff909
+    0xfffff905: cli    
+    0xfffff906: hlt    
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff903
+->  0xfffff903: je     0xfffff909
+    0xfffff905: cli    
+    0xfffff906: hlt    
+    0xfffff907: jmp    0xfffff905
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffff909
+->  0xfffff909: jmp    0xffffff3c
+    0xfffff90e: jmp    0xfffffa7c
+    0xfffff913: cmpl   $0x1, %eax
+    0xfffff916: je     0xfffff92b
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff3c
+->  0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
+    0xffffff41: andq   %rax, %rsi
+    0xffffff44: andq   %rax, %rbp
+    0xffffff47: andq   %rax, %rsp
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+
+
+```
+
+对应源码是 Transition32FlatTo64Flat->IsTdxEnabled->OneTimeCallRet IsTdxEnabled->    jnz     EnablePaging->    jmp     LINEAR_CODE64_SEL:ADDR_OF(jumpTo64BitAndLandHere)->    jz      InsnCompare->    je      GoodCompare->    OneTimeCallRet Transition32FlatTo64Flat
+
+
+
+
+```
+Transition32FlatTo64Flat:
+
+    OneTimeCall SetCr3ForPageTables64
+
+    mov     eax, cr4
+    bts     eax, 5                      ; enable PAE
+    mov     cr4, eax
+
+    ;
+    ; In TDX LME has already been set. So we're done and jump to enable
+    ; paging directly if Tdx is enabled.
+    ; EBX is cleared because in the later it will be used to check if
+    ; the second step of the SEV-ES mitigation is to be performed.
+    ;
+    xor     ebx, ebx
+    OneTimeCall IsTdxEnabled
+    test    eax, eax
+    jnz     EnablePaging
+
+    mov     ecx, 0xc0000080
+    rdmsr
+    bts     eax, 8                      ; set LME
+    wrmsr
+
+    ;
+    ; SEV-ES mitigation check support
+    ;
+    xor     ebx, ebx
+
+    mov     ecx, 1
+    bt      [SEV_ES_WORK_AREA_STATUS_MSR], ecx
+    jnc     EnablePaging
+
+    ;
+    ; SEV-ES is active, perform a quick sanity check against the reported
+    ; encryption bit position. This is to help mitigate against attacks where
+    ; the hypervisor reports an incorrect encryption bit position.
+    ;
+    ; This is the first step in a two step process. Before paging is enabled
+    ; writes to memory are encrypted. Using the RDRAND instruction (available
+    ; on all SEV capable processors), write 64-bits of random data to the
+    ; SEV_ES_WORK_AREA and maintain the random data in registers (register
+    ; state is protected under SEV-ES). This will be used in the second step.
+    ;
+```
+
+```
+IsTdxEnabled:
+    xor     eax, eax
+    cmp     byte[WORK_AREA_GUEST_TYPE], VM_GUEST_TDX
+    jne     TdxNotEnabled
+    mov     eax, 1
+TdxNotEnabled:
+    OneTimeCallRet IsTdxEnabled
+
+```
+
+```
+
+EnablePaging:
+    mov     eax, cr0
+    bts     eax, 31                     ; set PG
+    mov     cr0, eax                    ; enable paging
+
+    jmp     LINEAR_CODE64_SEL:ADDR_OF(jumpTo64BitAndLandHere)
+BITS    64
+jumpTo64BitAndLandHere:
+
+    ;
+    ; Check if the second step of the SEV-ES mitigation is to be performed.
+    ;
+    test    ebx, ebx
+    jz      InsnCompare
+
+    ;
+    ; SEV-ES is active, perform the second step of the encryption bit postion
+    ; mitigation check. The ECX and EDX register contain data from RDRAND that
+    ; was stored to memory in encrypted form. If the encryption bit position is
+    ; valid, the contents of ECX and EDX will match the memory location.
+    ;
+    cmp     dword[SEV_ES_WORK_AREA_RDRAND], ecx
+    jne     SevEncBitHlt
+    cmp     dword[SEV_ES_WORK_AREA_RDRAND + 4], edx
+    jne     SevEncBitHlt
+
+    ;
+    ; If SEV or SEV-ES is active, perform a quick sanity check against
+    ; the reported encryption bit position. This is to help mitigate
+    ; against attacks where the hypervisor reports an incorrect encryption
+    ; bit position. If SEV is not active, this check will always succeed.
+    ;
+    ; The cmp instruction compares the first four bytes of the cmp instruction
+    ; itself (which will be read decrypted if SEV or SEV-ES is active and the
+    ; encryption bit position is valid) against the immediate within the
+    ; instruction (an instruction fetch is always decrypted correctly by
+    ; hardware) based on RIP relative addressing.
+    ;
+InsnCompare:
+    cmp     dword[rel InsnCompare], 0xFFF63D81
+    je      GoodCompare
+
+    ;
+    ; The hypervisor provided an incorrect encryption bit position, do not
+    ; proceed.
+    ;
+SevEncBitHlt:
+    cli
+    hlt
+    jmp     SevEncBitHlt
+
+GoodCompare:
+    debugShowPostCode POSTCODE_64BIT_MODE
+
+    OneTimeCallRet Transition32FlatTo64Flat
+```
+
+```
+
+   ;
+    ; Transition the processor from 32-bit flat mode to 64-bit flat mode
+    ;
+    OneTimeCall Transition32FlatTo64Flat
+
+BITS    64
+
+    ;
+    ; Some values were calculated in 32-bit mode.  Make sure the upper
+    ; 32-bits of 64-bit registers are zero for these values.
+    ;
+    mov     rax, 0x00000000ffffffff
+    and     rsi, rax
+    and     rbp, rax
+    and     rsp, rax
+
+    ;
+    ; RSI - SEC Core entry point
+    ; RBP - Start of BFV
+    ;
+
+    ;
+    ; Restore initial EAX value into the RAX register
+    ;
+    mov     rax, rsp
+
+    ;
+    ; Jump to the 64-bit SEC entry point
+    ;
+    jmp     rsi
+
+%endif
+
+
+
+
+```
+
+### 22.0xffffff3c->0xffffff4d->0xfffc8000
+
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff3c
+->  0xffffff3c: movl   $0xffffffff, %eax         ; imm = 0xFFFFFFFF 
+    0xffffff41: andq   %rax, %rsi
+    0xffffff44: andq   %rax, %rbp
+    0xffffff47: andq   %rax, %rsp
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff41
+->  0xffffff41: andq   %rax, %rsi
+    0xffffff44: andq   %rax, %rbp
+    0xffffff47: andq   %rax, %rsp
+    0xffffff4a: movq   %rsp, %rax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff44
+->  0xffffff44: andq   %rax, %rbp
+    0xffffff47: andq   %rax, %rsp
+    0xffffff4a: movq   %rsp, %rax
+    0xffffff4d: jmpq   *%rsi
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff47
+->  0xffffff47: andq   %rax, %rsp
+    0xffffff4a: movq   %rsp, %rax
+    0xffffff4d: jmpq   *%rsi
+    0xffffff4f: nop    
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff4a
+->  0xffffff4a: movq   %rsp, %rax
+    0xffffff4d: jmpq   *%rsi
+    0xffffff4f: nop    
+    0xffffff50: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000ffffff4d
+->  0xffffff4d: jmpq   *%rsi
+    0xffffff4f: nop    
+    0xffffff50: addb   %al, (%rax)
+    0xffffff52: addb   %al, (%rax)
+Target 0: (Bootstrap.dll) stopped.
+(lldb) x $rsi
+0xfffc8000: b8 00 b0 80 00 67 80 38 02 75 1e b8 01 00 00 00  .....g.8.u......
+0xfffc8010: 66 0f 01 cc 4c 89 c8 48 25 ff ff 00 00 48 85 c0  f...L..H%....H..
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8000
+->  0xfffc8000: movl   $0x80b000, %eax           ; imm = 0x80B000 
+    0xfffc8005: cmpb   $0x2, (%eax)
+    0xfffc8009: jne    0xfffc8029
+    0xfffc800b: movl   $0x1, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+
+
+
+```
+
+
+对应源码是
+
+
+```
+
+    ;
+    ; Transition the processor from 32-bit flat mode to 64-bit flat mode
+    ;
+    OneTimeCall Transition32FlatTo64Flat
+
+BITS    64
+
+    ;
+    ; Some values were calculated in 32-bit mode.  Make sure the upper
+    ; 32-bits of 64-bit registers are zero for these values.
+    ;
+    mov     rax, 0x00000000ffffffff
+    and     rsi, rax
+    and     rbp, rax
+    and     rsp, rax
+
+    ;
+    ; RSI - SEC Core entry point
+    ; RBP - Start of BFV
+    ;
+
+    ;
+    ; Restore initial EAX value into the RAX register
+    ;
+    mov     rax, rsp
+
+    ;
+    ; Jump to the 64-bit SEC entry point
+    ;
+    jmp     rsi
+
+%endif
+
+
+
+
+```
+
+### 23.0xfffc8000 
+
+
+```
+
+(lldb) c
+Process 1 resuming
+Process 1 stopped
+* thread #1, stop reason = breakpoint 1.1
+    frame #0: 0x00000000fffc8000
+->  0xfffc8000: movl   $0x80b000, %eax           ; imm = 0x80B000 
+    0xfffc8005: cmpb   $0x2, (%eax)
+    0xfffc8009: jne    0xfffc8029
+    0xfffc800b: movl   $0x1, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8005
+->  0xfffc8005: cmpb   $0x2, (%eax)
+    0xfffc8009: jne    0xfffc8029
+    0xfffc800b: movl   $0x1, %eax
+    0xfffc8010: tdcall 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8009
+->  0xfffc8009: jne    0xfffc8029
+    0xfffc800b: movl   $0x1, %eax
+    0xfffc8010: tdcall 
+    0xfffc8014: movq   %r9, %rax
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8029
+->  0xfffc8029: movabsq $0x5aa55aa55aa55aa5, %rax ; imm = 0x5AA55AA55AA55AA5 
+    0xfffc8033: movl   $0x810000, %edi           ; imm = 0x810000 
+    0xfffc8038: movl   $0x2000, %ecx             ; imm = 0x2000 
+    0xfffc803d: cld    
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+
+```
+
+对应源代码是 ASM_PFX(_ModuleEntryPoint):
+
+
+
+```
+
+global ASM_PFX(_ModuleEntryPoint)
+ASM_PFX(_ModuleEntryPoint):
+
+    ;
+    ; Guest type is stored in OVMF_WORK_AREA
+    ;
+    %define OVMF_WORK_AREA        FixedPcdGet32 (PcdOvmfWorkAreaBase)
+    %define VM_GUEST_TYPE_TDX     2
+    mov     eax, OVMF_WORK_AREA
+    cmp     byte[eax], VM_GUEST_TYPE_TDX
+    jne     InitStack
+
+    %define TDCALL_TDINFO         1
+    mov     rax, TDCALL_TDINFO
+    tdcall
+
+    ;
+    ; R8  [31:0]  NUM_VCPUS
+    ;     [63:32] MAX_VCPUS
+    ; R9  [31:0]  VCPU_INDEX
+    ; Td Guest set the VCPU0 as the BSP, others are the APs
+    ; APs jump to spinloop and get released by DXE's MpInitLib
+    ;
+    mov     rax, r9
+    and     rax, 0xffff
+    test    rax, rax
+    jz      InitStack
+    mov     rsp, FixedPcdGet32 (PcdOvmfSecGhcbBackupBase)
+    jmp     ParkAp
+
 
 ```
 
