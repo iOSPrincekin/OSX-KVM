@@ -3561,12 +3561,10 @@ BITS    64
 
 ```
 
-### 23.0xfffc8000 
+### 23.0xfffc8000 ->0xfffc8029->0xfffc8051->0xfffc8fe6
 
 
 ```
-
-(lldb) c
 Process 1 resuming
 Process 1 stopped
 * thread #1, stop reason = breakpoint 1.1
@@ -3603,16 +3601,167 @@ Process 1 stopped
     0xfffc8038: movl   $0x2000, %ecx             ; imm = 0x2000 
     0xfffc803d: cld    
 Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8033
+->  0xfffc8033: movl   $0x810000, %edi           ; imm = 0x810000 
+    0xfffc8038: movl   $0x2000, %ecx             ; imm = 0x2000 
+    0xfffc803d: cld    
+    0xfffc803e: rep    stosq	%rax, %es:(%rdi)
+Target 0: (Bootstrap.dll) stopped.
 (lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8038
+->  0xfffc8038: movl   $0x2000, %ecx             ; imm = 0x2000 
+    0xfffc803d: cld    
+    0xfffc803e: rep    stosq	%rax, %es:(%rdi)
+    0xfffc8041: movl   $0x820000, %esp           ; imm = 0x820000 
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc803d
+->  0xfffc803d: cld    
+    0xfffc803e: rep    stosq	%rax, %es:(%rdi)
+    0xfffc8041: movl   $0x820000, %esp           ; imm = 0x820000 
+    0xfffc8046: nop    
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc803e
+->  0xfffc803e: rep    stosq	%rax, %es:(%rdi)
+    0xfffc8041: movl   $0x820000, %esp           ; imm = 0x820000 
+    0xfffc8046: nop    
+    0xfffc8047: movq   %rbp, %rcx
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+(lldb) 
+error: Command requires a process which is currently stopped.
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8041
+->  0xfffc8041: movl   $0x820000, %esp           ; imm = 0x820000 
+    0xfffc8046: nop    
+    0xfffc8047: movq   %rbp, %rcx
+    0xfffc804a: movq   %rsp, %rdx
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8046
+->  0xfffc8046: nop    
+    0xfffc8047: movq   %rbp, %rcx
+    0xfffc804a: movq   %rsp, %rdx
+    0xfffc804d: subq   $0x20, %rsp
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8047
+->  0xfffc8047: movq   %rbp, %rcx
+    0xfffc804a: movq   %rsp, %rdx
+    0xfffc804d: subq   $0x20, %rsp
+    0xfffc8051: callq  0xfffc8fe6
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc804a
+->  0xfffc804a: movq   %rsp, %rdx
+    0xfffc804d: subq   $0x20, %rsp
+    0xfffc8051: callq  0xfffc8fe6
+    0xfffc8056: movl   $0x1, %eax
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc804d
+->  0xfffc804d: subq   $0x20, %rsp
+    0xfffc8051: callq  0xfffc8fe6
+    0xfffc8056: movl   $0x1, %eax
+    0xfffc805b: lock   
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8051
+->  0xfffc8051: callq  0xfffc8fe6
+    0xfffc8056: movl   $0x1, %eax
+    0xfffc805b: lock   
+    0xfffc805c: xaddl  %eax, 0x900(%rsp)
+Target 0: (Bootstrap.dll) stopped.
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8fe6
+->  0xfffc8fe6: pushq  %rbp
+    0xfffc8fe7: movq   %rsp, %rbp
+    0xfffc8fea: pushq  %r15
+    0xfffc8fec: pushq  %r14
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x $rbp
+(unsigned long) 0x00000000fffc6000
+(lldb) si
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8fe7
+->  0xfffc8fe7: movq   %rsp, %rbp
+    0xfffc8fea: pushq  %r15
+    0xfffc8fec: pushq  %r14
+    0xfffc8fee: pushq  %r13
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8fea
+->  0xfffc8fea: pushq  %r15
+    0xfffc8fec: pushq  %r14
+    0xfffc8fee: pushq  %r13
+    0xfffc8ff0: pushq  %r12
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x $rbp
+(unsigned long) 0x000000000081ffd0
+(lldb) p/x $rsp
+(unsigned long) 0x000000000081ffd0
+(lldb) 
+
 
 ```
 
-对应源代码是 ASM_PFX(_ModuleEntryPoint):
+对应源代码是 ASM_PFX(_ModuleEntryPoint):->InitStack->ASM_PFX(SecCoreStartupWithStack)
+
 
 
 
 ```
+DEFAULT REL
+SECTION .text
 
+extern ASM_PFX(SecCoreStartupWithStack)
+
+%macro  tdcall  0
+  db  0x66, 0x0f, 0x01, 0xcc
+%endmacro
+
+;
+; SecCore Entry Point
+;
+; Processor is in flat protected mode
+;
+; @param[in]  RAX   Initial value of the EAX register (BIST: Built-in Self Test)
+; @param[in]  DI    'BP': boot-strap processor, or 'AP': application processor
+; @param[in]  RBP   Pointer to the start of the Boot Firmware Volume
+; @param[in]  DS    Selector allowing flat access to all addresses
+; @param[in]  ES    Selector allowing flat access to all addresses
+; @param[in]  FS    Selector allowing flat access to all addresses
+; @param[in]  GS    Selector allowing flat access to all addresses
+; @param[in]  SS    Selector allowing flat access to all addresses
+;
+; @return     None  This routine does not return
+;
 global ASM_PFX(_ModuleEntryPoint)
 ASM_PFX(_ModuleEntryPoint):
 
@@ -3642,6 +3791,61 @@ ASM_PFX(_ModuleEntryPoint):
     jz      InitStack
     mov     rsp, FixedPcdGet32 (PcdOvmfSecGhcbBackupBase)
     jmp     ParkAp
+
+InitStack:
+
+    ;
+    ; Fill the temporary RAM with the initial stack value.
+    ; The loop below will seed the heap as well, but that's harmless.
+    ;
+    mov     rax, (FixedPcdGet32 (PcdInitValueInTempStack) << 32) | FixedPcdGet32 (PcdInitValueInTempStack)
+                                                              ; qword to store
+    mov     rdi, FixedPcdGet32 (PcdOvmfSecPeiTempRamBase)     ; base address,
+                                                              ;   relative to
+                                                              ;   ES
+    mov     rcx, FixedPcdGet32 (PcdOvmfSecPeiTempRamSize) / 8 ; qword count
+    cld                                                       ; store from base
+                                                              ;   up
+    rep stosq
+
+    ;
+    ; Load temporary RAM stack based on PCDs
+    ;
+    %define SEC_TOP_OF_STACK (FixedPcdGet32 (PcdOvmfSecPeiTempRamBase) + \
+                          FixedPcdGet32 (PcdOvmfSecPeiTempRamSize))
+    mov     rsp, SEC_TOP_OF_STACK
+    nop
+
+    ;
+    ; Setup parameters and call SecCoreStartupWithStack
+    ;   rcx: BootFirmwareVolumePtr
+    ;   rdx: TopOfCurrentStack
+    ;
+    mov     rcx, rbp
+    mov     rdx, rsp
+    sub     rsp, 0x20
+    call    ASM_PFX(SecCoreStartupWithStack)
+
+%include "../../IntelTdx/Sec/X64/IntelTdxAPs.nasm"
+
+
+```
+
+
+```
+
+VOID
+EFIAPI
+SecCoreStartupWithStack (
+  IN EFI_FIRMWARE_VOLUME_HEADER  *BootFv,
+  IN VOID                        *TopOfCurrentStack
+  )
+{
+  EFI_SEC_PEI_HAND_OFF  SecCoreData;
+  SEC_IDT_TABLE         IdtTableInStack;
+  IA32_DESCRIPTOR       IdtDescriptor;
+  UINT32                Index;
+  volatile UINT8        *Table;
 
 
 ```
