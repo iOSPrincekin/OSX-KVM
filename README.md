@@ -1176,6 +1176,41 @@ searchingForBfvHeaderLoop:
 003ff510  81 78 18 bd 6f 1e 96 75  0b 81 78 1c 89 e7 34 9a  |.x..o..u..x...4.|
 ```
 
+
+Flat32SearchForBfvBase 从 0x00000000fffff000 每次减去 0x1000,一直寻找，一直找到了
+0xfffc6000，找到了 Address of Boot Firmware Volume (BFV)，即 BootFv=0x00000000fffc6000
+
+```
+
+(lldb) x/100 $rax
+0xfffc6000: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc6010: 0x8c8ce578 0x4f1c8a3d 0x61893599 0xd32dc385
+0xfffc6020: 0x0003a000 0x00000000 0x4856465f 0x0004feff
+0xfffc6030: 0x46320048 0x02000060 0x0000003a 0x00001000
+0xfffc6040: 0x00000000 0x00000000 0xffffffff 0xffffffff
+0xfffc6050: 0xffffffff 0xffffffff 0x00f0aaf4 0xf800002c
+0xfffc6060: 0x763bed0d 0x48f5de9f 0x903ef181 0x15a0b1e1
+0xfffc6070: 0x00000014 0xffffffff 0xdf1ccef6 0x4a63f301
+0xfffc6080: 0x60fc6196 0x80c8dc30 0x0003aafc 0xf8014faa
+0xfffc6090: 0x19000f6c 0x00000000 0x00000000 0x00000000
+0xfffc60a0: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc60b0: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc60c0: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc60d0: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc60e0: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc60f0: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc6100: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc6110: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc6120: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc6130: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc6140: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc6150: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc6160: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc6170: 0x00000000 0x00000000 0x00000000 0x00000000
+0xfffc6180: 0x00000000 0x00000000 0x00000000 0x00000000
+
+```
+
 ### 9. 从 0xfffff6c6 跳转到 0xfffff6c8
 ```
 (lldb) si
@@ -1751,6 +1786,61 @@ fileTypeIsSecCore:
     OneTimeCall GetEntryPointOfFfsFile
     test    eax, eax
     jnz     doneSeachingForSecEntryPoint
+
+```
+
+
+通过 rax : 0xfffc6000 -> 0xfffc6048-> 0x00000000fffc607b-> 0xfffc6090->   mov     ebx, dword [eax]  and     ebx, 0x00ffffff  add     eax, ebx -> 0x00000000fffc6ffc -> add     eax, 4 ->0xfffc7000 -> rax:0x00000000fffc8000
+
+
+```
+(lldb) x $rax
+0xfffc6090: 6c 0f 00 19 00 00 00 00 00 00 00 00 00 00 00 00  l...............
+0xfffc60a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+
+```
+
+```
+
+    mov     ebx, dword [eax]
+    and     ebx, 0x00ffffff
+    add     eax, ebx
+
+```
+
+```
+(lldb) p/x $rax
+(unsigned long) 0x00000000fffc6ffc
+(lldb) p/x 0xfffc6090 + 0xf6c
+(unsigned int) 0xfffc6ffc
+
+```
+
+```
+(lldb) x/100 $rax
+0xfffc6ffc: 0x10014004 0x10094555 0x00001000 0x000fffc7
+```
+
+```
+
+(lldb) x/100 $rax
+0xfffc7000: 0x10094555 0x00001000 0x000fffc7 0x05000000
+0xfffc7010: 0x0010000d 0x0000d000 0x00300004 0x00004000
+0xfffc7020: 0x00200002 0x00002000 0x00000000 0x00000000
+
+```
+
+```
+    ; *EntryPoint = (VOID *)((UINTN)UeData + UeHdr.EntryPointAddress)
+    mov     ebx, dword [eax + 0x4]
+    add     eax, ebx
+
+```
+
+
+```
+(lldb) p/x $rax
+(unsigned long) 0x00000000fffc8000
 
 ```
 
@@ -3849,6 +3939,66 @@ SecCoreStartupWithStack (
 
 
 ```
+
+### 24.进入 OVMF_CODE.fd 第一个  efi  /Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/Sec/SecMain/DEBUG/SecMain.efi
+
+
+/Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/Ovmf.map
+
+```
+
+SecMain (Fixed Flash Address, BaseAddress=0x00fffc7000, EntryPoint=0x00fffc8000, Type=UE)
+(GUID=DF1CCEF6-F301-4A63-9661-FC6030DCC880)
+(IMAGE=/Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/Sec/SecMain/DEBUG/SecMain.efi)
+
+```
+
+LLDB 处理
+
+```
+
+(lldb) target module add /Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/Sec/SecMain/DEBUG/SecMain.dll
+
+(lldb) target module load --file /Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/Sec/SecMain/DEBUG/SecMain.dll -s 0x00fffc7000
+
+```
+
+ b _ModuleEntryPoint
+
+```
+
+Process 1 stopped
+* thread #1, stop reason = breakpoint 4.3
+    frame #0: 0x00000000fffc8000 SecMain.dll`_ModuleEntryPoint
+SecMain.dll`:
+->  0xfffc8000 <+0>:  movl   $0x80b000, %eax           ; imm = 0x80B000 
+    0xfffc8005 <+5>:  cmpb   $0x2, (%eax)
+    0xfffc8009 <+9>:  jne    0xfffc8029                ; InitStack
+    0xfffc800b <+11>: movl   $0x1, %eax
+Target 0: (SecMain.efi) stopped.
+
+
+```
+
+
+b SecCoreStartupWithStack       
+
+```
+
+(lldb) c
+Process 1 resuming
+Process 1 stopped
+* thread #1, stop reason = breakpoint 1.1 2.1 3.1
+    frame #0: 0x00000000fffc9008 SecMain.dll`SecCoreStartupWithStack(BootFv=0x00000000fffc6000, TopOfCurrentStack=0x0000000000820000) at SecMain.c:779:18
+   776 	  volatile UINT8        *Table;
+   777 	
+   778 	 #if defined (TDX_GUEST_SUPPORTED)
+-> 779 	  if (CcProbe () == CcGuestTypeIntelTdx) {
+   780 	    //
+   781 	    // From the security perspective all the external input should be measured before
+```
+
+
 
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 

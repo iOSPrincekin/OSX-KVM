@@ -186,12 +186,14 @@ OpenCore_efi=${KVM_Opencore_OC_Dir}/OpenCore.efi
 
 Build_dir=/Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/
 
+SecMain_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/Sec/SecMain/DEBUG/SecMain.dll
+
 Bootstrap_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/Bootstrap/Bootstrap/DEBUG/Bootstrap.dll
 
 OpenCore_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/OpenCore/OpenCore/DEBUG/OpenCore.dll
 
 osascript -e "tell application \"Terminal\" to quit"
-osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\nlldb ${Bootstrap_dll} \\n  target modules add ${Bootstrap_dll} \\n target modules load --file ${Bootstrap_dll} --slide 0 \\n target modules add ${OpenCore_dll} \\n target modules load --file ${OpenCore_dll} --slide 0 \\n gdb-remote localhost:1234 \\n \"" \
+osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\nlldb ${Bootstrap_dll} \\n  target modules add ${Bootstrap_dll} \\n  target modules add ${OpenCore_dll} \\n  target modules add ${SecMain_dll} \\n target modules load --file ${SecMain_dll} --slide 0x00fffc7000 \\n  b _ModuleEntryPoint \\n gdb-remote localhost:1234 \\n \"" \
 -e "tell application \"Terminal\" to activate" \
 -e "tell application \"System Events\" to tell process \"Terminal\" to keystroke \"t\" using command down" \
 -e "tell application \"Terminal\" to set background color of window 1 to {0,0,0,1}" \
