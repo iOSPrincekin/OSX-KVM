@@ -188,12 +188,16 @@ Build_dir=/Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/
 
 SecMain_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/Sec/SecMain/DEBUG/SecMain.dll
 
+PeiCore_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Core/Pei/PeiMain/DEBUG/PeiCore.dll
+
+PcdPeim_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/PCD/Pei/Pcd/DEBUG/PcdPeim.dll
+
 Bootstrap_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/Bootstrap/Bootstrap/DEBUG/Bootstrap.dll
 
 OpenCore_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/OpenCore/OpenCore/DEBUG/OpenCore.dll
 
 osascript -e "tell application \"Terminal\" to quit"
-osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\nlldb ${Bootstrap_dll} \\n  target modules add ${Bootstrap_dll} \\n  target modules add ${OpenCore_dll} \\n  target modules add ${SecMain_dll} \\n target modules load --file ${SecMain_dll} --slide 0x00fffc7000 \\n  b _ModuleEntryPoint \\n gdb-remote localhost:1234 \\n \"" \
+osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lldb ${Bootstrap_dll} \\n target modules add ${SecMain_dll} \\n target modules load --file ${SecMain_dll} --slide 0x00fffc7000 \\n target modules add ${PeiCore_dll} \\n target modules load --file ${PeiCore_dll} --slide 0x0000821000 \\n target modules add ${PcdPeim_dll} \\n target modules load --file ${PcdPeim_dll} --slide 0x0000833000 \\n target modules add ${Bootstrap_dll} \\n  target modules add ${OpenCore_dll} \\n b _ModuleEntryPoint \\n gdb-remote localhost:1234 \\n \"" \
 -e "tell application \"Terminal\" to activate" \
 -e "tell application \"System Events\" to tell process \"Terminal\" to keystroke \"t\" using command down" \
 -e "tell application \"Terminal\" to set background color of window 1 to {0,0,0,1}" \

@@ -1790,14 +1790,23 @@ fileTypeIsSecCore:
 ```
 
 
-通过 rax : 0xfffc6000 -> 0xfffc6048-> 0x00000000fffc607b-> 0xfffc6090->   mov     ebx, dword [eax]  and     ebx, 0x00ffffff  add     eax, ebx -> 0x00000000fffc6ffc -> add     eax, 4 ->0xfffc7000 -> rax:0x00000000fffc8000
+通过 rax : 0xfffc6000 -> 0xfffc6048-> 0x00000000fffc6074->  add     eax, 7
+   ; jc      secEntryPointWasNotFound ;and     al, 0xf8-> 0xfffc6078 ->add     eax, 0x18   -> 0xfffc6090->   mov     ebx, dword [eax]  and     ebx, 0x00ffffff  add     eax, ebx -> 0x00000000fffc6ffc -> add     eax, 4 ->0xfffc7000 -> rax:0x00000000fffc8000
 
 
 ```
-(lldb) x $rax
-0xfffc6090: 6c 0f 00 19 00 00 00 00 00 00 00 00 00 00 00 00  l...............
-0xfffc60a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-
+(lldb) x/100b 0xfffc6048
+0xfffc6048: 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff
+0xfffc6050: 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff
+0xfffc6058: 0xf4 0xaa 0xf0 0x00 0x2c 0x00 0x00 0xf8
+0xfffc6060: 0x0d 0xed 0x3b 0x76 0x9f 0xde 0xf5 0x48
+0xfffc6068: 0x81 0xf1 0x3e 0x90 0xe1 0xb1 0xa0 0x15
+0xfffc6070: 0x14 0x00 0x00 0x00 0xff 0xff 0xff 0xff
+0xfffc6078: 0xf6 0xce 0x1c 0xdf 0x01 0xf3 0x63 0x4a
+0xfffc6080: 0x96 0x61 0xfc 0x60 0x30 0xdc 0xc8 0x80
+0xfffc6088: 0xfc 0xaa 0x03 0x00 0xaa 0x4f 0x01 0xf8
+0xfffc6090: 0x6c 0x0f 0x00 0x19 0x00 0x00 0x00 0x00
+0xfffc6098: 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
 ```
 
 ```
@@ -4000,6 +4009,131 @@ Process 1 stopped
 
 
 
+### 24.定义 SEC_TOP_OF_STACK 栈的地址
+
+```
+#define _PCD_VALUE_PcdOvmfSecPeiTempRamBase  0x00810000U
+
+#define _PCD_VALUE_PcdOvmfSecPeiTempRamSize  0x00010000U
+
+    %define SEC_TOP_OF_STACK (FixedPcdGet32 (PcdOvmfSecPeiTempRamBase) + \
+                          FixedPcdGet32 (PcdOvmfSecPeiTempRamSize))
+```
+
+### 25.从 0x00000000ffc84000 开始 即相对于 OVMF_CODE.fd 文件的0x0 地址，每 0x90 查询  FfsFileAndSection 、FfsSectionInstance
+
+```
+
+* thread #1, stop reason = instruction step into
+  * frame #0: 0x00000000fffc8e95 SecMain.dll`FindFfsSectionInstance(Sections=0x00000000ffc84090, SizeOfSections=1234468, SectionType='\x02', Instance=0, FoundSection=0x5aa55aa55aa55aa5) at SecMain.c:172
+    frame #1: 0x00000000fffc8f95 SecMain.dll`FindFfsFileAndSection [inlined] FindFfsSectionInSections(Sections=<unavailable>, SizeOfSections=<unavailable>, SectionType='\x02', FoundSection=<unavailable>) at SecMain.c:244:10
+    frame #2: 0x00000000fffc8f85 SecMain.dll`FindFfsFileAndSection(Fv=<unavailable>, FileType=<unavailable>, SectionType='\x02', FoundSection=<unavailable>) at SecMain.c:317:14
+    frame #3: 0x00000000fffca22f SecMain.dll`SecCoreStartupWithStack [inlined] DecompressMemFvs(Fv=<unavailable>) at SecMain.c:361:12
+    frame #4: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] FindPeiCoreImageBase(BootFv=<unavailable>, PeiCoreImageBase=<unavailable>, PeiCoreImageSize=<unavailable>) at SecMain.c:597:5
+    frame #5: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] FindAndReportEntryPoints(BootFirmwareVolumePtr=<unavailable>, PeiCoreEntryPoint=<unavailable>) at SecMain.c:721:3
+    frame #6: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1005:3
+    frame #7: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #8: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #9: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+
+```
+
+### 26.在 section 查找函数入口
+
+```
+
+(lldb) bt
+* thread #1, stop reason = breakpoint 6.1
+  * frame #0: 0x00000000fffd0256 SecMain.dll`UefiImageGetEntryPointAddressUe [inlined] UeGetEntryPointAddress(Context=0x000000000081fee8) at UeImageLib.c:1280:19
+    frame #1: 0x00000000fffd0256 SecMain.dll`UefiImageGetEntryPointAddressUe(Context=0x000000000081fee0) at UeSupport.c:216:10
+    frame #2: 0x00000000fffca5ce SecMain.dll`SecCoreStartupWithStack [inlined] UefiImageGetEntryPointAddress(Context=0x000000000081fee0) at UefiImageLib.c:0:3
+    frame #3: 0x00000000fffca58e SecMain.dll`SecCoreStartupWithStack [inlined] UefiImageLoaderGetImageEntryPoint(Context=0x000000000081fee0) at CommonSupport.c:61:23
+    frame #4: 0x00000000fffca547 SecMain.dll`SecCoreStartupWithStack [inlined] FindAndReportEntryPoints(BootFirmwareVolumePtr=<unavailable>, PeiCoreEntryPoint=<unavailable>) at SecMain.c:760:58
+    frame #5: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1005:3
+    frame #6: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #7: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #8: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+
+```
+
+```
+
+typedef struct {
+  CONST UINT8          *FileBuffer;
+  UINT32               UnsignedFileSize;
+  UINT8                Subsystem;
+  UINT8                Machine;
+  BOOLEAN              FixedAddress;
+  BOOLEAN              XIP;
+  UINT8                LastSegmentIndex;
+  UINT32               SegmentsFileOffset; // Unused for XIP
+  UINT32               SegmentAlignment;
+  CONST VOID           *Segments;
+  UINT8                SegmentImageInfoIterSize;
+  BOOLEAN              RelocsStripped;
+  UINT8                NumLoadTables;
+  UINT32               LoadTablesFileOffset;
+  UINT32               RelocTableSize;
+  CONST UE_LOAD_TABLE  *LoadTables;
+  VOID                 *ImageBuffer;
+  UINT32               ImageSize;
+  UINT32               EntryPointAddress;
+  UINT64               BaseAddress; // Unused for XIP
+} UE_LOADER_IMAGE_CONTEXT;
+
+
+```
+
+查找可执行文件主函数入口
+
+```
+
+
+UINT32
+UeGetEntryPointAddress (
+  IN CONST UE_LOADER_IMAGE_CONTEXT  *Context
+  )
+{
+  ASSERT (Context != NULL);
+
+  return Context->EntryPointAddress;
+}
+
+```
+
+### 27.跳转到 PeiCoreEntryPoint.c _ModuleEntryPoint
+
+```
+(lldb) bt
+* thread #1, stop reason = instruction step into
+  * frame #0: 0x000000000082326c PeiCore.dll`PeiCore(SecCoreDataPtr=0x000000000081fe98, PpiList=0x00000000fffd9020, Data=0x0000000000000000) at PeiMain.c:170
+    frame #1: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #2: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #3: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #4: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #5: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #6: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+
+
+```
+
+0xfffca600 对应代码是
+
+```
+
+  //
+  // Transfer the control to the PEI core
+  //
+  (*PeiCoreEntryPoint)(SecCoreData, EfiPeiPpiDescriptor);
+
+```
+EfiPeiPpiDescriptor 的值是：
+
+    EfiPeiPpiDescriptor = (EFI_PEI_PPI_DESCRIPTOR *)&mPrivateDispatchTableMp;
+
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 
@@ -4044,3 +4178,5 @@ https://blog.51cto.com/u_16099264/8344097
 使用：Please enable FixupAppleEfiImages quirk in your config.plist  解决了
 
 https://github.com/acidanthera/bugtracker/issues/2389
+
+
