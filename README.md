@@ -4134,6 +4134,59 @@ EfiPeiPpiDescriptor 的值是：
     EfiPeiPpiDescriptor = (EFI_PEI_PPI_DESCRIPTOR *)&mPrivateDispatchTableMp;
 
 
+### 28.设置 IDT 中断描述符, IdtDescriptor.Base ==  0x000000000081fc78， IdtDescriptor.Limit == 0x021f
+
+```
+typedef struct {
+  UINT16 Limit;
+  UINTN Base;
+} IA32_DESCRIPTOR;
+```
+
+```
+typedef struct _SEC_IDT_TABLE {
+  EFI_PEI_SERVICES            *PeiService;
+  IA32_IDT_GATE_DESCRIPTOR    IdtTable[SEC_IDT_ENTRY_COUNT];
+} SEC_IDT_TABLE;
+```
+```
+
+* thread #1, stop reason = breakpoint 2.3
+  * frame #0: 0x00000000fffc9c70 SecMain.dll`SecCoreStartupWithStack [inlined] InternalX86WriteIdtr(Idtr=0x000000000081ff50) at GccInlinePriv.c:997:3
+    frame #1: 0x00000000fffc9c70 SecMain.dll`SecCoreStartupWithStack [inlined] AsmWriteIdtr(Idtr=0x000000000081ff50) at X86WriteIdtr.c:29:3
+    frame #2: 0x00000000fffc9c70 SecMain.dll`SecCoreStartupWithStack(BootFv=0x00000000fffc6000, TopOfCurrentStack=0x0000000000820000) at SecMain.c:871:5
+    frame #3: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+
+
+```
+
+### 29.SecCoreData.BootFirmwareVolumeBase 地址从 0x00000000fffc6000 到 0x0000000000820000 的转变
+
+
+```
+
+(lldb) bt
+* thread #1, stop reason = step over
+  * frame #0: 0x00000000fffca77b SecMain.dll`SecCoreStartupWithStack [inlined] DecompressMemFvs(Fv=<unavailable>) at SecMain.c:432:41
+    frame #1: 0x00000000fffca647 SecMain.dll`SecCoreStartupWithStack [inlined] FindPeiCoreImageBase(BootFv=<unavailable>, PeiCoreImageBase=<unavailable>, PeiCoreImageSize=<unavailable>) at SecMain.c:597:5
+    frame #2: 0x00000000fffca647 SecMain.dll`SecCoreStartupWithStack [inlined] FindAndReportEntryPoints(BootFirmwareVolumePtr=<unavailable>, PeiCoreEntryPoint=<unavailable>) at SecMain.c:721:3
+    frame #3: 0x00000000fffca647 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1005:3
+    frame #4: 0x00000000fffca647 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #5: 0x00000000fffca647 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #6: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+
+```
+
+    #define _PCD_VALUE_PcdOvmfPeiMemFvBase  0x00820000U
+
+  // 0x0000000000820000
+  PeiMemFv = (EFI_FIRMWARE_VOLUME_HEADER *)(UINTN)PcdGet32 (PcdOvmfPeiMemFvBase);
+
+    *Fv = PeiMemFv;
+
+
+
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 
