@@ -4533,6 +4533,169 @@ PEI_CORE_INSTANCE* PrivateData = PEI_CORE_INSTANCE_FROM_PS_THIS (PeiServices);
     frame #11: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
     frame #12: 0x00000000fffc8056 SecMain.dll`InitStack + 45
 ```
+
+
+### 32.关于 PpiList
+
+1.安装
+
+```
+
+
+EFI_PEI_PPI_DESCRIPTOR  mPeiFfs2FvPpiList = {
+  (EFI_PEI_PPI_DESCRIPTOR_PPI | EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST),
+  &gEfiFirmwareFileSystem2Guid,
+  &mPeiFfs2FwVol.Fv
+};
+
+EFI_PEI_PPI_DESCRIPTOR  mPeiFfs3FvPpiList = {
+  (EFI_PEI_PPI_DESCRIPTOR_PPI | EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST),
+  &gEfiFirmwareFileSystem3Guid,
+  &mPeiFfs3FwVol.Fv
+};
+
+
+```
+
+```
+
+  //
+  // Install FV_PPI for FFS2 file system.
+  //
+  PeiServicesInstallPpi (&mPeiFfs2FvPpiList);
+
+  //
+  // Install FV_PPI for FFS3 file system.
+  //
+  PeiServicesInstallPpi (&mPeiFfs3FvPpiList);
+
+```
+```
+
+(lldb) bt
+* thread #1, stop reason = breakpoint 2.1
+  * frame #0: 0x0000000000822bca PeiCore.dll`InternalPeiInstallPpi(PeiServices=0x000000000081f610, PpiList=0x0000000000831270, Single='\0') at Ppi.c:461:15
+    frame #1: 0x000000000082366c PeiCore.dll`PeiCore [inlined] PeiServicesInstallPpi(PpiList=<unavailable>) at PeiServicesLib.c:42:10
+    frame #2: 0x0000000000823656 PeiCore.dll`PeiCore [inlined] PeiInitializeFv(PrivateData=0x000000000081f608, SecCoreData=0x000000000081fe98) at FwVol.c:480:3
+    frame #3: 0x0000000000823656 PeiCore.dll`PeiCore [inlined] InitializeDispatcherData(PrivateData=0x000000000081f608, OldCoreData=<unavailable>, SecCoreData=0x000000000081fe98) at Dispatcher.c:1759:5
+    frame #4: 0x000000000082364f PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=0x00000000fffd9020, Data=<unavailable>) at PeiMain.c:538:3
+    frame #5: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #6: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #7: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #8: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #9: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #10: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+
+```
+
+```
+  if (CcProbe () == CcGuestTypeIntelTdx) {
+    EfiPeiPpiDescriptor = (EFI_PEI_PPI_DESCRIPTOR *)&mPrivateDispatchTableUp;
+  } else {
+    EfiPeiPpiDescriptor = (EFI_PEI_PPI_DESCRIPTOR *)&mPrivateDispatchTableMp;
+  }
+```
+
+```
+    if (PpiList != NULL) {
+      ProcessPpiListFromSec ((CONST EFI_PEI_SERVICES **)&PrivateData.Ps, PpiList);
+    }
+```
+
+2.通知
+
+```
+
+EFI_PEI_NOTIFY_DESCRIPTOR  mNotifyOnFvInfoList[] = {
+  {
+    EFI_PEI_PPI_DESCRIPTOR_NOTIFY_CALLBACK,
+    &gEfiPeiFirmwareVolumeInfoPpiGuid,
+    FirmwareVolumeInfoPpiNotifyCallback
+  },
+  {
+    (EFI_PEI_PPI_DESCRIPTOR_NOTIFY_CALLBACK | EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST),
+    &gEfiPeiFirmwareVolumeInfo2PpiGuid,
+    FirmwareVolumeInfoPpiNotifyCallback
+  }
+};
+
+
+```
+
+  //
+  // Post a call-back for the FvInfoPPI and FvInfo2PPI services to expose
+  // additional FVs to PeiCore.
+  //
+  Status = PeiServicesNotifyPpi (mNotifyOnFvInfoList);
+
+```
+
+```
+
+```
+(lldb) bt
+* thread #1, stop reason = breakpoint 3.1
+  * frame #0: 0x0000000000822fd8 PeiCore.dll`InternalPeiNotifyPpi(PeiServices=0x000000000081f610, NotifyList=0x0000000000831180, Single='\0') at Ppi.c:746:18
+    frame #1: 0x00000000008237e0 PeiCore.dll`PeiCore [inlined] PeiServicesNotifyPpi(NotifyList=<unavailable>) at PeiServicesLib.c:125:10
+    frame #2: 0x00000000008237ca PeiCore.dll`PeiCore [inlined] PeiInitializeFv(PrivateData=0x000000000081f608, SecCoreData=0x000000000081fe98) at FwVol.c:536:12
+    frame #3: 0x0000000000823656 PeiCore.dll`PeiCore [inlined] InitializeDispatcherData(PrivateData=0x000000000081f608, OldCoreData=<unavailable>, SecCoreData=0x000000000081fe98) at Dispatcher.c:1759:5
+    frame #4: 0x000000000082364f PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=0x00000000fffd9020, Data=<unavailable>) at PeiMain.c:538:3
+    frame #5: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #6: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #7: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #8: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #9: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #10: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+
+```
+
+3.触发通知
+
+FirmwareVolumeInfoPpiNotifyCallback
+
+```
+(lldb) bt
+* thread #1, stop reason = breakpoint 2.1
+  * frame #0: 0x0000000000825d3b PeiCore.dll`FirmwareVolumeInfoPpiNotifyCallback(PeiServices=0x000000000081f610, NotifyDescriptor=0x0000000000831180, Ppi=0x0000000000811a18) at FwVol.c:574:17
+    frame #1: 0x0000000000822ddc PeiCore.dll`ProcessNotify(PrivateData=0x000000000081f608, NotifyType=<unavailable>, InstallStartIndex=13, InstallStopIndex=<unavailable>, NotifyStartIndex=0, NotifyStopIndex=3) at Ppi.c:1002:9
+    frame #2: 0x0000000000822d03 PeiCore.dll`InternalPeiInstallPpi(PeiServices=<unavailable>, PpiList=0x0000000000811a50, Single='\0') at Ppi.c:534:3
+    frame #3: 0x000000000084a9e7 PlatformPei.dll`InitializePlatform [inlined] PeiServicesInstallPpi(PpiList=<unavailable>) at PeiServicesLib.c:42:10
+    frame #4: 0x000000000084a9d5 PlatformPei.dll`InitializePlatform [inlined] InternalPeiServicesInstallFvInfoPpi(InstallFvInfoPpi='\x01', FvFormat=0x0000000000000000, FvInfo=0x0000000000930000, FvInfoSize=15007744, ParentFvName=0x0000000000000000, ParentFileName=0x0000000000000000, AuthenticationStatus=0) at PeiServicesLib.c:725:32
+    frame #5: 0x000000000084a8aa PlatformPei.dll`InitializePlatform [inlined] PeiServicesInstallFvInfoPpi(FvFormat=0x0000000000000000, FvInfo=0x0000000000930000, FvInfoSize=15007744, ParentFvName=0x0000000000000000, ParentFileName=0x0000000000000000) at PeiServicesLib.c:769:3
+    frame #6: 0x000000000084a8aa PlatformPei.dll`InitializePlatform [inlined] PeiFvInitialization(PlatformInfoHob=0x0000000000811708) at Fv.c:83:3
+    frame #7: 0x000000000084a798 PlatformPei.dll`InitializePlatform(FileHandle=<unavailable>, PeiServices=<unavailable>) at Platform.c:354:5
+    frame #8: 0x00000000008516b9 PlatformPei.dll`_ModuleEntryPoint [inlined] ProcessModuleEntryPointList(FileHandle=<unavailable>, PeiServices=<unavailable>) at AutoGen.c:336:10
+    frame #9: 0x00000000008516b4 PlatformPei.dll`_ModuleEntryPoint(FileHandle=<unavailable>, PeiServices=<unavailable>) at PeimEntryPoint.c:49:10
+    frame #10: 0x00000000008247b7 PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1626:19
+    frame #11: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #12: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #13: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #14: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #15: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #16: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #17: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+```
+
+### 33.PeiCore 的递归调用
+
+```
+(lldb) bt
+* thread #1, stop reason = step over
+  * frame #0: 0x0000000000823dcb PeiCore.dll`PeiCore(SecCoreDataPtr=0x000000007bf3de98, PpiList=0x0000000000000000, Data=0x000000007bf3d608) at PeiMain.c:302:72
+    frame #1: 0x00000000008280f1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:875:7
+    frame #2: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #3: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #4: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #5: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #6: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #7: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #8: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #9: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+
+```
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 
