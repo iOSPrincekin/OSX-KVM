@@ -4184,9 +4184,355 @@ typedef struct _SEC_IDT_TABLE {
 
     *Fv = PeiMemFv;
 
+### 30.如何通过 EFI_PEI_SERVICES  **PeiServices 获取 PEI_CORE_INSTANCE* PrivateData ?
+
+```
+///
+/// Pei Core private data structure instance
+///
+struct _PEI_CORE_INSTANCE {
+  UINTN                             Signature;
+
+  ///
+  /// Point to ServiceTableShadow
+  ///
+  EFI_PEI_SERVICES                  *Ps;
+  PEI_PPI_DATABASE                  PpiData;
+
+  ///
+  /// The count of FVs which contains FFS and could be dispatched by PeiCore.
+  ///
+  UINTN                             FvCount;
+
+  ///
+  /// The max count of FVs which contains FFS and could be dispatched by PeiCore.
+  ///
+  UINTN                             MaxFvCount;
+
+  ///
+  /// Pointer to the buffer with the MaxFvCount number of entries.
+  /// Each entry is for one FV which contains FFS and could be dispatched by PeiCore.
+  ///
+  PEI_CORE_FV_HANDLE                *Fv;
+
+  ///
+  /// Pointer to the buffer with the MaxUnknownFvInfoCount number of entries.
+  /// Each entry is for one FV which could not be dispatched by PeiCore.
+  ///
+  PEI_CORE_UNKNOW_FORMAT_FV_INFO    *UnknownFvInfo;
+  UINTN                             MaxUnknownFvInfoCount;
+  UINTN                             UnknownFvInfoCount;
+
+  ///
+  /// Pointer to the buffer FvFileHandlers in PEI_CORE_FV_HANDLE specified by CurrentPeimFvCount.
+  ///
+  EFI_PEI_FILE_HANDLE               *CurrentFvFileHandles;
+  UINTN                             AprioriCount;
+  UINTN                             CurrentPeimFvCount;
+  UINTN                             CurrentPeimCount;
+  EFI_PEI_FILE_HANDLE               CurrentFileHandle;
+  BOOLEAN                           PeimNeedingDispatch;
+  BOOLEAN                           PeimDispatchOnThisPass;
+  BOOLEAN                           PeimDispatcherReenter;
+  EFI_PEI_HOB_POINTERS              HobList;
+  BOOLEAN                           SwitchStackSignal;
+  BOOLEAN                           PeiMemoryInstalled;
+  VOID                              *CpuIo;
+  EFI_PEI_SECURITY2_PPI             *PrivateSecurityPpi;
+  EFI_PEI_SERVICES                  ServiceTableShadow;
+  EFI_PEI_PPI_DESCRIPTOR            *XipLoadFile;
+  EFI_PHYSICAL_ADDRESS              PhysicalMemoryBegin;
+  UINT64                            PhysicalMemoryLength;
+  EFI_PHYSICAL_ADDRESS              FreePhysicalMemoryTop;
+  UINTN                             HeapOffset;
+  BOOLEAN                           HeapOffsetPositive;
+  UINTN                             StackOffset;
+  BOOLEAN                           StackOffsetPositive;
+  //
+  // Information for migrating memory pages allocated in pre-memory phase.
+  //
+  HOLE_MEMORY_DATA                  MemoryPages;
+  PEICORE_FUNCTION_POINTER          ShadowedPeiCore;
+  CACHE_SECTION_DATA                CacheSection;
+  //
+  // For Loading modules at fixed address feature to cache the top address below which the
+  // Runtime code, boot time code and PEI memory will be placed. Please note that the offset between this field
+  // and Ps should not be changed since maybe user could get this top address by using the offset to Ps.
+  //
+  EFI_PHYSICAL_ADDRESS              LoadModuleAtFixAddressTopAddress;
+  //
+  // The field is define for Loading modules at fixed address feature to tracker the PEI code
+  // memory range usage. It is a bit mapped array in which every bit indicates the corresponding memory page
+  // available or not.
+  //
+  UINT64                            *PeiCodeMemoryRangeUsageBitMap;
+
+  UINTN                             TempPeimCount;
+
+  //
+  // Pointer to the temp buffer with the TempPeimCount number of entries.
+  //
+  EFI_PEI_FILE_HANDLE               *TempFileHandles;
+  //
+  // Pointer to the temp buffer with the TempPeimCount number of entries.
+  //
+  EFI_GUID                          *TempFileGuid;
+
+  //
+  // Temp Memory Range is not covered by PeiTempMem and Stack.
+  // Those Memory Range will be migrated into physical memory.
+  //
+  HOLE_MEMORY_DATA                  HoleData[HOLE_MAX_NUMBER];
+};
+```
+
+```
+PEI_CORE_INSTANCE* PrivateData = PEI_CORE_INSTANCE_FROM_PS_THIS (PeiServices);
+```
+
+```
+///
+/// Pei Core Instance Data Macros
+///
+#define PEI_CORE_INSTANCE_FROM_PS_THIS(a) \
+  CR(a, PEI_CORE_INSTANCE, Ps, PEI_CORE_HANDLE_SIGNATURE)
+
+```
+
+```
+#define CR(Record, TYPE, Field, TestSignature)                                              \
+    (DebugAssertEnabled () && (BASE_CR (Record, TYPE, Field)->Signature != TestSignature)) ?  \
+    (TYPE *) (_ASSERT (CR has Bad Signature), Record) :                                       \
+    BASE_CR (Record, TYPE, Field)
+```
 
 
+```
+#define BASE_CR(Record, TYPE, Field)  ((TYPE *) ((CHAR8 *) (Record) - OFFSET_OF (TYPE, Field)))
+```
 
+### 31.
+
+```
+(lldb) p/x &PrivateData
+(PEI_CORE_INSTANCE *) 0x000000000081f608
+(lldb) p/x Idtr.Base
+(UINTN) 0x000000000081fc78
+(lldb) p/x PeiServicesTablePointer
+(const EFI_PEI_SERVICES **) 0x000000000081f610
+
+```
+
+```
+
+(lldb) p/x PrivateData
+(PEI_CORE_INSTANCE) {
+  Signature = 0x0000000043696550
+  Ps = 0x000000000081f6f0
+  PpiData = {
+    PpiList = {
+      CurrentCount = 0x0000000000000000
+      MaxCount = 0x0000000000000000
+      LastDispatchedCount = 0x0000000000000000
+      PpiPtrs = NULL
+    }
+    CallbackNotifyList = {
+      CurrentCount = 0x0000000000000000
+      MaxCount = 0x0000000000000000
+      NotifyPtrs = NULL
+    }
+    DispatchNotifyList = {
+      CurrentCount = 0x0000000000000000
+      MaxCount = 0x0000000000000000
+      LastDispatchedCount = 0x0000000000000000
+      NotifyPtrs = NULL
+    }
+  }
+  FvCount = 0x0000000000000000
+  MaxFvCount = 0x0000000000000000
+  Fv = NULL
+  UnknownFvInfo = NULL
+  MaxUnknownFvInfoCount = 0x0000000000000000
+  UnknownFvInfoCount = 0x0000000000000000
+  CurrentFvFileHandles = 0x0000000000000000
+  AprioriCount = 0x0000000000000000
+  CurrentPeimFvCount = 0x0000000000000000
+  CurrentPeimCount = 0x0000000000000000
+  CurrentFileHandle = 0x0000000000000000
+  PeimNeedingDispatch = 0x00
+  PeimDispatchOnThisPass = 0x00
+  PeimDispatcherReenter = 0x00
+  HobList = {
+    Header = NULL
+    HandoffInformationTable = NULL
+    MemoryAllocation = NULL
+    MemoryAllocationBspStore = NULL
+    MemoryAllocationStack = NULL
+    MemoryAllocationModule = NULL
+    ResourceDescriptor = NULL
+    Guid = NULL
+    FirmwareVolume = NULL
+    FirmwareVolume2 = NULL
+    FirmwareVolume3 = NULL
+    Cpu = NULL
+    Pool = NULL
+    Capsule = NULL
+    Raw = 0x0000000000000000
+  }
+  SwitchStackSignal = 0x00
+  PeiMemoryInstalled = 0x00
+  CpuIo = 0x0000000000000000
+  PrivateSecurityPpi = NULL
+  ServiceTableShadow = {
+    Hdr = (Signature = 0x5652455320494550, Revision = 0x00010046, HeaderSize = 0x00000100, CRC32 = 0x00000000, Reserved = 0x00000000)
+    InstallPpi = 0x0000000000822e02 (PeiCore.dll`PeiInstallPpi at Ppi.c:567)
+    ReInstallPpi = 0x0000000000822e0f (PeiCore.dll`PeiReInstallPpi at Ppi.c:595)
+    LocatePpi = 0x0000000000822ef7 (PeiCore.dll`PeiLocatePpi at Ppi.c:669)
+    NotifyPpi = 0x00000000008231b9 (PeiCore.dll`PeiNotifyPpi at Ppi.c:878)
+    GetBootMode = 0x000000000082841c (PeiCore.dll`PeiGetBootMode at BootMode.c:31)
+    SetBootMode = 0x000000000082847b (PeiCore.dll`PeiSetBootMode at BootMode.c:64)
+    GetHobList = 0x0000000000825bb8 (PeiCore.dll`PeiGetHobList at Hob.c:29)
+    CreateHob = 0x0000000000825c15 (PeiCore.dll`PeiCreateHob at Hob.c:72)
+    FfsFindNextVolume = 0x000000000082792f (PeiCore.dll`PeiFfsFindNextVolume at FwVol.c:1186)
+    FfsFindNextFile = 0x0000000000827874 (PeiCore.dll`PeiFfsFindNextFile at FwVol.c:1154)
+    FfsFindSectionData = 0x000000000082777b (PeiCore.dll`PeiFfsFindSectionData at FwVol.c:1042)
+    InstallPeiMemory = 0x0000000000824b1d (PeiCore.dll`PeiInstallPeiMemory at MemoryServices.c:78)
+    AllocatePages = 0x0000000000824e2a (PeiCore.dll`PeiAllocatePages at MemoryServices.c:591)
+    AllocatePool = 0x00000000008252d4 (PeiCore.dll`PeiAllocatePool at MemoryServices.c:883)
+    CopyMem = 0x0000000000828f5f (PeiCore.dll`CopyMem at CopyMemWrapper.c:46)
+    SetMem = 0x0000000000828f03 (PeiCore.dll`SetMem at SetMemWrapper.c:43)
+    ReportStatusCode = 0x0000000000822810 (PeiCore.dll`PeiReportStatusCode at StatusCode.c:37)
+    ResetSystem = 0x0000000000822941 (PeiCore.dll`PeiResetSystem at Reset.c:28)
+    CpuIo = 0x00000000008312a0
+    PciCfg = 0x0000000000831340
+    FfsFindFileByName = 0x00000000008279b1 (PeiCore.dll`PeiFfsFindFileByName at FwVol.c:1227)
+    FfsGetFileInfo = 0x0000000000827a17 (PeiCore.dll`PeiFfsGetFileInfo at FwVol.c:1259)
+    FfsGetVolumeInfo = 0x0000000000827ad8 (PeiCore.dll`PeiFfsGetVolumeInfo at FwVol.c:1345)
+    RegisterForShadow = 0x00000000008280f1 (PeiCore.dll`PeiRegisterForShadow at Dispatcher.c:1845)
+    FindSectionData3 = 0x00000000008277ce (PeiCore.dll`PeiFfsFindSectionData3 at FwVol.c:1077)
+    FfsGetFileInfo2 = 0x0000000000827a6a (PeiCore.dll`PeiFfsGetFileInfo2 at FwVol.c:1294)
+    ResetSystem2 = 0x00000000008229d7 (PeiCore.dll`PeiResetSystem2 at Reset.c:86)
+    FreePages = 0x0000000000825122 (PeiCore.dll`PeiFreePages at MemoryServices.c:807)
+    FindSectionData4 = 0x00000000008277fc (PeiCore.dll`PeiFfsFindSectionData4 at FwVol.c:1109)
+  }
+  XipLoadFile = NULL
+  PhysicalMemoryBegin = 0x0000000000000000
+  PhysicalMemoryLength = 0x0000000000000000
+  FreePhysicalMemoryTop = 0x0000000000000000
+  HeapOffset = 0x0000000000000000
+  HeapOffsetPositive = 0x00
+  StackOffset = 0x0000000000000000
+  StackOffsetPositive = 0x00
+  MemoryPages = (Base = 0x0000000000000000, Size = 0x0000000000000000, Offset = 0x0000000000000000, OffsetPositive = 0x00)
+  ShadowedPeiCore = 0x0000000000000000
+  CacheSection = {
+    Section = {
+      [0] = NULL
+      [1] = NULL
+      [2] = NULL
+      [3] = NULL
+      [4] = NULL
+      [5] = NULL
+      [6] = NULL
+      [7] = NULL
+      [8] = NULL
+      [9] = NULL
+      [10] = NULL
+      [11] = NULL
+      [12] = NULL
+      [13] = NULL
+      [14] = NULL
+      [15] = NULL
+    }
+    SectionData = {
+      [0] = 0x0000000000000000
+      [1] = 0x0000000000000000
+      [2] = 0x0000000000000000
+      [3] = 0x0000000000000000
+      [4] = 0x0000000000000000
+      [5] = 0x0000000000000000
+      [6] = 0x0000000000000000
+      [7] = 0x0000000000000000
+      [8] = 0x0000000000000000
+      [9] = 0x0000000000000000
+      [10] = 0x0000000000000000
+      [11] = 0x0000000000000000
+      [12] = 0x0000000000000000
+      [13] = 0x0000000000000000
+      [14] = 0x0000000000000000
+      [15] = 0x0000000000000000
+    }
+    SectionSize = {
+      [0] = 0x0000000000000000
+      [1] = 0x0000000000000000
+      [2] = 0x0000000000000000
+      [3] = 0x0000000000000000
+      [4] = 0x0000000000000000
+      [5] = 0x0000000000000000
+      [6] = 0x0000000000000000
+      [7] = 0x0000000000000000
+      [8] = 0x0000000000000000
+      [9] = 0x0000000000000000
+      [10] = 0x0000000000000000
+      [11] = 0x0000000000000000
+      [12] = 0x0000000000000000
+      [13] = 0x0000000000000000
+      [14] = 0x0000000000000000
+      [15] = 0x0000000000000000
+    }
+    AuthenticationStatus = {
+      [0] = 0x00000000
+      [1] = 0x00000000
+      [2] = 0x00000000
+      [3] = 0x00000000
+      [4] = 0x00000000
+      [5] = 0x00000000
+      [6] = 0x00000000
+      [7] = 0x00000000
+      [8] = 0x00000000
+      [9] = 0x00000000
+      [10] = 0x00000000
+      [11] = 0x00000000
+      [12] = 0x00000000
+      [13] = 0x00000000
+      [14] = 0x00000000
+      [15] = 0x00000000
+    }
+    AllSectionCount = 0x0000000000000000
+    SectionIndex = 0x0000000000000000
+  }
+  LoadModuleAtFixAddressTopAddress = 0x0000000000000000
+  PeiCodeMemoryRangeUsageBitMap = 0x0000000000000000
+  TempPeimCount = 0x0000000000000000
+  TempFileHandles = 0x0000000000000000
+  TempFileGuid = NULL
+  HoleData = {
+    [0] = (Base = 0x0000000000000000, Size = 0x0000000000000000, Offset = 0x0000000000000000, OffsetPositive = 0x00)
+    [1] = (Base = 0x0000000000000000, Size = 0x0000000000000000, Offset = 0x0000000000000000, OffsetPositive = 0x00)
+    [2] = (Base = 0x0000000000000000, Size = 0x0000000000000000, Offset = 0x0000000000000000, OffsetPositive = 0x00)
+  }
+}
+
+
+```
+
+```
+(lldb) bt
+* thread #1, stop reason = instruction step into
+  * frame #0: 0x0000000000822ef8 PeiCore.dll`PeiLocatePpi(PeiServices=0x000000000081f610, Guid=0x000000000084500c, Instance=0, PpiDescriptor=0x0000000000000000, Ppi=0x0000000000000000) at Ppi.c:669
+    frame #1: 0x0000000000843a22 StatusCodeHandlerPei.dll`_ModuleEntryPoint [inlined] PeiServicesLocatePpi(Guid=<unavailable>, Instance=0, PpiDescriptor=0x0000000000000000, Ppi=0x000000000081f570) at PeiServicesLib.c:98:10
+    frame #2: 0x00000000008439fd StatusCodeHandlerPei.dll`_ModuleEntryPoint [inlined] StatusCodeHandlerPeiEntry(FileHandle=<unavailable>, PeiServices=<unavailable>) at StatusCodeHandlerPei.c:35:12
+    frame #3: 0x00000000008439fd StatusCodeHandlerPei.dll`_ModuleEntryPoint [inlined] ProcessModuleEntryPointList(FileHandle=<unavailable>, PeiServices=<unavailable>) at AutoGen.c:207:10
+    frame #4: 0x00000000008439fd StatusCodeHandlerPei.dll`_ModuleEntryPoint(FileHandle=<unavailable>, PeiServices=<unavailable>) at PeimEntryPoint.c:49:10
+    frame #5: 0x00000000008247b7 PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1626:19
+    frame #6: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #7: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #8: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #9: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #10: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #11: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #12: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+```
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 

@@ -192,12 +192,29 @@ PeiCore_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Core/Pei/PeiMain/
 
 PcdPeim_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/PCD/Pei/Pcd/DEBUG/PcdPeim.dll
 
+PcdPeim_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/PCD/Pei/Pcd/DEBUG/PcdPeim.dll
+
+ReportStatusCodeRouterPei_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/ReportStatusCodeRouter/Pei/ReportStatusCodeRouterPei/DEBUG/ReportStatusCodeRouterPei.dll
+
+StatusCodeHandlerPei_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/StatusCodeHandler/Pei/StatusCodeHandlerPei/DEBUG/StatusCodeHandlerPei.dll
+
+PlatformPei_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/PlatformPei/PlatformPei/DEBUG/PlatformPei.dll
+
+DxeIpl_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Core/DxeIplPeim/DxeIpl/DEBUG/DxeIpl.dll
+
 Bootstrap_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/Bootstrap/Bootstrap/DEBUG/Bootstrap.dll
 
-OpenCore_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/OpenCore/OpenCore/DEBUG/OpenCore.dll
-
 osascript -e "tell application \"Terminal\" to quit"
-osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lldb ${Bootstrap_dll} \\n target modules add ${SecMain_dll} \\n target modules load --file ${SecMain_dll} --slide 0x00fffc7000 \\n target modules add ${PeiCore_dll} \\n target modules load --file ${PeiCore_dll} --slide 0x0000821000 \\n target modules add ${PcdPeim_dll} \\n target modules load --file ${PcdPeim_dll} --slide 0x0000833000 \\n target modules add ${Bootstrap_dll} \\n  target modules add ${OpenCore_dll} \\n b _ModuleEntryPoint \\n gdb-remote localhost:1234 \\n \"" \
+osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lldb ${Bootstrap_dll} \\n\
+  target modules add ${SecMain_dll} \\n target modules load --file ${SecMain_dll} --slide 0x00fffc7000 \\n\
+  target modules add ${PeiCore_dll} \\n target modules load --file ${PeiCore_dll} --slide 0x0000821000 \\n\
+  target modules add ${PcdPeim_dll} \\n target modules load --file ${PcdPeim_dll} --slide 0x0000833000 \\n\
+  target modules add ${ReportStatusCodeRouterPei_dll} \\n target modules load --file ${ReportStatusCodeRouterPei_dll} --slide 0x000083b000 \\n\
+  target modules add ${StatusCodeHandlerPei_dll} \\n target modules load --file ${StatusCodeHandlerPei_dll} --slide 0x0000841000 \\n\
+  target modules add ${PlatformPei_dll} \\n target modules load --file ${PlatformPei_dll} --slide 0x0000847000 \\n\
+  target modules add ${DxeIpl_dll} \\n target modules load --file ${DxeIpl_dll} --slide 0x0000858000 \\n\
+  target modules add ${Bootstrap_dll} \\n  target modules add ${OpenCore_dll} \\n\
+  b _ModuleEntryPoint \\n gdb-remote localhost:1234 \\n \"" \
 -e "tell application \"Terminal\" to activate" \
 -e "tell application \"System Events\" to tell process \"Terminal\" to keystroke \"t\" using command down" \
 -e "tell application \"Terminal\" to set background color of window 1 to {0,0,0,1}" \
