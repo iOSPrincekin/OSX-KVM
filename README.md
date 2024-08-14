@@ -4696,6 +4696,32 @@ FirmwareVolumeInfoPpiNotifyCallback
 
 ```
 
+### 34.调用 DxeMain 方法
+
+```
+
+(lldb) bt
+* thread #1, stop reason = step over
+  * frame #0: 0x000000007fe4f0c6 DxeCore.dll`DxeMain [inlined] CoreInitializeMemoryServices(HobStart=<unavailable>, MemoryBaseAddress=<unavailable>, MemoryLength=<unavailable>) at Gcd.c:2256:3
+    frame #1: 0x000000007fe4f0c6 DxeCore.dll`DxeMain(HobStart=0x000000007bf3e000) at DxeMain.c:264:3
+    frame #2: 0x000000007fe52dcd DxeCore.dll`ProcessModuleEntryPointList(HobStart=<unavailable>) at AutoGen.c:746:3
+    frame #3: 0x000000007fe576be DxeCore.dll`_ModuleEntryPoint(HobStart=<unavailable>) at DxeCoreEntryPoint.c:46:3
+    frame #4: 0x000000007febd3d7 DxeIpl.dll`InternalSwitchStack + 15
+    frame #5: 0x000000007febeb0c DxeIpl.dll`DxeLoadCore [inlined] HandOffToDxeCore(DxeCoreEntryPoint=2145744554, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoadFunc.c:129:3
+    frame #6: 0x000000007febdf10 DxeIpl.dll`DxeLoadCore(This=<unavailable>, PeiServices=<unavailable>, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoad.c:456:3
+    frame #7: 0x000000007fecd958 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:663:12
+    frame #9: 0x0000000000824afe PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:458:7
+    frame #10: 0x00000000008280f1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:875:7
+    frame #11: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #12: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #13: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #14: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #15: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #16: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #17: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #18: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+```
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 

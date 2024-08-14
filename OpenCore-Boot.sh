@@ -192,8 +192,6 @@ PeiCore_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Core/Pei/PeiMain/
 
 PcdPeim_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/PCD/Pei/Pcd/DEBUG/PcdPeim.dll
 
-PcdPeim_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/PCD/Pei/Pcd/DEBUG/PcdPeim.dll
-
 ReportStatusCodeRouterPei_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/ReportStatusCodeRouter/Pei/ReportStatusCodeRouterPei/DEBUG/ReportStatusCodeRouterPei.dll
 
 StatusCodeHandlerPei_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/StatusCodeHandler/Pei/StatusCodeHandlerPei/DEBUG/StatusCodeHandlerPei.dll
@@ -206,6 +204,8 @@ S3Resume2Pei_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/UefiCpuPkg/Universal/Acpi
 
 CpuMpPei_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/UefiCpuPkg/CpuMpPei/CpuMpPei/DEBUG/CpuMpPei.dll
 
+DxeCore_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Core/Dxe/DxeMain/DEBUG/DxeCore.dll
+
 Bootstrap_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/Bootstrap/Bootstrap/DEBUG/Bootstrap.dll
 
 osascript -e "tell application \"Terminal\" to quit"
@@ -216,9 +216,10 @@ osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lld
   target modules add ${ReportStatusCodeRouterPei_dll} \\n target modules load --file ${ReportStatusCodeRouterPei_dll} --slide 0x000083b000 \\n\
   target modules add ${StatusCodeHandlerPei_dll} \\n target modules load --file ${StatusCodeHandlerPei_dll} --slide 0x0000841000 \\n\
   target modules add ${PlatformPei_dll} \\n target modules load --file ${PlatformPei_dll} --slide 0x0000847000 \\n\
-  target modules add ${DxeIpl_dll} \\n target modules load --file ${DxeIpl_dll} --slide 0x0000858000 \\n\
+  target modules add ${DxeIpl_dll} \\n target modules load --file ${DxeIpl_dll} --slide 0x0007FEBC000 \\n\
   target modules add ${S3Resume2Pei_dll} \\n target modules load --file ${S3Resume2Pei_dll} --slide 0x0000860000 \\n\
   target modules add ${CpuMpPei_dll} \\n target modules load --file ${CpuMpPei_dll} --slide 0x0000869000 \\n\
+  target modules add ${DxeCore_dll} \\n target modules load --file ${DxeCore_dll} --slide 0x0007FE3C000 \\n\
   target modules add ${Bootstrap_dll} \\n  target modules add ${OpenCore_dll} \\n\
   b _ModuleEntryPoint \\n gdb-remote localhost:1234 \\n \"" \
 -e "tell application \"Terminal\" to activate" \
