@@ -4722,6 +4722,8 @@ FirmwareVolumeInfoPpiNotifyCallback
     frame #18: 0x00000000fffc8056 SecMain.dll`InitStack + 45
 ```
 
+### 35.为何 DxeCore.dll 的基地址 0x0007FE3C000 和 实际的 0x0007FE3B000  偏差 0x1000 ?
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 

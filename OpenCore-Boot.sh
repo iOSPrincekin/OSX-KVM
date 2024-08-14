@@ -219,7 +219,7 @@ osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lld
   target modules add ${DxeIpl_dll} \\n target modules load --file ${DxeIpl_dll} --slide 0x0007FEBC000 \\n\
   target modules add ${S3Resume2Pei_dll} \\n target modules load --file ${S3Resume2Pei_dll} --slide 0x0000860000 \\n\
   target modules add ${CpuMpPei_dll} \\n target modules load --file ${CpuMpPei_dll} --slide 0x0000869000 \\n\
-  target modules add ${DxeCore_dll} \\n target modules load --file ${DxeCore_dll} --slide 0x0007FE3C000 \\n\
+  target modules add ${DxeCore_dll} \\n target modules load --file ${DxeCore_dll} --slide 0x0007FE3B000 \\n\
   target modules add ${Bootstrap_dll} \\n  target modules add ${OpenCore_dll} \\n\
   b _ModuleEntryPoint \\n gdb-remote localhost:1234 \\n \"" \
 -e "tell application \"Terminal\" to activate" \
