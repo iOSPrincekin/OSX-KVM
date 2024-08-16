@@ -187,7 +187,7 @@ OpenCore_efi=${KVM_Opencore_OC_Dir}/OpenCore.efi
 Build_dir=/Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/
 
 SecMain_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/Sec/SecMain/DEBUG/SecMain.dll
-
+## 二次加载地址为 0x0007FECA000
 PeiCore_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Core/Pei/PeiMain/DEBUG/PeiCore.dll
 
 PcdPeim_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/PCD/Pei/Pcd/DEBUG/PcdPeim.dll
@@ -208,6 +208,10 @@ DxeCore_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Core/Dxe/DxeMain/
 
 Bootstrap_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/Bootstrap/Bootstrap/DEBUG/Bootstrap.dll
 
+BdsDxe_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/BdsDxe/BdsDxe/DEBUG/BdsDxe.dll
+
+QemuVideoDxe_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/QemuVideoDxe/QemuVideoDxe/DEBUG/QemuVideoDxe.dll
+
 osascript -e "tell application \"Terminal\" to quit"
 osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lldb ${Bootstrap_dll} \\n\
   target modules add ${SecMain_dll} \\n target modules load --file ${SecMain_dll} --slide 0x00fffc7000 \\n\
@@ -219,8 +223,11 @@ osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lld
   target modules add ${DxeIpl_dll} \\n target modules load --file ${DxeIpl_dll} --slide 0x0007FEBC000 \\n\
   target modules add ${S3Resume2Pei_dll} \\n target modules load --file ${S3Resume2Pei_dll} --slide 0x0000860000 \\n\
   target modules add ${CpuMpPei_dll} \\n target modules load --file ${CpuMpPei_dll} --slide 0x0000869000 \\n\
-  target modules add ${DxeCore_dll} \\n target modules load --file ${DxeCore_dll} --slide 0x0007FE3B000 \\n\
-  target modules add ${Bootstrap_dll} \\n  target modules add ${OpenCore_dll} \\n\
+  target modules add ${DxeCore_dll} \\n target modules load --file ${DxeCore_dll} --slide 0x0007FE3C000 \\n\
+  target modules add ${Bootstrap_dll} \\n\
+  target modules add ${BdsDxe_dll} \\n target modules load --file ${BdsDxe_dll} --slide 0x0007EE1D000 \\n\
+  target modules add ${QemuVideoDxe_dll} \\n target modules load --file ${QemuVideoDxe_dll} --slide 0x0007EC08000 \\n\
+  target modules add ${OpenCore_dll} \\n\
   b _ModuleEntryPoint \\n gdb-remote localhost:1234 \\n \"" \
 -e "tell application \"Terminal\" to activate" \
 -e "tell application \"System Events\" to tell process \"Terminal\" to keystroke \"t\" using command down" \

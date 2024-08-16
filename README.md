@@ -4922,6 +4922,86 @@ FirmwareVolumeInfoPpiNotifyCallback
 
 ```
 
+### 37.将PeiCore.efi 等代码复制到  0x820000 | 0x0000000000820000
+```
+(lldb) bt
+* thread #1, stop reason = breakpoint 4.2
+  * frame #0: 0x00000000fffcd488 SecMain.dll`CopyMem(DestinationBuffer=0x0000000000820000, SourceBuffer=0x0000000000a30010, Length=1114112) at CopyMemWrapper.c:47:14
+    frame #1: 0x00000000fffca792 SecMain.dll`SecCoreStartupWithStack [inlined] DecompressMemFvs(Fv=<unavailable>) at SecMain.c:432:3
+    frame #2: 0x00000000fffca647 SecMain.dll`SecCoreStartupWithStack [inlined] FindPeiCoreImageBase(BootFv=<unavailable>, PeiCoreImageBase=<unavailable>, PeiCoreImageSize=<unavailable>) at SecMain.c:597:5
+    frame #3: 0x00000000fffca647 SecMain.dll`SecCoreStartupWithStack [inlined] FindAndReportEntryPoints(BootFirmwareVolumePtr=<unavailable>, PeiCoreEntryPoint=<unavailable>) at SecMain.c:721:3
+    frame #4: 0x00000000fffca647 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1005:3
+    frame #5: 0x00000000fffca647 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #6: 0x00000000fffca647 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #7: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+```
+
+### 38. DxeIpl 中 DxeLoadCore 之前的 PeimInitializeDxeIpl  方法调用
+
+```
+(lldb) bt
+* thread #1, stop reason = breakpoint 2.1
+  * frame #0: 0x000000007fec09be DxeIpl.dll`_ModuleEntryPoint [inlined] PeimInitializeDxeIpl(FileHandle=<unavailable>, PeiServices=<unavailable>) at DxeLoad.c:79:14
+    frame #1: 0x000000007fec09be DxeIpl.dll`_ModuleEntryPoint [inlined] ProcessModuleEntryPointList(FileHandle=<unavailable>, PeiServices=<unavailable>) at AutoGen.c:246:10
+    frame #2: 0x000000007fec09be DxeIpl.dll`_ModuleEntryPoint(FileHandle=0x0000000000857098, PeiServices=0x000000007bf3c8d0) at PeimEntryPoint.c:49:10
+    frame #3: 0x000000007fecd7b7 PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000007bf3c880, Private=0x000000007bf3c8c8) at Dispatcher.c:1626:19
+    frame #4: 0x0000000000824afe PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:458:7
+    frame #5: 0x00000000008280f1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:875:7
+    frame #6: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #7: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #8: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #9: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #10: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #11: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #12: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #13: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+
+```
+
+### 39.调用 InitializeBochsGraphicsMode 设置分辨率
+
+```
+
+(lldb) bt
+* thread #1, stop reason = breakpoint 2.1
+  * frame #0: 0x000000007ec0a978 QemuVideoDxe.dll`QemuVideoGraphicsOutputSetMode [inlined] InitializeBochsGraphicsMode(Private=0x000000007ecda998, ModeData=0x000000007ecba018) at Driver.c:1021:3
+    frame #1: 0x000000007ec0a978 QemuVideoDxe.dll`QemuVideoGraphicsOutputSetMode(This=0x000000007ecda9b8, ModeNumber=0) at Gop.c:187:7
+    frame #2: 0x000000007ec0aea2 QemuVideoDxe.dll`QemuVideoGraphicsOutputConstructor(Private=<unavailable>) at Gop.c:383:12
+    frame #3: 0x000000007ec09dfd QemuVideoDxe.dll`QemuVideoControllerDriverStart(This=0x000000007ec11050, Controller=<unavailable>, RemainingDevicePath=<unavailable>) at Driver.c:439:12
+    frame #4: 0x000000007fe43f9e DxeCore.dll`CoreConnectController [inlined] CoreConnectSingleController(ControllerHandle=0x000000007ecdd798, ContextDriverImageHandles=0x0000000000000000, RemainingDevicePath=0x0000000000000000) at DriverSupport.c:653:20
+    frame #5: 0x000000007fe43efa DxeCore.dll`CoreConnectController(ControllerHandle=0x000000007ecdd798, DriverImageHandle=0x0000000000000000, RemainingDevicePath=<unavailable>, Recursive='\0') at DriverSupport.c:138:20
+    frame #6: 0x000000007ee306a2 BdsDxe.dll`DetectAndPreparePlatformPciDevicePath [inlined] GetGopDevicePath(PciDevicePath=<unavailable>, GopDevicePath=<unavailable>) at BdsPlatform.c:886:3
+    frame #7: 0x000000007ee30658 BdsDxe.dll`DetectAndPreparePlatformPciDevicePath [inlined] PreparePciDisplayDevicePath(DeviceHandle=<unavailable>) at BdsPlatform.c:969:3
+    frame #8: 0x000000007ee3062d BdsDxe.dll`DetectAndPreparePlatformPciDevicePath(Handle=<unavailable>, PciIo=<unavailable>, Pci=0x000000007fe3c968) at BdsPlatform.c:1225:5
+    frame #9: 0x000000007ee308c9 BdsDxe.dll`VisitingAPciInstance(Handle=0x000000007ecdd798, Instance=<unavailable>, Context=<unavailable>) at BdsPlatform.c:1136:10
+    frame #10: 0x000000007ee300fd BdsDxe.dll`VisitAllInstancesOfProtocol(Id=0x000000007ee3a518, CallBackFunction=<unavailable>, Context=<unavailable>) at BdsPlatform.c:1096:14
+    frame #11: 0x000000007ee30148 BdsDxe.dll`PlatformInitializeConsole [inlined] VisitAllPciInstances(CallBackFunction=<unavailable>) at BdsPlatform.c:1148:10
+    frame #12: 0x000000007ee3012e BdsDxe.dll`PlatformInitializeConsole(PlatformConsole=<unavailable>) at BdsPlatform.c:1282:3
+    frame #13: 0x000000007ee1f218 BdsDxe.dll`BdsEntry [inlined] PlatformBootManagerBeforeConsole at BdsPlatform.c:470:3
+    frame #14: 0x000000007ee1f0ba BdsDxe.dll`BdsEntry(This=<unavailable>) at BdsEntry.c:888:3
+    frame #15: 0x000000007fe52d81 DxeCore.dll`DxeMain(HobStart=0x000000007f8e7018) at DxeMain.c:570:3
+    frame #16: 0x000000007fe52dcd DxeCore.dll`ProcessModuleEntryPointList(HobStart=<unavailable>) at AutoGen.c:746:3
+    frame #17: 0x000000007fe576be DxeCore.dll`_ModuleEntryPoint(HobStart=<unavailable>) at DxeCoreEntryPoint.c:46:3
+    frame #18: 0x000000007febd3d7 DxeIpl.dll`InternalSwitchStack + 15
+    frame #19: 0x000000007febeb0c DxeIpl.dll`DxeLoadCore [inlined] HandOffToDxeCore(DxeCoreEntryPoint=2145744554, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoadFunc.c:129:3
+    frame #20: 0x000000007febdf10 DxeIpl.dll`DxeLoadCore(This=<unavailable>, PeiServices=<unavailable>, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoad.c:456:3
+    frame #21: 0x000000007fecd958 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:663:12
+    frame #22: 0x0000000000824afe PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:458:7
+    frame #23: 0x00000000008280f1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:875:7
+    frame #24: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #25: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #26: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #27: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #28: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #29: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #30: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #31: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+```
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 
