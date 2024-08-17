@@ -5002,6 +5002,683 @@ FirmwareVolumeInfoPpiNotifyCallback
 
 ```
 
+
+
+### 40.设置 PrivateData->PhysicalMemoryBegin = 0x7bf1e000
+
+```
+(lldb) n
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000849cd9 PlatformPei.dll`InitializePlatform [inlined] PublishPeiMemory(PlatformInfoHob=0x0000000000811708) at MemDetect.c:329:22
+   326 	                 PcdGet32 (PcdOvmfDecompressionScratchEnd) :
+   327 	                 PcdGet32 (PcdOvmfDxeMemFvBase) + PcdGet32 (PcdOvmfDxeMemFvSize);
+   328 	    MemorySize = LowerMemorySize - MemoryBase;
+-> 329 	    if (MemorySize > PeiMemoryCap) {
+   330 	      MemoryBase = LowerMemorySize - PeiMemoryCap;
+   331 	      MemorySize = PeiMemoryCap;
+   332 	    }
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x MemorySize
+(UINT64) 0x000000007e7e0000
+(lldb) p/x LowerMemorySize
+(UINT32) 0x7ff60000
+(lldb) p/x MemoryBase
+(EFI_PHYSICAL_ADDRESS) 0x0000000001780000
+(lldb) p/x PeiMemoryCap
+(UINT32) 0x04042000
+(lldb) n
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000849ce0 PlatformPei.dll`InitializePlatform [inlined] PublishPeiMemory(PlatformInfoHob=0x0000000000811708) at MemDetect.c:330:36
+   327 	                 PcdGet32 (PcdOvmfDxeMemFvBase) + PcdGet32 (PcdOvmfDxeMemFvSize);
+   328 	    MemorySize = LowerMemorySize - MemoryBase;
+   329 	    if (MemorySize > PeiMemoryCap) {
+-> 330 	      MemoryBase = LowerMemorySize - PeiMemoryCap;
+   331 	      MemorySize = PeiMemoryCap;
+   332 	    }
+   333 	  }
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000849ce8 PlatformPei.dll`InitializePlatform [inlined] PublishPeiMemory(PlatformInfoHob=0x0000000000811708) at MemDetect.c:340:7
+   337 	  // normal boot permanent PEI RAM. Regarding the S3 boot path, the S3
+   338 	  // permanent PEI RAM is located even higher.
+   339 	  //
+-> 340 	  if (PlatformInfoHob->SmmSmramRequire && PlatformInfoHob->Q35SmramAtDefaultSmbase) {
+   341 	    ASSERT (SMM_DEFAULT_SMBASE + MCH_DEFAULT_SMBASE_SIZE <= MemoryBase);
+   342 	  }
+   343 	
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x MemoryBase
+(EFI_PHYSICAL_ADDRESS) 0x000000007bf1e000
+(lldb) bt
+* thread #1, stop reason = step over
+  * frame #0: 0x0000000000849ce8 PlatformPei.dll`InitializePlatform [inlined] PublishPeiMemory(PlatformInfoHob=0x0000000000811708) at MemDetect.c:340:7
+    frame #1: 0x0000000000849b51 PlatformPei.dll`InitializePlatform(FileHandle=<unavailable>, PeiServices=<unavailable>) at Platform.c:343:3
+    frame #2: 0x00000000008516b9 PlatformPei.dll`_ModuleEntryPoint [inlined] ProcessModuleEntryPointList(FileHandle=<unavailable>, PeiServices=<unavailable>) at AutoGen.c:336:10
+    frame #3: 0x00000000008516b4 PlatformPei.dll`_ModuleEntryPoint(FileHandle=<unavailable>, PeiServices=<unavailable>) at PeimEntryPoint.c:49:10
+    frame #4: 0x00000000008247b7 PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1626:19
+    frame #5: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #6: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #7: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #8: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #9: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #10: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #11: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+```
+
+获取 MemorySize 
+```
+(lldb) bt
+* thread #1, stop reason = step over
+  * frame #0: 0x000000000084eaf3 PlatformPei.dll`QemuFwCfgFindFile(Name="etc/e820", Item=0x000000000081f10c, Size=0x000000000081f100) at QemuFwCfgLib.c:266:21
+    frame #1: 0x0000000000851822 PlatformPei.dll`PlatformScanE820(Callback=<unavailable>, PlatformInfoHob=<unavailable>) at MemDetect.c:282:12
+    frame #2: 0x0000000000851732 PlatformPei.dll`PlatformGetSystemMemorySizeBelow4gb(PlatformInfoHob=<unavailable>) at MemDetect.c:385:12
+    frame #3: 0x0000000000849b59 PlatformPei.dll`InitializePlatform [inlined] PublishPeiMemory(PlatformInfoHob=0x0000000000811708) at MemDetect.c:274:3
+    frame #4: 0x0000000000849b51 PlatformPei.dll`InitializePlatform(FileHandle=<unavailable>, PeiServices=<unavailable>) at Platform.c:343:3
+    frame #5: 0x00000000008516b9 PlatformPei.dll`_ModuleEntryPoint [inlined] ProcessModuleEntryPointList(FileHandle=<unavailable>, PeiServices=<unavailable>) at AutoGen.c:336:10
+    frame #6: 0x00000000008516b4 PlatformPei.dll`_ModuleEntryPoint(FileHandle=<unavailable>, PeiServices=<unavailable>) at PeimEntryPoint.c:49:10
+    frame #7: 0x00000000008247b7 PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1626:19
+    frame #8: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #9: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #10: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #11: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #12: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #13: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #14: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+
+
+```
+
+ 获取 PlatformGetLowMemoryCB: LowMemory=0x80000000，   PlatformInfoHob->LowMemory = (UINT32)Candidate;
+
+
+```
+
+(lldb) bt
+* thread #1, stop reason = step over
+  * frame #0: 0x00000000008517ef PlatformPei.dll`PlatformGetLowMemoryCB(E820Entry=<unavailable>, PlatformInfoHob=<unavailable>) at MemDetect.c:157:1
+    frame #1: 0x00000000008518a6 PlatformPei.dll`PlatformScanE820(Callback=<unavailable>, PlatformInfoHob=<unavailable>) at MemDetect.c:294:5
+    frame #2: 0x0000000000851732 PlatformPei.dll`PlatformGetSystemMemorySizeBelow4gb(PlatformInfoHob=<unavailable>) at MemDetect.c:385:12
+    frame #3: 0x0000000000849b59 PlatformPei.dll`InitializePlatform [inlined] PublishPeiMemory(PlatformInfoHob=0x0000000000811708) at MemDetect.c:274:3
+    frame #4: 0x0000000000849b51 PlatformPei.dll`InitializePlatform(FileHandle=<unavailable>, PeiServices=<unavailable>) at Platform.c:343:3
+    frame #5: 0x00000000008516b9 PlatformPei.dll`_ModuleEntryPoint [inlined] ProcessModuleEntryPointList(FileHandle=<unavailable>, PeiServices=<unavailable>) at AutoGen.c:336:10
+    frame #6: 0x00000000008516b4 PlatformPei.dll`_ModuleEntryPoint(FileHandle=<unavailable>, PeiServices=<unavailable>) at PeimEntryPoint.c:49:10
+    frame #7: 0x00000000008247b7 PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1626:19
+    frame #8: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #9: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #10: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #11: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #12: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #13: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #14: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+
+```
+
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000849b84 PlatformPei.dll`InitializePlatform [inlined] PublishPeiMemory(PlatformInfoHob=0x0000000000811708) at MemDetect.c:295:48
+   292 	    S3AcpiReservedMemorySize = SIZE_512KB +
+   293 	                               PlatformInfoHob->PcdCpuMaxLogicalProcessorNumber *
+   294 	                               PcdGet32 (PcdCpuApStackSize);
+-> 295 	    S3AcpiReservedMemoryBase = LowerMemorySize - S3AcpiReservedMemorySize;
+   296 	    LowerMemorySize          = S3AcpiReservedMemoryBase;
+   297 	  }
+   298 	
+Target 0: (Bootstrap.dll) stopped.
+```
+
+LowerMemorySize = 0x7ff60000
+```
+(lldb) n
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000849b8e PlatformPei.dll`InitializePlatform [inlined] PublishPeiMemory(PlatformInfoHob=0x0000000000811708) at MemDetect.c:299:45
+   296 	    LowerMemorySize          = S3AcpiReservedMemoryBase;
+   297 	  }
+   298 	
+-> 299 	  PlatformInfoHob->S3AcpiReservedMemoryBase = S3AcpiReservedMemoryBase;
+   300 	  PlatformInfoHob->S3AcpiReservedMemorySize = S3AcpiReservedMemorySize;
+   301 	
+   302 	  if (PlatformInfoHob->BootMode == BOOT_ON_S3_RESUME) {
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x LowerMemorySize
+(UINT32) 0x7ff60000
+(lldb) 
+
+```
+
+赋值 PrivateData->PhysicalMemoryBegin = 0x7bf1e000
+```
+(lldb) n
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000824bb2 PeiCore.dll`PeiInstallPeiMemory(PeiServices=<unavailable>, MemoryBegin=2079449088, MemoryLength=67379200) at MemoryServices.c:97:52
+   94  	
+   95  	  PrivateData->PhysicalMemoryBegin   = MemoryBegin;
+   96  	  PrivateData->PhysicalMemoryLength  = MemoryLength;
+-> 97  	  PrivateData->FreePhysicalMemoryTop = MemoryBegin + MemoryLength;
+   98  	
+   99  	  PrivateData->SwitchStackSignal = TRUE;
+   100 	
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000824bbc PeiCore.dll`PeiInstallPeiMemory(PeiServices=<unavailable>, MemoryBegin=2079449088, MemoryLength=<unavailable>) at MemoryServices.c:99:34
+   96  	  PrivateData->PhysicalMemoryLength  = MemoryLength;
+   97  	  PrivateData->FreePhysicalMemoryTop = MemoryBegin + MemoryLength;
+   98  	
+-> 99  	  PrivateData->SwitchStackSignal = TRUE;
+   100 	
+   101 	  return EFI_SUCCESS;
+   102 	}
+Target 0: (Bootstrap.dll) stopped.
+(lldb) n
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000824bc3 PeiCore.dll`PeiInstallPeiMemory(PeiServices=<unavailable>, MemoryBegin=2079449088, MemoryLength=<unavailable>) at MemoryServices.c:102:1
+   99  	  PrivateData->SwitchStackSignal = TRUE;
+   100 	
+   101 	  return EFI_SUCCESS;
+-> 102 	}
+   103 	
+   104 	/**
+   105 	  Migrate memory pages allocated in pre-memory phase.
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p PrivateData
+(PEI_CORE_INSTANCE *) 0x000000000081f608
+(lldb) p *PrivateData
+(PEI_CORE_INSTANCE) {
+  XipLoadFile = 0x0000000000831150
+  PhysicalMemoryBegin = 0x7bf1e000
+  PhysicalMemoryLength = 0x04042000
+  FreePhysicalMemoryTop = 0x7ff60000
+  HeapOffset = 0
+  HeapOffsetPositive = '\0'
+  StackOffset = 0
+  StackOffsetPositive = '\0'
+  MemoryPages = (Base = 0, Size = 0, Offset = 0, OffsetPositive = '\0')
+  ShadowedPeiCore = 0x0000000000000000
+}
+(lldb) bt
+* thread #1, stop reason = step over
+  * frame #0: 0x0000000000824bc3 PeiCore.dll`PeiInstallPeiMemory(PeiServices=<unavailable>, MemoryBegin=2079449088, MemoryLength=<unavailable>) at MemoryServices.c:102:1
+    frame #1: 0x0000000000849d6b PlatformPei.dll`InitializePlatform [inlined] PeiServicesInstallPeiMemory(MemoryBegin=2079449088, MemoryLength=67379200) at PeiServicesLib.c:381:10
+    frame #2: 0x0000000000849d56 PlatformPei.dll`InitializePlatform [inlined] PublishSystemMemory(MemoryBegin=2079449088, MemoryLength=67379200) at PeiResourcePublicationLib.c:44:12
+    frame #3: 0x0000000000849d19 PlatformPei.dll`InitializePlatform [inlined] PublishPeiMemory(PlatformInfoHob=0x0000000000811708) at MemDetect.c:347:12
+    frame #4: 0x0000000000849b51 PlatformPei.dll`InitializePlatform(FileHandle=<unavailable>, PeiServices=<unavailable>) at Platform.c:343:3
+    frame #5: 0x00000000008516b9 PlatformPei.dll`_ModuleEntryPoint [inlined] ProcessModuleEntryPointList(FileHandle=<unavailable>, PeiServices=<unavailable>) at AutoGen.c:336:10
+    frame #6: 0x00000000008516b4 PlatformPei.dll`_ModuleEntryPoint(FileHandle=<unavailable>, PeiServices=<unavailable>) at PeimEntryPoint.c:49:10
+    frame #7: 0x00000000008247b7 PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1626:19
+    frame #8: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #9: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #10: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #11: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #12: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #13: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #14: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+
+```
+
+
+### 41.切换栈方法 PeiCheckAndSwitchStack
+
+具体切换代码是
+
+```
+  //
+  // Use SetJump()/LongJump() to switch to a new stack.
+  //
+  if (SetJump (&JumpBuffer) == 0) {
+ #if defined (MDE_CPU_IA32)
+    JumpBuffer.Esp = JumpBuffer.Esp + DebugAgentContext.StackMigrateOffset;
+    JumpBuffer.Ebp = JumpBuffer.Ebp + DebugAgentContext.StackMigrateOffset;
+ #endif
+ #if defined (MDE_CPU_X64)
+    JumpBuffer.Rsp = JumpBuffer.Rsp + DebugAgentContext.StackMigrateOffset;
+    JumpBuffer.Rbp = JumpBuffer.Rbp + DebugAgentContext.StackMigrateOffset;
+ #endif
+    LongJump (&JumpBuffer, (UINTN)-1);
+  }
+
+  第一次运行 SetJump() 会将当前寄存器存放在 JumpBuffer 中。然后 RunMark 加一，从0变成1.接着，判断这个值等于1，再执行 LongJump，执行的结果会回到  SetJump(); 的下一条指令，也就是 RunMark++。这样，RunMark 变成了2，不会运行 LongJump() 接下来顺利退出了。
+
+```
+
+切换前
+
+```
+
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x $rsp
+(unsigned long) 0x000000000081f358
+(lldb) p/x $rbp
+(unsigned long) 0x000000000081f4c0
+
+```
+
+切换后
+
+```
+(lldb) p/x $rsp
+(unsigned long) 0x000000007bf3d360
+(lldb) p/x $rbp
+(unsigned long) 0x000000007bf3d4c0
+```
+
+```
+typedef struct {
+  UINT64 Rbx;
+  UINT64 Rsp;
+  UINT64 Rbp;
+  UINT64 Rdi;
+  UINT64 Rsi;
+  UINT64 R12;
+  UINT64 R13;
+  UINT64 R14;
+  UINT64 R15;
+  UINT64 Rip;
+  UINT64 MxCsr;
+  UINT8 XmmBuffer[160];
+  UINT64 Ssp;
+} BASE_LIBRARY_JUMP_BUFFER;
+```
+JumpBuffer.Esp = JumpBuffer.Esp + DebugAgentContext.StackMigrateOffset; 获得新的栈地址
+
+```
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffc8e63 SecMain.dll`TemporaryRamMigration(PeiServices=<unavailable>, TemporaryMemoryBase=0x00810000, PermanentMemoryBase=0x7bf36000, CopySize=0x10000) at SecMain.c:1090:29
+   1087	  //
+   1088	  // Use SetJump()/LongJump() to switch to a new stack.
+   1089	  //
+-> 1090	  if (SetJump (&JumpBuffer) == 0) {
+   1091	 #if defined (MDE_CPU_IA32)
+   1092	    JumpBuffer.Esp = JumpBuffer.Esp + DebugAgentContext.StackMigrateOffset;
+   1093	    JumpBuffer.Ebp = JumpBuffer.Ebp + DebugAgentContext.StackMigrateOffset;
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p JumpBuffer
+(BASE_LIBRARY_JUMP_BUFFER)  (Rbx = 0x00810000, Rsp = 8516448, Rbp = 8516800, Rdi = 0x7bf36000, Rsi = 32768, R12 = 0x00810000, R13 = 2071060480, R14 = 8486912, R15 = 2071060480, Rip = 4294741603, MxCsr = 8064, XmmBuffer = "", Ssp = 0)
+(lldb) p/x 8516448
+(int) 0x0081f360
+(lldb) p/x DebugAgentContext.StackMigrateOffset
+(UINTN) 0x000000007b71e000
+(lldb) p/x 0x0081f360 + 0x000000007b71e000
+(int) 0x7bf3d360
+```
+
+根据 Private->PhysicalMemoryBegin 获取 TopOfNewStack 地址
+```
+
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000827cb1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:782:5
+   779 	    NewStackSize = ALIGN_VALUE (NewStackSize, EFI_PAGE_SIZE);
+   780 	    NewStackSize = MIN (PcdGet32 (PcdPeiCoreMaxPeiStackSize), NewStackSize);
+   781 	    DEBUG ((DEBUG_INFO, "Old Stack size %d, New stack size %d\n", (UINT32)SecCoreData->StackSize, (UINT32)NewStackSize));
+-> 782 	    ASSERT (NewStackSize >= SecCoreData->StackSize);
+   783 	
+   784 	    //
+   785 	    // Calculate stack offset and heap offset between temporary memory and new permanent
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x NewStackSize
+(UINT64) 0x0000000000020000
+(lldb) p/x SecCoreData->StackSize
+(const UINTN) 0x0000000000008000
+(lldb) n
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000827cd6 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:788:51
+   785 	    // Calculate stack offset and heap offset between temporary memory and new permanent
+   786 	    // memory separately.
+   787 	    //
+-> 788 	    TopOfOldStack = (UINTN)SecCoreData->StackBase + SecCoreData->StackSize;
+   789 	    TopOfNewStack = Private->PhysicalMemoryBegin + NewStackSize;
+   790 	    if (TopOfNewStack >= TopOfOldStack) {
+   791 	      StackOffsetPositive = TRUE;
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000827cda PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:789:30
+   786 	    // memory separately.
+   787 	    //
+   788 	    TopOfOldStack = (UINTN)SecCoreData->StackBase + SecCoreData->StackSize;
+-> 789 	    TopOfNewStack = Private->PhysicalMemoryBegin + NewStackSize;
+   790 	    if (TopOfNewStack >= TopOfOldStack) {
+   791 	      StackOffsetPositive = TRUE;
+   792 	      StackOffset         = (UINTN)(TopOfNewStack - TopOfOldStack);
+Target 0: (Bootstrap.dll) stopped.
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000827ce5 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:790:23
+   787 	    //
+   788 	    TopOfOldStack = (UINTN)SecCoreData->StackBase + SecCoreData->StackSize;
+   789 	    TopOfNewStack = Private->PhysicalMemoryBegin + NewStackSize;
+-> 790 	    if (TopOfNewStack >= TopOfOldStack) {
+   791 	      StackOffsetPositive = TRUE;
+   792 	      StackOffset         = (UINTN)(TopOfNewStack - TopOfOldStack);
+   793 	    } else {
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x TopOfNewStack
+(EFI_PHYSICAL_ADDRESS) 0x000000007bf3e000
+(lldb) 
+
+```
+
+```
+
+(lldb) bt
+* thread #1, stop reason = instruction step into
+  * frame #0: 0x00000000fffc8e63 SecMain.dll`TemporaryRamMigration(PeiServices=<unavailable>, TemporaryMemoryBase=0x00810000, PermanentMemoryBase=0x7bf36000, CopySize=0x10000) at SecMain.c:1090:29
+    frame #1: 0x00000000008280da PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:858:7
+    frame #2: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #3: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #4: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #5: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #6: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #7: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #8: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #9: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+
+```
+新的栈地址为 TopOfNewStack - TemporaryStackSize = 0x000000007bf3e000 - 0x0000000000008000 = 0x7bf36000 ,栈大小为 0x0000000000008000，栈的结尾是 0x000000007bf3e000
+```
+      TemporaryRamSupportPpi->TemporaryRamMigration (
+                                PeiServices,
+                                TemporaryRamBase,
+                                (EFI_PHYSICAL_ADDRESS)(UINTN)(TopOfNewStack - TemporaryStackSize),
+                                TemporaryRamSize
+                                );
+
+```
+
+
+```
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x00000000fffc8e28 SecMain.dll`TemporaryRamMigration(PeiServices=<unavailable>, TemporaryMemoryBase=0x00810000, PermanentMemoryBase=0x7bf36000, CopySize=0x10000) at SecMain.c:1060:50
+   1057	  OldHeap = (VOID *)(UINTN)TemporaryMemoryBase;
+   1058	  NewHeap = (VOID *)((UINTN)PermanentMemoryBase + (CopySize >> 1));
+   1059	
+-> 1060	  OldStack = (VOID *)((UINTN)TemporaryMemoryBase + (CopySize >> 1));
+   1061	  NewStack = (VOID *)(UINTN)PermanentMemoryBase;
+   1062	
+   1063	  DebugAgentContext.HeapMigrateOffset  = (UINTN)NewHeap - (UINTN)OldHeap;
+Target 0: (Bootstrap.dll) stopped.
+(lldb) n
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x00000000fffc8e2c SecMain.dll`TemporaryRamMigration(PeiServices=<unavailable>, TemporaryMemoryBase=0x00810000, PermanentMemoryBase=0x7bf36000, CopySize=0x10000) at SecMain.c:1064:58
+   1061	  NewStack = (VOID *)(UINTN)PermanentMemoryBase;
+   1062	
+   1063	  DebugAgentContext.HeapMigrateOffset  = (UINTN)NewHeap - (UINTN)OldHeap;
+-> 1064	  DebugAgentContext.StackMigrateOffset = (UINTN)NewStack - (UINTN)OldStack;
+   1065	
+   1066	  OldStatus = SaveAndSetDebugTimerInterrupt (FALSE);
+   1067	  InitializeDebugAgent (DEBUG_AGENT_INIT_POSTMEM_SEC, (VOID *)&DebugAgentContext, NULL);
+Target 0: (Bootstrap.dll) stopped.
+(lldb) n
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x00000000fffc8e32 SecMain.dll`TemporaryRamMigration(PeiServices=<unavailable>, TemporaryMemoryBase=0x00810000, PermanentMemoryBase=0x7bf36000, CopySize=0x10000) at SecMain.c:1072:3
+   1069	  //
+   1070	  // Migrate Heap
+   1071	  //
+-> 1072	  CopyMem (NewHeap, OldHeap, CopySize >> 1);
+   1073	
+   1074	  //
+   1075	  // Migrate Stack
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x OldHeap
+(void *) 0x0000000000810000
+(lldb) p/x NewHeap
+(void *) 0x000000007bf3e000
+(lldb) p/x OldStack
+(void *) 0x0000000000818000
+(lldb) p/x NewStack
+(void *) 0x000000007bf36000
+(lldb) p/x PermanentMemoryBase
+(EFI_PHYSICAL_ADDRESS) 0x000000007bf36000
+(lldb) p/x 0x000000007bf3e000 - 0x000000007bf36000
+(int) 0x00008000
+(lldb) p/x DebugAgentContext.HeapMigrateOffset
+(UINTN) 0x0000000000000000
+(lldb) p/x DebugAgentContext.StackMigrateOffset
+(UINTN) 0x000000007b71e000
+
+
+```
+
+
+### 42.   HandoffInformationTable = 0x000000007bf3e000
+
+```
+(lldb) bt
+* thread #1, stop reason = breakpoint 4.2
+  * frame #0: 0x00000000fffcd488 SecMain.dll`CopyMem(DestinationBuffer=0x000000007bf3e000, SourceBuffer=0x0000000000810000, Length=32768) at CopyMemWrapper.c:47:14
+    frame #1: 0x00000000fffc8e3d SecMain.dll`TemporaryRamMigration(PeiServices=<unavailable>, TemporaryMemoryBase=0x00810000, PermanentMemoryBase=<unavailable>, CopySize=0x10000) at SecMain.c:1072:3
+    frame #2: 0x00000000008280da PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:858:7
+    frame #3: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #4: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #5: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #6: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #7: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #8: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #9: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #10: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+```
+
+```
+
+(lldb) p PrivateData
+(PEI_CORE_INSTANCE) {
+  Signature = 1130980688
+  Ps = 0x000000007bf3c9b0
+  PpiData = {
+    PpiList = {
+      CurrentCount = 21
+      MaxCount = 64
+      LastDispatchedCount = 21
+      PpiPtrs = 0x000000007bf3e088
+    }
+    CallbackNotifyList = {
+      CurrentCount = 6
+      MaxCount = 32
+      NotifyPtrs = 0x000000007bf3e458
+    }
+    DispatchNotifyList = {
+      CurrentCount = 1
+      MaxCount = 8
+      LastDispatchedCount = 1
+      NotifyPtrs = 0x000000007bf3e040
+    }
+  }
+  FvCount = 2
+  MaxFvCount = 8
+  Fv = 0x000000007bf3e290
+  UnknownFvInfo = NULL
+  MaxUnknownFvInfoCount = 0
+  UnknownFvInfoCount = 0
+  CurrentFvFileHandles = 0x0000000000000000
+  AprioriCount = 0
+  CurrentPeimFvCount = 0
+  CurrentPeimCount = 0
+  CurrentFileHandle = 0x0000000000000000
+  PeimNeedingDispatch = '\x01'
+  PeimDispatchOnThisPass = '\0'
+  PeimDispatcherReenter = '\0'
+  HobList = {
+    Header = 0x000000007bf3e000
+    HandoffInformationTable = 0x000000007bf3e000
+    MemoryAllocation = 0x000000007bf3e000
+    MemoryAllocationBspStore = 0x000000007bf3e000
+    MemoryAllocationStack = 0x000000007bf3e000
+    MemoryAllocationModule = 0x000000007bf3e000
+    ResourceDescriptor = 0x000000007bf3e000
+    Guid = 0x000000007bf3e000
+    FirmwareVolume = 0x000000007bf3e000
+    FirmwareVolume2 = 0x000000007bf3e000
+    FirmwareVolume3 = 0x000000007bf3e000
+    Cpu = 0x000000007bf3e000
+    Pool = 0x000000007bf3e000
+    Capsule = 0x000000007bf3e000
+    Raw = 0x000000007bf3e000 "\U00000001"
+  }
+  SwitchStackSignal = '\0'
+  PeiMemoryInstalled = '\x01'
+  CpuIo = 0x000000007bf3d798
+  PrivateSecurityPpi = NULL
+  ServiceTableShadow = {
+    Hdr = (Signature = 6220110258678351184, Revision = 65606, HeaderSize = 256, CRC32 = 0, Reserved = 0)
+    InstallPpi = 0x000000007fecbe02 (PeiCore.dll`PeiInstallPpi at Ppi.c:567)
+    ReInstallPpi = 0x000000007fecbe0f (PeiCore.dll`PeiReInstallPpi at Ppi.c:595)
+    LocatePpi = 0x000000007fecbef7 (PeiCore.dll`PeiLocatePpi at Ppi.c:669)
+    NotifyPpi = 0x000000007fecc1b9 (PeiCore.dll`PeiNotifyPpi at Ppi.c:878)
+    GetBootMode = 0x000000007fed141c (PeiCore.dll`PeiGetBootMode at BootMode.c:31)
+    SetBootMode = 0x000000007fed147b (PeiCore.dll`PeiSetBootMode at BootMode.c:64)
+    GetHobList = 0x000000007fecebb8 (PeiCore.dll`PeiGetHobList at Hob.c:29)
+    CreateHob = 0x000000007fecec15 (PeiCore.dll`PeiCreateHob at Hob.c:72)
+    FfsFindNextVolume = 0x000000007fed092f (PeiCore.dll`PeiFfsFindNextVolume at FwVol.c:1186)
+    FfsFindNextFile = 0x000000007fed0874 (PeiCore.dll`PeiFfsFindNextFile at FwVol.c:1154)
+    FfsFindSectionData = 0x000000007fed077b (PeiCore.dll`PeiFfsFindSectionData at FwVol.c:1042)
+    InstallPeiMemory = 0x000000007fecdb1d (PeiCore.dll`PeiInstallPeiMemory at MemoryServices.c:78)
+    AllocatePages = 0x000000007fecde2a (PeiCore.dll`PeiAllocatePages at MemoryServices.c:591)
+    AllocatePool = 0x000000007fece2d4 (PeiCore.dll`PeiAllocatePool at MemoryServices.c:883)
+    CopyMem = 0x000000007fed1f5f (PeiCore.dll`CopyMem at CopyMemWrapper.c:46)
+    SetMem = 0x000000007fed1f03 (PeiCore.dll`SetMem at SetMemWrapper.c:43)
+    ReportStatusCode = 0x000000007fecb810 (PeiCore.dll`PeiReportStatusCode at StatusCode.c:37)
+    ResetSystem = 0x000000007fecb941 (PeiCore.dll`PeiResetSystem at Reset.c:28)
+    CpuIo = 0x00000000008312a0
+    PciCfg = 0x0000000000831340
+    FfsFindFileByName = 0x000000007fed09b1 (PeiCore.dll`PeiFfsFindFileByName at FwVol.c:1227)
+    FfsGetFileInfo = 0x000000007fed0a17 (PeiCore.dll`PeiFfsGetFileInfo at FwVol.c:1259)
+    FfsGetVolumeInfo = 0x000000007fed0ad8 (PeiCore.dll`PeiFfsGetVolumeInfo at FwVol.c:1345)
+    RegisterForShadow = 0x000000007fed10f1 (PeiCore.dll`PeiRegisterForShadow at Dispatcher.c:1845)
+    FindSectionData3 = 0x000000007fed07ce (PeiCore.dll`PeiFfsFindSectionData3 at FwVol.c:1077)
+    FfsGetFileInfo2 = 0x000000007fed0a6a (PeiCore.dll`PeiFfsGetFileInfo2 at FwVol.c:1294)
+    ResetSystem2 = 0x000000007fecb9d7 (PeiCore.dll`PeiResetSystem2 at Reset.c:86)
+    FreePages = 0x000000007fece122 (PeiCore.dll`PeiFreePages at MemoryServices.c:807)
+    FindSectionData4 = 0x000000007fed07fc (PeiCore.dll`PeiFfsFindSectionData4 at FwVol.c:1109)
+  }
+  XipLoadFile = 0x0000000000831150
+  PhysicalMemoryBegin = 2079449088
+  PhysicalMemoryLength = 67379200
+  FreePhysicalMemoryTop = 2146287616
+  HeapOffset = 2071126016
+  HeapOffsetPositive = '\x01'
+  StackOffset = 2071060480
+  StackOffsetPositive = '\x01'
+  MemoryPages = (Base = 0, Size = 0, Offset = 0, OffsetPositive = '\0')
+  ShadowedPeiCore = 0x000000007fecc26c (PeiCore.dll`PeiCore at PeiMain.c:214)
+  CacheSection = {
+    Section = {
+      [0] = NULL
+      [1] = NULL
+      [2] = NULL
+      [3] = NULL
+      [4] = NULL
+      [5] = NULL
+      [6] = NULL
+      [7] = NULL
+      [8] = NULL
+      [9] = NULL
+      [10] = NULL
+      [11] = NULL
+      [12] = NULL
+      [13] = NULL
+      [14] = NULL
+      [15] = NULL
+    }
+    SectionData = {
+      [0] = 0x0000000000000000
+      [1] = 0x0000000000000000
+      [2] = 0x0000000000000000
+      [3] = 0x0000000000000000
+      [4] = 0x0000000000000000
+      [5] = 0x0000000000000000
+      [6] = 0x0000000000000000
+      [7] = 0x0000000000000000
+      [8] = 0x0000000000000000
+      [9] = 0x0000000000000000
+      [10] = 0x0000000000000000
+      [11] = 0x0000000000000000
+      [12] = 0x0000000000000000
+      [13] = 0x0000000000000000
+      [14] = 0x0000000000000000
+      [15] = 0x0000000000000000
+    }
+    SectionSize = {
+      [0] = 0
+      [1] = 0
+      [2] = 0
+      [3] = 0
+      [4] = 0
+      [5] = 0
+      [6] = 0
+      [7] = 0
+      [8] = 0
+      [9] = 0
+      [10] = 0
+      [11] = 0
+      [12] = 0
+      [13] = 0
+      [14] = 0
+      [15] = 0
+    }
+    AuthenticationStatus = {
+      [0] = 0
+      [1] = 0
+      [2] = 0
+      [3] = 0
+      [4] = 0
+      [5] = 0
+      [6] = 0
+      [7] = 0
+      [8] = 0
+      [9] = 0
+      [10] = 0
+      [11] = 0
+      [12] = 0
+      [13] = 0
+      [14] = 0
+      [15] = 0
+    }
+    AllSectionCount = 0
+    SectionIndex = 0
+  }
+  LoadModuleAtFixAddressTopAddress = 0
+  PeiCodeMemoryRangeUsageBitMap = 0x0000000000000000
+  TempPeimCount = 32
+  TempFileHandles = 0x000000007bf3e560
+  TempFileGuid = 0x000000007bf3e668
+  HoleData = {
+    [0] = (Base = 0, Size = 0, Offset = 0, OffsetPositive = '\0')
+    [1] = (Base = 0, Size = 0, Offset = 0, OffsetPositive = '\0')
+    [2] = (Base = 0, Size = 0, Offset = 0, OffsetPositive = '\0')
+  }
+}
+
+```
+
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 
