@@ -5679,6 +5679,286 @@ Target 0: (Bootstrap.dll) stopped.
 ```
 
 
+### 43.三次进入 PeiCore
+
+前两次进入 PeiCore的调用
+
+```
+
+(lldb) bt
+* thread #1, stop reason = breakpoint 2.1
+  * frame #0: 0x000000000082328b PeiCore.dll`PeiCore(SecCoreDataPtr=0x000000007bf3de98, PpiList=0x0000000000000000, Data=0x000000007bf3d608) at PeiMain.c:250:19
+    frame #1: 0x00000000008280f1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:875:7
+    frame #2: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #3: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #4: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #5: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #6: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #7: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #8: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #9: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+
+```
+
+重新获取 SecCoreData 和 Private 的栈中地址
+
+```
+
+      //
+      // Calculate new HandOffTable and PrivateData address in permanent memory's stack
+      //
+      if (StackOffsetPositive) {
+        SecCoreData = (CONST EFI_SEC_PEI_HAND_OFF *)((UINTN)(VOID *)SecCoreData + StackOffset);
+        Private     = (PEI_CORE_INSTANCE *)((UINTN)(VOID *)Private + StackOffset);
+      } else {
+        SecCoreData = (CONST EFI_SEC_PEI_HAND_OFF *)((UINTN)(VOID *)SecCoreData - StackOffset);
+        Private     = (PEI_CORE_INSTANCE *)((UINTN)(VOID *)Private - StackOffset);
+      }
+
+```
+
+二次进入后的内存布局
+
+```
+
+(lldb) p/x HandoffInformationTable->EfiMemoryTop
+(EFI_PHYSICAL_ADDRESS) 0x000000007ff60000
+(lldb) n
+Process 1 stopped
+* thread #1, stop reason = step over
+    frame #0: 0x0000000000823bb5 PeiCore.dll`PeiCore(SecCoreDataPtr=0x000000007bf3de98, PpiList=0x0000000000000000, Data=0x000000007bf3d608) at PeiMain.c:390:7
+   387 	      //
+   388 	      // We need convert MemoryBaseAddress in memory allocation HOBs
+   389 	      //
+-> 390 	      ConvertMemoryAllocationHobs (OldCoreData);
+   391 	
+   392 	      //
+   393 	      // We need convert the PPI descriptor's pointer
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x HandoffInformationTable->EfiMemoryBottom 
+(EFI_PHYSICAL_ADDRESS) 0x000000007bf1e000
+(lldb) p/x HandoffInformationTable->EfiFreeMemoryTop
+(EFI_PHYSICAL_ADDRESS) 0x000000007fedc000
+(lldb) p/x HandoffInformationTable->EfiFreeMemoryBottom
+(EFI_PHYSICAL_ADDRESS) 0x000000007bf3fca8
+
+```
+
+(lldb) p/x 0x000000007fedc000 - 0x000000007bf3fca8
+(int) 0x03f9c358
+(lldb) p (int)0x03f9c358
+(int) 66700120
+
+EfiFreeMemory 占用 66700120 ，大概66M
+
+### 44.
+
+```
+(lldb)  
+Process 1 stopped
+* thread #1, stop reason = instruction step into
+    frame #0: 0x00000000fffd1a41 SecMain.dll`UefiImageLoadImageInplace(Context=0x000000000081fee0) at UefiImageLib.c:257:3
+   254 	{
+   255 	  RETURN_STATUS  Status;
+   256 	
+-> 257 	  UEFI_IMAGE_EXEC (
+   258 	    Status,
+   259 	    Context->FormatIndex,
+   260 	    LoadImageInplace,
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x 0x000000000081fee0
+(int) 0x0081fee0
+(lldb) p *(UEFI_IMAGE_LOADER_IMAGE_CONTEXT*)0x000000000081fee0
+(UEFI_IMAGE_LOADER_IMAGE_CONTEXT) {
+  FormatIndex = '\x01'
+  Ctx = {
+    Ue = {
+      FileBuffer = 0x00000000fffc7000 "UE\t\U00000010"
+      UnsignedFileSize = 81920
+      Subsystem = '\x01'
+      Machine = '\x01'
+      FixedAddress = '\0'
+      XIP = '\x01'
+      LastSegmentIndex = '\x02'
+      SegmentsFileOffset = 4096
+      SegmentAlignment = 4096
+      Segments = 0x00000000fffc7010
+      SegmentImageInfoIterSize = '\b'
+      RelocsStripped = '\x01'
+      NumLoadTables = '\0'
+      LoadTablesFileOffset = 81920
+      RelocTableSize = 0
+      LoadTables = 0x00000000fffc7028
+      ImageBuffer = 0x0000000000000000
+      ImageSize = 81920
+      EntryPointAddress = 4096
+      BaseAddress = 4294733824
+    }
+    Pe = {
+      ImageBase = 4294733824
+      FileBuffer = 0x0100010100014000
+      FileSize = 2
+      ImageBuffer = 0x0000000000001000
+      SectionsOffset = 4294733840
+      NumberOfSections = 0
+      SizeOfImage = 264
+      SectionAlignment = 81920
+      ExeHdrOffset = 0
+      SizeOfHeaders = 0
+      AddressOfEntryPoint = 4294733864
+      RelocsStripped = '\0'
+      ImageType = '\0'
+      Subsystem = 0
+      Machine = 0
+      RelocDirRva = 0
+      RelocDirSize = 81920
+      SecDirOffset = 4096
+      SecDirSize = 4294733824
+    }
+  }
+}
+(lldb) bt
+* thread #1, stop reason = instruction step into
+  * frame #0: 0x00000000fffd1a41 SecMain.dll`UefiImageLoadImageInplace(Context=0x000000000081fee0) at UefiImageLib.c:257:3
+    frame #1: 0x00000000fffca496 SecMain.dll`SecCoreStartupWithStack [inlined] FindAndReportEntryPoints(BootFirmwareVolumePtr=<unavailable>, PeiCoreEntryPoint=<unavailable>) at SecMain.c:735:12
+    frame #2: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1005:3
+    frame #3: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #4: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #5: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+```
+
+Loading PEIM 9B3ADA4F-AE56-4C24-8DEA-F03B7558AE50
+Loading PEIM at 0x00000833000 DebugBase=0x00000833000 EntryPoint=0x00000835E44 
+
+
+```
+(lldb) c
+Process 1 resuming
+Process 1 stopped
+* thread #1, stop reason = breakpoint 2.2
+    frame #0: 0x00000000008256af PeiCore.dll`LoadAndRelocateUefiImage [inlined] UefiImageLoadImageInplace(Context=0x000000000081f448) at UefiImageLib.c:257:3
+   254 	{
+   255 	  RETURN_STATUS  Status;
+   256 	
+-> 257 	  UEFI_IMAGE_EXEC (
+   258 	    Status,
+   259 	    Context->FormatIndex,
+   260 	    LoadImageInplace,
+Target 0: (Bootstrap.dll) stopped.
+(lldb) bt
+* thread #1, stop reason = breakpoint 2.2
+  * frame #0: 0x00000000008256af PeiCore.dll`LoadAndRelocateUefiImage [inlined] UefiImageLoadImageInplace(Context=0x000000000081f448) at UefiImageLib.c:257:3
+    frame #1: 0x00000000008256af PeiCore.dll`LoadAndRelocateUefiImage(FileHandle=<unavailable>, Pe32Data=<unavailable>, Pe32DataSize=<unavailable>, ImageContext=0x000000000081f448, ImageAddress=0x000000000081f4b8, DebugBase=0x000000000081f4b0) at Image.c:348:14
+    frame #2: 0x0000000000825416 PeiCore.dll`PeiLoadImageLoadImageWrapper [inlined] PeiLoadImageLoadImage(PeiServices=<unavailable>, FileHandle=0x0000000000832150, ImageAddressArg=<unavailable>, ImageSizeArg=<unavailable>, EntryPoint=0x000000000081fb30, AuthenticationState=0x000000000081fb4c) at Image.c:505:12
+    frame #3: 0x0000000000825391 PeiCore.dll`PeiLoadImageLoadImageWrapper(This=<unavailable>, FileHandle=0x0000000000832150, ImageAddressArg=<unavailable>, ImageSizeArg=<unavailable>, EntryPoint=0x000000000081fb30, AuthenticationState=0x000000000081fb4c) at Image.c:734:10
+    frame #4: 0x0000000000825b9d PeiCore.dll`PeiLoadImage(PeiServices=<unavailable>, FileHandle=0x0000000000832150, PeimState=<unavailable>, EntryPoint=<unavailable>, AuthenticationState=<unavailable>) at Image.c:845:16
+    frame #5: 0x000000000082472a PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1595:24
+    frame #6: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #7: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #8: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #9: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #10: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #11: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #12: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) po *Context
+
+(lldb) p *Context
+(UEFI_IMAGE_LOADER_IMAGE_CONTEXT) {
+  FormatIndex = '\x01'
+  Ctx = {
+    Ue = {
+      FileBuffer = 0x0000000000833000 "UE\t\U00000011D."
+      UnsignedFileSize = 28808
+      Subsystem = '\x01'
+      Machine = '\x01'
+      FixedAddress = '\0'
+      XIP = '\x01'
+      LastSegmentIndex = '\x02'
+      SegmentsFileOffset = 4096
+      SegmentAlignment = 4096
+      Segments = 0x0000000000833010
+      SegmentImageInfoIterSize = '\b'
+      RelocsStripped = '\0'
+      NumLoadTables = '\x01'
+      LoadTablesFileOffset = 28672
+      RelocTableSize = 136
+      LoadTables = 0x0000000000833028
+      ImageBuffer = 0x0000000000000000
+      ImageSize = 28672
+      EntryPointAddress = 11844
+      BaseAddress = 8597504
+    }
+    Pe = {
+      ImageBase = 8597504
+      FileBuffer = 0x0100010100007088
+      FileSize = 2
+      ImageBuffer = 0x0000000000001000
+      SectionsOffset = 8597520
+      NumberOfSections = 0
+      SizeOfImage = 65544
+      SectionAlignment = 28672
+      ExeHdrOffset = 136
+      SizeOfHeaders = 0
+      AddressOfEntryPoint = 8597544
+      RelocsStripped = '\0'
+      ImageType = '\0'
+      Subsystem = 0
+      Machine = 0
+      RelocDirRva = 0
+      RelocDirSize = 28672
+      SecDirOffset = 11844
+      SecDirSize = 8597504
+    }
+  }
+}
+(lldb) 
+
+
+```
+ImageAddress 赋值为  0x00833000的触发点
+```
+(lldb) c
+Process 1 resuming
+
+Watchpoint 1 hit:
+old value: 0
+new value: 8597504
+Process 1 stopped
+* thread #1, stop reason = watchpoint 1
+    frame #0: 0x000000000082736b PeiCore.dll`ProcessSection(PeiServices=0x000000000081f610, SectionType='\x10', SectionInstance=0x000000000081f1a8, Section=0x0000000000832ffc, SectionSize=32578, OutputBuffer=0x000000000081f4a8, OutputSize=0x000000000081f4c4, AuthenticationStatus=0x000000000081f1b4, IsFfs3Fv='\0') at FwVol.c:856:27
+   853 	          *OutputSize   = SECTION2_SIZE (Section) - sizeof (EFI_COMMON_SECTION_HEADER2);
+   854 	        } else {
+   855 	          *OutputBuffer = (VOID *)((UINT8 *)Section + sizeof (EFI_COMMON_SECTION_HEADER));
+-> 856 	          *OutputSize   = SECTION_SIZE (Section) - sizeof (EFI_COMMON_SECTION_HEADER);
+   857 	        }
+   858 	
+   859 	        return EFI_SUCCESS;
+Target 0: (Bootstrap.dll) stopped.
+(lldb) p/x 8597504
+(int) 0x00833000
+(lldb) bt
+* thread #1, stop reason = watchpoint 1
+  * frame #0: 0x000000000082736b PeiCore.dll`ProcessSection(PeiServices=0x000000000081f610, SectionType='\x10', SectionInstance=0x000000000081f1a8, Section=0x0000000000832ffc, SectionSize=32578, OutputBuffer=0x000000000081f4a8, OutputSize=0x000000000081f4c4, AuthenticationStatus=0x000000000081f1b4, IsFfs3Fv='\0') at FwVol.c:856:27
+    frame #1: 0x0000000000826dd1 PeiCore.dll`PeiFfsFvPpiFindSectionByType3(This=<unavailable>, SearchType='\x10', SearchInstance=<unavailable>, FileHandle=<unavailable>, SectionData=0x000000000081f4a8, SectionDataSize=0x000000000081f4c4, AuthenticationStatus=0x000000000081fb4c) at FwVol.c:2170:35
+    frame #2: 0x00000000008253d0 PeiCore.dll`PeiLoadImageLoadImageWrapper [inlined] PeiServicesFfsFindSectionData4(SectionType='\x10', SectionInstance=0, FileHandle=0x0000000000832150, SectionData=0x000000000081f4a8, SectionDataSize=0x000000000081f4c4, AuthenticationStatus=0x000000000081fb4c) at PeiServicesLib.c:356:10
+    frame #3: 0x000000000082539f PeiCore.dll`PeiLoadImageLoadImageWrapper [inlined] PeiLoadImageLoadImage(PeiServices=<unavailable>, FileHandle=0x0000000000832150, ImageAddressArg=<unavailable>, ImageSizeArg=<unavailable>, EntryPoint=0x000000000081fb30, AuthenticationState=0x000000000081fb4c) at Image.c:484:12
+    frame #4: 0x0000000000825391 PeiCore.dll`PeiLoadImageLoadImageWrapper(This=<unavailable>, FileHandle=0x0000000000832150, ImageAddressArg=<unavailable>, ImageSizeArg=<unavailable>, EntryPoint=0x000000000081fb30, AuthenticationState=0x000000000081fb4c) at Image.c:734:10
+    frame #5: 0x0000000000825b9d PeiCore.dll`PeiLoadImage(PeiServices=<unavailable>, FileHandle=0x0000000000832150, PeimState=<unavailable>, EntryPoint=<unavailable>, AuthenticationState=<unavailable>) at Image.c:845:16
+    frame #6: 0x000000000082472a PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1595:24
+    frame #7: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #8: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #9: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #10: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #11: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #12: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #13: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+```
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 
@@ -5700,6 +5980,289 @@ https://blog.51cto.com/u_16099264/8344097
 
 ```
 
+
+## 8.HOB介绍
+
+https://blog.csdn.net/jiangwei0512/article/details/129457004
+
+综述
+HOB的全称是Hand-Off Block，从名字上也可以看出来，它表示的是一种用于交接的数据。按照HOB的使用情况，可以将BIOS的启动阶段分为两个部分：
+
+HOB生成阶段（HOB producer phase），用来创建和修改HOB；
+HOB消费阶段（HOB consumer phase），用来使用HOB，注意此阶段HOB是只读的。
+而这里说的“交接”就是从HOB生成阶段像HOB消费阶段交接数据，至于交接的是什么数据，后面会一一介绍。
+
+本文参考《PI_Spec_1_7_A_final_May1.pdf》（后面统称为PI规范），该手册为了将x86的Platform Initialization扩展到更多的平台，已经不再直接使用PEI、DXE等阶段说明HOB的使用情况，不过对于x86架构的BIOS来说，HOB生成阶段其实就是SEC和PEI阶段，而HOB消费阶段就是DXE和BDS阶段。为了方便，本文还是直接使用PEI、DXE等术语。术语的对应关系如下表所示：
+
+| HOB Specification Term                  | Other PI Specifications Term                |
+|-----------------------------------------|--------------------------------------------|
+| HOB producer phase                      | PEI phase                                  |
+| HOB consumer phase                      | DXE phase                                  |
+| Executable content in the HOB producer phase | Pre-EFI Initialization Module (PEIM) |
+| Hand-off into the HOB consumer phase    | DXE Initial Program Load (IPL) PEIM or DXE IPL PEIM-to-PEIM Interface (PPI) |
+| Platform boot-policy phase              | Boot Device Selection (BDS) phase          |
+
+
+注意，虽然上表中只有PEI和DXE，但是从实际的情况来看，SEC和BDS也分别可以作为HOB生成阶段和HOB消费阶段。
+
+
+### HOB的构成
+
+HOB在PEI阶段创建，并返回一个列表（称为HOB List，HOB列表），其中的HOB一个个堆叠放置，最终构成如下的形式：
+![](./screenshots/study_hob_1.png)
+
+根据HOB中包含的数据的不同可以对HOB进行分类，且HOB列表的第一个必须要是PHIT HOB。PHIT的全称是Phase Handoff Information Table，它是第一个被创建的HOB，对应的指针在PEI的核心数据中：
+
+```
+///
+/// Union of all the possible HOB Types.
+///
+typedef union {
+  EFI_HOB_GENERIC_HEADER                 *Header;
+  EFI_HOB_HANDOFF_INFO_TABLE             *HandoffInformationTable;
+  EFI_HOB_MEMORY_ALLOCATION              *MemoryAllocation;
+  EFI_HOB_MEMORY_ALLOCATION_BSP_STORE    *MemoryAllocationBspStore;
+  EFI_HOB_MEMORY_ALLOCATION_STACK        *MemoryAllocationStack;
+  EFI_HOB_MEMORY_ALLOCATION_MODULE       *MemoryAllocationModule;
+  EFI_HOB_RESOURCE_DESCRIPTOR            *ResourceDescriptor;
+  EFI_HOB_GUID_TYPE                      *Guid;
+  EFI_HOB_FIRMWARE_VOLUME                *FirmwareVolume;
+  EFI_HOB_FIRMWARE_VOLUME2               *FirmwareVolume2;
+  EFI_HOB_FIRMWARE_VOLUME3               *FirmwareVolume3;
+  EFI_HOB_CPU                            *Cpu;
+  EFI_HOB_MEMORY_POOL                    *Pool;
+  EFI_HOB_UEFI_CAPSULE                   *Capsule;
+  UINT8                                  *Raw;
+} EFI_PEI_HOB_POINTERS;
+
+///
+/// Forward declaration for PEI_CORE_INSTANCE
+///
+typedef struct _PEI_CORE_INSTANCE PEI_CORE_INSTANCE;
+
+///
+/// Pei Core private data structure instance
+///
+struct _PEI_CORE_INSTANCE {
+  UINTN                             Signature;
+
+  ///
+  /// Point to ServiceTableShadow
+  ///
+  EFI_PEI_SERVICES                  *Ps;
+  PEI_PPI_DATABASE                  PpiData;
+
+  /// 其它略。下面就是指向第一个HOB的指针，EFI_PEI_HOB_POINTERS是一个Union，包括各种指针：
+  EFI_PEI_HOB_POINTERS              HobList;
+}
+
+```
+
+后面的HOB操作接口都是以这里为基础的，比如EFI_PEI_SERVICES中就有接口GetHobList()，其实现：
+
+```
+
+///
+/// Pei Core Instance Data Macros
+///
+#define PEI_CORE_INSTANCE_FROM_PS_THIS(a) \
+  CR(a, PEI_CORE_INSTANCE, Ps, PEI_CORE_HANDLE_SIGNATURE)
+
+EFI_STATUS
+EFIAPI
+PeiGetHobList (
+  IN CONST EFI_PEI_SERVICES  **PeiServices,
+  IN OUT VOID                **HobList
+  )
+{
+  PEI_CORE_INSTANCE  *PrivateData;
+
+  //
+  // Only check this parameter in debug mode
+  //
+
+  DEBUG_CODE_BEGIN ();
+  if (HobList == NULL) {
+    return EFI_INVALID_PARAMETER;
+  }
+
+  DEBUG_CODE_END ();
+
+  PrivateData = PEI_CORE_INSTANCE_FROM_PS_THIS (PeiServices);
+
+  *HobList = PrivateData->HobList.Raw;
+
+  return EFI_SUCCESS;
+}
+
+
+```
+
+创建PHIT HOB的大致流程如下（不同的平台可能会有不同）：
+
+PeiCore
+
+    ↓
+
+InitializeMemoryServices
+
+    ↓
+
+PeiCoreBuildHobHandoffInfoTable
+
+在PeiCoreBuildHobHandoffInfoTable()函数中有PHIT HOB的初始化：
+
+
+```
+
+EFI_STATUS
+PeiCoreBuildHobHandoffInfoTable (
+  IN EFI_BOOT_MODE         BootMode,
+  IN EFI_PHYSICAL_ADDRESS  MemoryBegin,
+  IN UINT64                MemoryLength
+  )
+{
+  EFI_HOB_HANDOFF_INFO_TABLE  *Hob;
+  EFI_HOB_GENERIC_HEADER      *HobEnd;
+
+  Hob                   = (VOID *)(UINTN)MemoryBegin;
+  HobEnd                = (EFI_HOB_GENERIC_HEADER *)(Hob+1);
+  Hob->Header.HobType   = EFI_HOB_TYPE_HANDOFF;
+  Hob->Header.HobLength = (UINT16)sizeof (EFI_HOB_HANDOFF_INFO_TABLE);
+  Hob->Header.Reserved  = 0;
+
+  HobEnd->HobType   = EFI_HOB_TYPE_END_OF_HOB_LIST;
+  HobEnd->HobLength = (UINT16)sizeof (EFI_HOB_GENERIC_HEADER);
+  HobEnd->Reserved  = 0;
+
+  Hob->Version  = EFI_HOB_HANDOFF_TABLE_VERSION;
+  Hob->BootMode = BootMode;
+
+  Hob->EfiMemoryTop        = MemoryBegin + MemoryLength;
+  Hob->EfiMemoryBottom     = MemoryBegin;
+  Hob->EfiFreeMemoryTop    = MemoryBegin + MemoryLength;
+  Hob->EfiFreeMemoryBottom = (EFI_PHYSICAL_ADDRESS)(UINTN)(HobEnd + 1);
+  Hob->EfiEndOfHobList     = (EFI_PHYSICAL_ADDRESS)(UINTN)HobEnd;
+
+  return EFI_SUCCESS;
+}
+
+
+```
+
+这里的数据可以跟前面的图对应。有了第一个HOB，之后的HOB就在此基础之上堆叠，最终完成所有需要的HOB。下面介绍目前PI规范中定义的HOB分类。
+
+
+### HOB分类
+
+当前PI规范定义的HOB有如下的几种类型：
+
+![](./screenshots/study_hob_2.png)
+
+每一个HOB都包含一个通用的结构：
+
+```
+///
+/// Describes the format and size of the data inside the HOB.
+/// All HOBs must contain this generic HOB header.
+///
+typedef struct {
+  ///
+  /// Identifies the HOB data structure type.
+  ///
+  UINT16    HobType;
+  ///
+  /// The length in bytes of the HOB.
+  ///
+  UINT16    HobLength;
+  ///
+  /// This field must always be set to zero.
+  ///
+  UINT32    Reserved;
+} EFI_HOB_GENERIC_HEADER;
+
+
+```
+
+这里就指定了HOB的类型HobType：
+
+```
+
+//
+// HobType of EFI_HOB_GENERIC_HEADER.
+//
+#define EFI_HOB_TYPE_HANDOFF              0x0001
+#define EFI_HOB_TYPE_MEMORY_ALLOCATION    0x0002
+#define EFI_HOB_TYPE_RESOURCE_DESCRIPTOR  0x0003
+#define EFI_HOB_TYPE_GUID_EXTENSION       0x0004
+#define EFI_HOB_TYPE_FV                   0x0005
+#define EFI_HOB_TYPE_CPU                  0x0006
+#define EFI_HOB_TYPE_MEMORY_POOL          0x0007
+#define EFI_HOB_TYPE_FV2                  0x0009
+#define EFI_HOB_TYPE_LOAD_PEIM_UNUSED     0x000A
+#define EFI_HOB_TYPE_UEFI_CAPSULE         0x000B
+#define EFI_HOB_TYPE_FV3                  0x000C
+#define EFI_HOB_TYPE_UNUSED               0xFFFE
+#define EFI_HOB_TYPE_END_OF_HOB_LIST      0xFFFF
+
+```
+
+然后是HOB的长度HobLength，通过它就可以知道下一个HOB的位置。
+
+下面介绍一些常用的HOB。
+
+### PHIT HOB
+
+前面已经介绍了PHIT HOB，它的结构体如下：
+
+```
+
+///
+/// Contains general state information used by the HOB producer phase.
+/// This HOB must be the first one in the HOB list.
+///
+typedef struct {
+  ///
+  /// The HOB generic header. Header.HobType = EFI_HOB_TYPE_HANDOFF.
+  ///
+  EFI_HOB_GENERIC_HEADER    Header;
+  ///
+  /// The version number pertaining to the PHIT HOB definition.
+  /// This value is four bytes in length to provide an 8-byte aligned entry
+  /// when it is combined with the 4-byte BootMode.
+  ///
+  UINT32                    Version;
+  ///
+  /// The system boot mode as determined during the HOB producer phase.
+  ///
+  EFI_BOOT_MODE             BootMode;
+  ///
+  /// The highest address location of memory that is allocated for use by the HOB producer
+  /// phase. This address must be 4-KB aligned to meet page restrictions of UEFI.
+  ///
+  EFI_PHYSICAL_ADDRESS      EfiMemoryTop;
+  ///
+  /// The lowest address location of memory that is allocated for use by the HOB producer phase.
+  ///
+  EFI_PHYSICAL_ADDRESS      EfiMemoryBottom;
+  ///
+  /// The highest address location of free memory that is currently available
+  /// for use by the HOB producer phase.
+  ///
+  EFI_PHYSICAL_ADDRESS      EfiFreeMemoryTop;
+  ///
+  /// The lowest address location of free memory that is available for use by the HOB producer phase.
+  ///
+  EFI_PHYSICAL_ADDRESS      EfiFreeMemoryBottom;
+  ///
+  /// The end of the HOB list.
+  ///
+  EFI_PHYSICAL_ADDRESS      EfiEndOfHobList;
+} EFI_HOB_HANDOFF_INFO_TABLE;
+
+```
+
+里面主要有包含两个部分，一个用来描述启动模式，另一个用来描述HOB内存的分布，这个也已经在前文的图中说明。
 
 ### 传统BIOS的启动
 
