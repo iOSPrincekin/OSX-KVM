@@ -6164,6 +6164,16 @@ Target 0: (Bootstrap.dll) stopped.                       ^
 是否为 ‘随机基地址’的应用
 
 ```
+EFI_STATUS
+CoreLoadPeImage (
+  IN     BOOLEAN                          BootPolicy,
+  IN     LOADED_IMAGE_PRIVATE_DATA        *Image,
+  IN     EFI_PHYSICAL_ADDRESS             *DstBuffer   OPTIONAL,
+  OUT    EFI_PHYSICAL_ADDRESS             *EntryPoint  OPTIONAL,
+  IN     UINT32                           Attribute,
+  IN OUT UEFI_IMAGE_LOADER_IMAGE_CONTEXT  *ImageContext
+  )
+{
     if (EFI_ERROR (Status)) {
       BufferAddress = UefiImageGetBaseAddress (ImageContext);
       if ((BufferAddress >= 0x100000) || UefiImageGetRelocsStripped (ImageContext)) {
@@ -6185,6 +6195,7 @@ Target 0: (Bootstrap.dll) stopped.                       ^
                    );
       }
     }
+}
 ```
 
 设置是否 ‘随机基地址’
@@ -6223,10 +6234,32 @@ Context->RelocsStripped = (UeHdr->ImageInfo & UE_HEADER_IMAGE_INFO_RELOCATION_FI
 
 ```
 
-改为固定基地址
+强制改为固定基地址，但是会导致 导致 build -a X64 -p OvmfPkg/OvmfPkgX64.dsc -t XCODE5 -b DEBUG  编译报错
+
+
 
 ```
   Context->RelocsStripped = TRUE;//(UeHdr->ImageInfo & UE_HEADER_IMAGE_INFO_RELOCATION_FIXUPS_STRIPPED) != 0;
+
+```
+
+报错：
+
+```
+ASSERT [BaseTools] UeImageLib.c(181): ((BOOLEAN)(0==1))
+build.py... : error 7000: Failed to generate FV
+```
+
+```
+ImageTool GenImage -c UE -o /Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/FV/Ffs/A210F973-229D-4f4d-AA37-9895E6C9EABADpcDxe/A210F973-229D-4f4d-AA37-9895E6C9EABAUe.raw /Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/X64/NetworkPkg/DpcDxe/DpcDxe/OUTPUT/DpcDxe.efi
+ImageTool GenImage -c UE -o /Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/FV/Ffs/A19B1FE7-C1BC-49F8-875F-54A5D542443FCpuIo2Dxe/A19B1FE7-C1BC-49F8-875F-54A5D542443FUe.raw /Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/X64/UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe/OUTPUT/CpuIo2Dxe.efi
+Assertion failed: (Status == RETURN_OUT_OF_RESOURCES), function ValidateOutputFile, file ImageToolEmit.c, line 66.
+make: *** [/Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/FV/Ffs/A19B1FE7-C1BC-49F8-875F-54A5D542443FCpuIo2Dxe/A19B1FE7-C1BC-49F8-875F-54A5D542443FUe.raw] Abort trap: 6
+
+
+build.py...
+ : error 7000: Failed to execute command
+	make tbuild [/Users/lee/Desktop/Computer_Systems/UEFI/KVM-Opencore/src/OpenCorePkg/UDK/Build/OvmfX64/DEBUG_XCODE5/X64/UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe]
 
 ```
 
