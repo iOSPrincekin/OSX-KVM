@@ -6078,6 +6078,158 @@ Target 0: (Bootstrap.dll) stopped.
 ```
 
 
+### 46.关闭 efi 基地址的随机化
+
+```
+Watchpoint 3 hit:
+old value: 0
+new value: 2134364160
+Process 1 stopped
+* thread #1, stop reason = watchpoint 3
+    frame #0: 0x000000007fe41460 DxeCore.dll`CoreLoadImage [inlined] CoreLoadPeImage(BootPolicy=<unavailable>, Image=0x000000007f401218, DstBuffer=<unavailable>, EntryPoint=0x0000000000000000, Attribute=3, ImageContext=0x000000007fe3caf0) at Image.c:752:31
+   749 	  //
+   750 	  Image->Type               = UefiImageGetSubsystem (ImageContext);
+   751 	  Image->Info.ImageBase     = (VOID *)(UINTN)BufferAddress;
+-> 752 	  Image->Info.ImageSize     = ImageSize;
+   753 	  Image->Info.ImageCodeType = ImageCodeMemoryType;
+   754 	  Image->Info.ImageDataType = ImageDataMemoryType;
+   755 	  if ((Attribute & EFI_LOAD_PE_IMAGE_ATTRIBUTE_RUNTIME_REGISTRATION) != 0) {
+Target 0: (Bootstrap.dll) stopped.                       ^
+(lldb) p/x BufferAddress
+(EFI_PHYSICAL_ADDRESS) 0x000000007f37d000
+(lldb) bt
+* thread #1, stop reason = watchpoint 3
+  * frame #0: 0x000000007fe41460 DxeCore.dll`CoreLoadImage [inlined] CoreLoadPeImage(BootPolicy=<unavailable>, Image=0x000000007f401218, DstBuffer=<unavailable>, EntryPoint=0x0000000000000000, Attribute=3, ImageContext=0x000000007fe3caf0) at Image.c:752:31
+    frame #1: 0x000000007fe41219 DxeCore.dll`CoreLoadImage [inlined] CoreLoadImageCommon(BootPolicy=<unavailable>, ParentImageHandle=<unavailable>, FilePath=<unavailable>, SourceBuffer=<unavailable>, SourceSize=<unavailable>, DstBuffer=0, NumberOfPages=0x0000000000000000, ImageHandle=<unavailable>, EntryPoint=0x0000000000000000, Attribute=3) at Image.c:1369:12
+    frame #2: 0x000000007fe4106e DxeCore.dll`CoreLoadImage(BootPolicy=<unavailable>, ParentImageHandle=<unavailable>, FilePath=0x000000007f810e98, SourceBuffer=<unavailable>, SourceSize=0, ImageHandle=0x000000007f810e18) at Image.c:1536:12
+    frame #3: 0x000000007fe4d6c5 DxeCore.dll`CoreDispatcher at Dispatcher.c:454:18
+    frame #4: 0x000000007fe52c1f DxeCore.dll`DxeMain(HobStart=0x000000007f8e7018) at DxeMain.c:524:3
+    frame #5: 0x000000007fe52dcd DxeCore.dll`ProcessModuleEntryPointList(HobStart=<unavailable>) at AutoGen.c:746:3
+    frame #6: 0x000000007fe576be DxeCore.dll`_ModuleEntryPoint(HobStart=<unavailable>) at DxeCoreEntryPoint.c:46:3
+    frame #7: 0x000000007febd3d7 DxeIpl.dll`InternalSwitchStack + 15
+    frame #8: 0x000000007febeb0c DxeIpl.dll`DxeLoadCore [inlined] HandOffToDxeCore(DxeCoreEntryPoint=2145744554, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoadFunc.c:129:3
+    frame #9: 0x000000007febdf10 DxeIpl.dll`DxeLoadCore(This=<unavailable>, PeiServices=<unavailable>, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoad.c:456:3
+    frame #10: 0x000000007fecd958
+    frame #11: 0x0000000000824afe PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:458:7
+    frame #12: 0x00000000008280f1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:875:7
+    frame #13: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #14: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #15: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #16: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #17: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #18: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #19: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #20: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+```
+
+开辟新内存     *Memory = Start;
+
+
+
+```
+(lldb) bt
+* thread #1, stop reason = instruction step into
+  * frame #0: 0x000000007fe49b39 DxeCore.dll`CoreAllocatePages [inlined] CoreInternalAllocatePages(Type=AllocateAnyPages, MemoryType=EfiRuntimeServicesCode, NumberOfPages=<unavailable>, Memory=<unavailable>, NeedGuard='\0') at Page.c:1298:7
+    frame #1: 0x000000007fe49b36 DxeCore.dll`CoreAllocatePages(Type=AllocateAnyPages, MemoryType=EfiRuntimeServicesCode, NumberOfPages=5, Memory=0x000000007fe3cbe8) at Page.c:1483:15
+    frame #2: 0x000000007fe530d4 DxeCore.dll`AllocateAlignedPagesEx [inlined] PhaseAllocatePages(Type=AllocateAnyPages, MemoryType=EfiRuntimeServicesCode, Pages=5, Memory=0x000000007fe3cbe8) at MemoryAllocationLib.c:52:10
+    frame #3: 0x000000007fe530c4 DxeCore.dll`AllocateAlignedPagesEx [inlined] AllocatePagesEx(Type=AllocateAnyPages, MemoryType=EfiRuntimeServicesCode, Pages=5, Memory=0x000000007fe3cbe8) at CommonMemoryAllocationLibEx.c:43:10
+    frame #4: 0x000000007fe530c4 DxeCore.dll`AllocateAlignedPagesEx(Type=AllocateAnyPages, MemoryType=EfiRuntimeServicesCode, Pages=5, Alignment=<unavailable>, Memory=0x000000007fe3cbe8) at CommonMemoryAllocationLibEx.c:143:14
+    frame #5: 0x000000007fe4122e DxeCore.dll`CoreLoadImage [inlined] CoreLoadPeImage(BootPolicy=<unavailable>, Image=0x000000007f373b98, DstBuffer=<unavailable>, EntryPoint=0x0000000000000000, Attribute=3, ImageContext=0x000000007fe3caf0) at Image.c:648:18
+    frame #6: 0x000000007fe41219 DxeCore.dll`CoreLoadImage [inlined] CoreLoadImageCommon(BootPolicy=<unavailable>, ParentImageHandle=<unavailable>, FilePath=<unavailable>, SourceBuffer=<unavailable>, SourceSize=<unavailable>, DstBuffer=0, NumberOfPages=0x0000000000000000, ImageHandle=<unavailable>, EntryPoint=0x0000000000000000, Attribute=3) at Image.c:1369:12
+    frame #7: 0x000000007fe4106e DxeCore.dll`CoreLoadImage(BootPolicy=<unavailable>, ParentImageHandle=<unavailable>, FilePath=0x000000007f8b0018, SourceBuffer=<unavailable>, SourceSize=0, ImageHandle=0x000000007f8b1418) at Image.c:1536:12
+    frame #8: 0x000000007fe4d6c5 DxeCore.dll`CoreDispatcher at Dispatcher.c:454:18
+    frame #9: 0x000000007fe52c1f DxeCore.dll`DxeMain(HobStart=0x000000007f8e7018) at DxeMain.c:524:3
+    frame #10: 0x000000007fe52dcd DxeCore.dll`ProcessModuleEntryPointList(HobStart=<unavailable>) at AutoGen.c:746:3
+    frame #11: 0x000000007fe576be DxeCore.dll`_ModuleEntryPoint(HobStart=<unavailable>) at DxeCoreEntryPoint.c:46:3
+    frame #12: 0x000000007febd3d7 DxeIpl.dll`InternalSwitchStack + 15
+    frame #13: 0x000000007febeb0c DxeIpl.dll`DxeLoadCore [inlined] HandOffToDxeCore(DxeCoreEntryPoint=2145744554, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoadFunc.c:129:3
+    frame #14: 0x000000007febdf10 DxeIpl.dll`DxeLoadCore(This=<unavailable>, PeiServices=<unavailable>, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoad.c:456:3
+    frame #15: 0x000000007fecd958
+    frame #16: 0x0000000000824afe PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:458:7
+    frame #17: 0x00000000008280f1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:875:7
+    frame #18: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #19: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #20: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #21: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #22: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #23: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #24: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #25: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+```
+
+是否为 ‘随机基地址’的应用
+
+```
+    if (EFI_ERROR (Status)) {
+      BufferAddress = UefiImageGetBaseAddress (ImageContext);
+      if ((BufferAddress >= 0x100000) || UefiImageGetRelocsStripped (ImageContext)) {
+        Status = AllocatePagesEx (
+                   AllocateAddress,
+                   ImageCodeMemoryType,
+                   DstBufPages,
+                   &BufferAddress
+                   );
+      }
+
+      if (EFI_ERROR (Status) && !UefiImageGetRelocsStripped (ImageContext)) {
+        Status = AllocateAlignedPagesEx (
+                   AllocateAnyPages,
+                   ImageCodeMemoryType,
+                   DstBufPages,
+                   ImageAlignment,
+                   &BufferAddress
+                   );
+      }
+    }
+```
+
+设置是否 ‘随机基地址’
+
+Context->RelocsStripped = (UeHdr->ImageInfo & UE_HEADER_IMAGE_INFO_RELOCATION_FIXUPS_STRIPPED) != 0;
+
+```
+
+(lldb) bt
+* thread #1, stop reason = breakpoint 9.3
+  * frame #0: 0x000000007fe600bc DxeCore.dll`UefiImageInitializeContextPostHashUe [inlined] UeInitializeContextPostHash(Context=0x000000007fe3caf8) at UeImageLib.c:298:39
+    frame #1: 0x000000007fe600bc DxeCore.dll`UefiImageInitializeContextPostHashUe(Context=0x000000007fe3caf0) at UeSupport.c:52:10
+    frame #2: 0x000000007fe40750 DxeCore.dll`CoreLoadImage [inlined] UefiImageInitializeContextPostHash(Context=0x000000007fe3caf0) at Image.c:0:11
+    frame #3: 0x000000007fe40728 DxeCore.dll`CoreLoadImage [inlined] CoreLoadImageCommon(BootPolicy=<unavailable>, ParentImageHandle=<unavailable>, FilePath=<unavailable>, SourceBuffer=<unavailable>, SourceSize=<unavailable>, DstBuffer=0, NumberOfPages=0x0000000000000000, ImageHandle=<unavailable>, EntryPoint=0x0000000000000000, Attribute=3) at Image.c:1304:12
+    frame #4: 0x000000007fe4038f DxeCore.dll`CoreLoadImage(BootPolicy=<unavailable>, ParentImageHandle=0x000000007f8ecf98, FilePath=0x000000007f8b0198, SourceBuffer=<unavailable>, SourceSize=0, ImageHandle=0x000000007f8b0998) at Image.c:1536:12
+    frame #5: 0x000000007fe4d6c5 DxeCore.dll`CoreDispatcher at Dispatcher.c:454:18
+    frame #6: 0x000000007fe52c1f DxeCore.dll`DxeMain(HobStart=0x000000007f8e7018) at DxeMain.c:524:3
+    frame #7: 0x000000007fe52dcd DxeCore.dll`ProcessModuleEntryPointList(HobStart=<unavailable>) at AutoGen.c:746:3
+    frame #8: 0x000000007fe576be DxeCore.dll`_ModuleEntryPoint(HobStart=<unavailable>) at DxeCoreEntryPoint.c:46:3
+    frame #9: 0x000000007febd3d7 DxeIpl.dll`InternalSwitchStack + 15
+    frame #10: 0x000000007febeb0c DxeIpl.dll`DxeLoadCore [inlined] HandOffToDxeCore(DxeCoreEntryPoint=2145744554, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoadFunc.c:129:3
+    frame #11: 0x000000007febdf10 DxeIpl.dll`DxeLoadCore(This=<unavailable>, PeiServices=<unavailable>, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoad.c:456:3
+    frame #12: 0x000000007fecd958
+    frame #13: 0x0000000000824afe PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:458:7
+    frame #14: 0x00000000008280f1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:875:7
+    frame #15: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #16: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #17: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #18: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #19: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #20: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #21: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #22: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+
+```
+
+改为固定基地址
+
+```
+  Context->RelocsStripped = TRUE;//(UeHdr->ImageInfo & UE_HEADER_IMAGE_INFO_RELOCATION_FIXUPS_STRIPPED) != 0;
+
+```
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 
