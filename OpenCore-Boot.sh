@@ -15,10 +15,10 @@
 
 MY_OPTIONS="+ssse3,+sse4.2,+popcnt,+avx,+aes,+xsave,+xsaveopt,check"
 
-MAKE_DMG=$1
+OPTION=$1
 
 
-if [[ $MAKE_DMG == 1 ]];then
+if [[ $OPTION == 1 ]];then
     DMG_SRC_DIR=BaseSystem
     DMG_NAME=BaseSystem1
     DMG_FILE=${DMG_NAME}.dmg
@@ -62,7 +62,7 @@ if [[ $MAKE_DMG == 1 ]];then
     
     exit
     
-elif [[ $MAKE_DMG == 2 ]];then
+elif [[ $OPTION == 2 ]];then
     DMG_SRC_DIR=/Volumes/macOS\ Base\ System/
     DMG_NAME=BaseSystem1
     DMG_FILE=${DMG_NAME}.dmg
@@ -105,7 +105,7 @@ elif [[ $MAKE_DMG == 2 ]];then
     
     exit
     
-elif [[ $MAKE_DMG == 3 ]];then
+elif [[ $OPTION == 3 ]];then
 
     DMG_NAME=BaseSystem100
     DMG_FILE=${DMG_NAME}.dmg
@@ -160,9 +160,18 @@ CPU_THREADS="4"
 REPO_PATH="."
 OVMF_DIR="."
 
+QEMU_ARGS=""
 # shellcheck disable=SC2054
+if [[ $OPTION == 4 ]];then
+
+QEMU_ARGS="-gdb tcp:1235 -S -m $ALLOCATED_RAM -cpu Penryn,kvm=on,vendor=GenuineIntel,+invtsc,vmware-cpuid-freq=on,$MY_OPTIONS -machine q35 -usb -device usb-kbd -device usb-tablet -smp $CPU_THREADS,cores=$CPU_CORES,sockets=$CPU_SOCKETS -device usb-ehci,id=ehci -device nec-usb-xhci,id=xhci -global nec-usb-xhci.msi=off -device isa-applesmc,osk='ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc' -drive if=pflash,format=raw,readonly=on,file=$REPO_PATH/$OVMF_DIR/OVMF_CODE.fd -smbios type=2 -device ich9-intel-hda -device hda-duplex -device ich9-ahci,id=sata -drive file=$REPO_PATH/OpenCore/OpenCore-master.iso,if=none,id=OpenCoreBoot,format=raw, -device ide-hd,bus=sata.2,drive=OpenCoreBoot -device ide-hd,bus=sata.3,drive=InstallMedia -drive id=InstallMedia,if=none,file=$REPO_PATH/BaseSystem.img,format=raw -drive id=MacHDD,if=none,file=$REPO_PATH/mac_hdd_ng.img,format=qcow2 -device ide-hd,bus=sata.4,drive=MacHDD -netdev user,id=net0,hostfwd=tcp::2222-:22 -serial stdio -device vmware-svga -debugcon file:debug.log -global isa-debugcon.iobase=0x402"
+
+else
+
 QEMU_ARGS="-s -S -m $ALLOCATED_RAM -cpu Penryn,kvm=on,vendor=GenuineIntel,+invtsc,vmware-cpuid-freq=on,$MY_OPTIONS -machine q35 -usb -device usb-kbd -device usb-tablet -smp $CPU_THREADS,cores=$CPU_CORES,sockets=$CPU_SOCKETS -device usb-ehci,id=ehci -device nec-usb-xhci,id=xhci -global nec-usb-xhci.msi=off -device isa-applesmc,osk='ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc' -drive if=pflash,format=raw,readonly=on,file=$REPO_PATH/$OVMF_DIR/OVMF_CODE.fd -smbios type=2 -device ich9-intel-hda -device hda-duplex -device ich9-ahci,id=sata -drive file=$REPO_PATH/OpenCore/OpenCore-master.iso,if=none,id=OpenCoreBoot,format=raw, -device ide-hd,bus=sata.2,drive=OpenCoreBoot -device ide-hd,bus=sata.3,drive=InstallMedia -drive id=InstallMedia,if=none,file=$REPO_PATH/BaseSystem.img,format=raw -drive id=MacHDD,if=none,file=$REPO_PATH/mac_hdd_ng.img,format=qcow2 -device ide-hd,bus=sata.4,drive=MacHDD -netdev user,id=net0,hostfwd=tcp::2222-:22 -serial stdio -device vmware-svga -debugcon file:debug.log -global isa-debugcon.iobase=0x402"
 
+
+fi
 echo "qemu-system-x86_64 ${QEMU_ARGS}"
 
 # 路径
@@ -206,17 +215,23 @@ CpuMpPei_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/UefiCpuPkg/CpuMpPei/CpuMpPei/
 
 DxeCore_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Core/Dxe/DxeMain/DEBUG/DxeCore.dll
 
+SecurityStubDxe_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe/DEBUG/SecurityStubDxe.dll
+
+BdsDxe_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/BdsDxe/BdsDxe/DEBUG/BdsDxe.dll
+
+QemuVideoDxe_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/QemuVideoDxe/QemuVideoDxe/DEBUG/QemuVideoDxe.dll
+
 Bootstrap_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/Bootstrap/Bootstrap/DEBUG/Bootstrap.dll
 
 OpenCore_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/OpenCore/OpenCore/DEBUG/OpenCore.dll
 
 OpenCanopy_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Platform/OpenCanopy/OpenCanopy/DEBUG/OpenCanopy.dll
 
-BdsDxe_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/MdeModulePkg/Universal/BdsDxe/BdsDxe/DEBUG/BdsDxe.dll
+boot_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/boot/boot/DEBUG/boot.dll
 
-QemuVideoDxe_dll=${Build_dir}/OvmfX64/DEBUG_XCODE5/X64/OvmfPkg/QemuVideoDxe/QemuVideoDxe/DEBUG/QemuVideoDxe.dll
 
-osascript -e "tell application \"Terminal\" to quit"
+if [[ $OPTION == 4 ]];then
+
 osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lldb ${Bootstrap_dll} \\n\
   target modules add ${SecMain_dll} \\n target modules load --file ${SecMain_dll} --slide 0x00fffc7000 \\n\
   target modules add ${PeiCore_dll} \\n target modules load --file ${PeiCore_dll} --slide 0x0000821000 \\n\
@@ -227,15 +242,46 @@ osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lld
   target modules add ${DxeIpl_dll} \\n target modules load --file ${DxeIpl_dll} --slide 0x0007FEBC000 \\n\
   target modules add ${S3Resume2Pei_dll} \\n target modules load --file ${S3Resume2Pei_dll} --slide 0x0000860000 \\n\
   target modules add ${CpuMpPei_dll} \\n target modules load --file ${CpuMpPei_dll} --slide 0x0000869000 \\n\
-  target modules add ${DxeCore_dll} \\n target modules load --file ${DxeCore_dll} --slide 0x0007FE3C000 \\n\
+  target modules add ${DxeCore_dll} \\n target modules load --file ${DxeCore_dll} --slide 0x0007FDF2000 \\n\
+  target modules add ${SecurityStubDxe_dll} \\n target modules load --file ${SecurityStubDxe_dll} --slide 0x0007F36A000 \\n\
   target modules load --file ${Bootstrap_dll} --slide 0x0007DE3D000  \\n\
   target modules add ${OpenCore_dll} \\n target modules load --file ${OpenCore_dll} --slide 0x0007DCA2000  \\n\
   target modules add ${OpenCanopy_dll} \\n target modules load --file ${OpenCanopy_dll} --slide 0x0007DA95000  \\n\
   target modules add ${BdsDxe_dll} \\n target modules load --file ${BdsDxe_dll} --slide 0x0007EE1D000 \\n\
   target modules add ${QemuVideoDxe_dll} \\n target modules load --file ${QemuVideoDxe_dll} --slide 0x0007EC08000 \\n\
+  target modules add ${boot_dll} \\n target modules load --file ${boot_dll} --slide 0x0007CDED000 \\n\
+  b _ModuleEntryPoint \\n b testGetDllAddress \\n gdb-remote localhost:1235 \\n \"" \
+-e "tell application \"Terminal\" to activate" \
+-e "tell application \"System Events\" to tell process \"Terminal\" to keystroke \"t\" using command down" \
+-e "tell application \"Terminal\" to set background color of window 1 to {0,0,0,1}" \
+-e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR} \\n sleep 0.3\\n qemu-system-x86_64 ${QEMU_ARGS} \\n \\n \" in window 1"
+
+else
+
+osascript -e "tell application \"Terminal\" to quit"
+
+osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lldb ${Bootstrap_dll} \\n\
+  target modules add ${SecMain_dll} \\n target modules load --file ${SecMain_dll} --slide 0x00fffc7000 \\n\
+  target modules add ${PeiCore_dll} \\n target modules load --file ${PeiCore_dll} --slide 0x0000821000 \\n\
+  target modules add ${PcdPeim_dll} \\n target modules load --file ${PcdPeim_dll} --slide 0x0000833000 \\n\
+  target modules add ${ReportStatusCodeRouterPei_dll} \\n target modules load --file ${ReportStatusCodeRouterPei_dll} --slide 0x000083b000 \\n\
+  target modules add ${StatusCodeHandlerPei_dll} \\n target modules load --file ${StatusCodeHandlerPei_dll} --slide 0x0000841000 \\n\
+  target modules add ${PlatformPei_dll} \\n target modules load --file ${PlatformPei_dll} --slide 0x0000847000 \\n\
+  target modules add ${DxeIpl_dll} \\n target modules load --file ${DxeIpl_dll} --slide 0x0007FEBC000 \\n\
+  target modules add ${S3Resume2Pei_dll} \\n target modules load --file ${S3Resume2Pei_dll} --slide 0x0000860000 \\n\
+  target modules add ${CpuMpPei_dll} \\n target modules load --file ${CpuMpPei_dll} --slide 0x0000869000 \\n\
+  target modules add ${DxeCore_dll} \\n target modules load --file ${DxeCore_dll} --slide 0x0007FDF2000 \\n\
+  target modules add ${SecurityStubDxe_dll} \\n target modules load --file ${SecurityStubDxe_dll} --slide 0x0007F36A000 \\n\
+  target modules load --file ${Bootstrap_dll} --slide 0x0007DE3D000  \\n\
+  target modules add ${OpenCore_dll} \\n target modules load --file ${OpenCore_dll} --slide 0x0007DCA2000  \\n\
+  target modules add ${OpenCanopy_dll} \\n target modules load --file ${OpenCanopy_dll} --slide 0x0007DA95000  \\n\
+  target modules add ${BdsDxe_dll} \\n target modules load --file ${BdsDxe_dll} --slide 0x0007EE1D000 \\n\
+  target modules add ${QemuVideoDxe_dll} \\n target modules load --file ${QemuVideoDxe_dll} --slide 0x0007EC08000 \\n\
+  target modules add ${boot_dll} \\n target modules load --file ${boot_dll} --slide 0x0007CDED000 \\n\
   b _ModuleEntryPoint \\n b testGetDllAddress \\n gdb-remote localhost:1234 \\n \"" \
 -e "tell application \"Terminal\" to activate" \
 -e "tell application \"System Events\" to tell process \"Terminal\" to keystroke \"t\" using command down" \
 -e "tell application \"Terminal\" to set background color of window 1 to {0,0,0,1}" \
 -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR} \\n sleep 0.3\\n qemu-system-x86_64 ${QEMU_ARGS} \\n \\n \" in window 1"
 
+fi

@@ -6787,6 +6787,109 @@ Target 0: (Bootstrap.dll) stopped.
 
 ```
 
+
+### 48.
+
+```
+
+(lldb) bt
+* thread #1, stop reason = breakpoint 3.1
+  * frame #0: 0x000000007f36ba7c SecurityStubDxe.dll`Security2StubAuthenticate [inlined] testGetBootAddrees at Defer3rdPartyImageLoad.c:304:5
+    frame #1: 0x000000007f36ba7c SecurityStubDxe.dll`Security2StubAuthenticate [inlined] Defer3rdPartyImageLoad(File=0x000000007d583818, BootPolicy=<unavailable>) at Defer3rdPartyImageLoad.c:356:3
+    frame #2: 0x000000007f36b9b3 SecurityStubDxe.dll`Security2StubAuthenticate(This=<unavailable>, File=0x000000007d583818, FileBuffer=<unavailable>, FileSize=<unavailable>, BootPolicy='\0') at SecurityStub.c:141:14
+    frame #3: 0x000000007fe405d6 DxeCore.dll`CoreLoadImage [inlined] CoreLoadImageCommon(BootPolicy=<unavailable>, ParentImageHandle=<unavailable>, FilePath=<unavailable>, SourceBuffer=<unavailable>, SourceSize=<unavailable>, DstBuffer=0, NumberOfPages=0x0000000000000000, ImageHandle=<unavailable>, EntryPoint=0x0000000000000000, Attribute=3) at Image.c:1271:22
+    frame #4: 0x000000007fe4038f DxeCore.dll`CoreLoadImage(BootPolicy=<unavailable>, ParentImageHandle=0x000000007de20a98, FilePath=0x000000007d583818, SourceBuffer=<unavailable>, SourceSize=739896, ImageHandle=0x000000007fe3c2d8) at Image.c:1553:12
+    frame #5: 0x000000007dccbd1f OpenCore.dll`DecompressZLIB [inlined] inflate(strm=0x000000007fe3c038, flush=0) at inflate.c:899:13
+    frame #6: 0x000000007dccbae5 OpenCore.dll`DecompressZLIB [inlined] uncompress2(dest="", destLen=<unavailable>, source=<unavailable>, sourceLen=<unavailable>) at uncompr.c:70:15
+    frame #7: 0x000000007dccb946 OpenCore.dll`DecompressZLIB [inlined] uncompress(dest=<unavailable>, destLen=<unavailable>, source=<unavailable>, sourceLen=<unavailable>) at uncompr.c:92:12
+    frame #8: 0x000000007dccb946 OpenCore.dll`DecompressZLIB(Dst=<unavailable>, DstLen=<unavailable>, Src=<unavailable>, SrcLen=<unavailable>) at zlib_uefi.c:72:7
+    frame #9: 0x000000007dce606f OpenCore.dll`OcDecodePng [inlined] lodepng_zlib_decompress(out=0x000000007fe3bf10, outsize=0x000000007fe3bf08, in="", insize=12297829382473034410, settings=0x000000007fe3be20) at lodepng.c:2268:6
+    frame #10: 0x000000007dce6035 OpenCore.dll`OcDecodePng [inlined] zlib_decompress(out=0x000000007fe3bf10, outsize=0x000000007fe3bf08, in="", insize=12297829382473034410, settings=0x000000007fe3be20) at lodepng.c:2284:12
+    frame #11: 0x000000007dce6035 OpenCore.dll`OcDecodePng [inlined] decodeGeneric(out=0xaaaaaaaaaaaaaaaa, w=0x000000007fe3be1c, h=0x000000007fe3be18, state=0x000000007fe3be20, in=<unavailable>, insize=<unavailable>) at lodepng.c:4963:20
+    frame #12: 0x000000007dce6035 OpenCore.dll`OcDecodePng [inlined] lodepng_decode(out=0xaaaaaaaaaaaaaaaa, w=0x000000007fe3be1c, h=0x000000007fe3be18, state=0x000000007fe3be20, in=<unavailable>, insize=<unavailable>) at lodepng.c:4985:3
+    frame #13: 0x000000007dce3a42 OpenCore.dll`OcDecodePng(Buffer=<unavailable>, Size=<unavailable>, RawData=0xaaaaaaaaaaaaaaaa, Width=0xaaaaaaaaaaaaaaaa, Height=0x0000000000000000, HasAlphaType=0x0000000000000000) at OcPng.c:91:11
+    frame #14: 0x000000007dccee26 OpenCore.dll`OcConsoleControlSetMode(Mode=<unavailable>) at ConsoleControl.c:0:12
+    frame #15: 0x000000007dc81ac3
+    frame #16: 0x000000007fe41cbb DxeCore.dll`CoreStartImage(ImageHandle=<unavailable>, ExitDataSize=<unavailable>, ExitData=<unavailable>) at Image.c:1703:22
+    frame #17: 0x000000007de15d70
+    frame #18: 0x000000007fe41cbb DxeCore.dll`CoreStartImage(ImageHandle=<unavailable>, ExitDataSize=<unavailable>, ExitData=<unavailable>) at Image.c:1703:22
+    frame #19: 0x000000007ee276df BdsDxe.dll`EfiBootManagerBoot(BootOption=<unavailable>) at BmBoot.c:2061:12
+    frame #20: 0x000000007ee1fe86 BdsDxe.dll`BdsEntry [inlined] BootBootOptions(BootOptions=<unavailable>, BootOptionCount=<unavailable>, BootManagerMenu=0x000000007fe3cb38) at BdsEntry.c:414:5
+    frame #21: 0x000000007ee1fe45 BdsDxe.dll`BdsEntry(This=<unavailable>) at BdsEntry.c:1094:21
+    frame #22: 0x000000007fe52e55 DxeCore.dll`DxeMain(HobStart=0x000000007f8e7018) at DxeMain.c:570:3
+    frame #23: 0x000000007fe52ea1 DxeCore.dll`ProcessModuleEntryPointList(HobStart=<unavailable>) at AutoGen.c:746:3
+    frame #24: 0x000000007fe57792 DxeCore.dll`_ModuleEntryPoint(HobStart=<unavailable>) at DxeCoreEntryPoint.c:46:3
+    frame #25: 0x000000007febd3d7 DxeIpl.dll`InternalSwitchStack + 15
+    frame #26: 0x000000007febeb0c DxeIpl.dll`DxeLoadCore [inlined] HandOffToDxeCore(DxeCoreEntryPoint=2145744766, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoadFunc.c:129:3
+    frame #27: 0x000000007febdf10 DxeIpl.dll`DxeLoadCore(This=<unavailable>, PeiServices=<unavailable>, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoad.c:456:3
+    frame #28: 0x000000007fecd958
+    frame #29: 0x0000000000824afe PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:458:7
+    frame #30: 0x00000000008280f1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:875:7
+    frame #31: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #32: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #33: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #34: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #35: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #36: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #37: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #38: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+
+```
+
+
+### 49.进入 boot.efi
+
+b testGetBootAddrees
+
+b SetJump
+
+```
+(lldb) bt
+* thread #1, stop reason = breakpoint 8.1
+  * frame #0: 0x000000007cf7d7f0 _ModuleEntryPoint
+    * frame #0: 0x000000007fe3ee11 DxeCore.dll`CoreStartImage(ImageHandle=0x000000007d4c9b98, ExitDataSize=0x0000000000000000, ExitData=0x0000000000000000) at Image.c:1749:66     Image->Status  = Image->EntryPoint (ImageHandle, Image->Info.SystemTable);
+
+    frame #1: 0x000000007dce9103 OpenCore.dll`InternalEfiStartImage(ImageHandle=<unavailable>, ExitDataSize=<unavailable>, ExitData=<unavailable>) at ImageLoader.c:1114:12
+    frame #2: 0x000000007dd03c23 OpenCore.dll`OcStartImage(ImageHandle=<unavailable>, ExitDataSize=0x0000000000000000, ExitData=0x0000000000000000) at ServiceOverrides.c:1324:12
+    frame #3: 0x000000007dc96dc4 OpenCore.dll`OcStartImage(Chosen=<unavailable>, ImageHandle=0x000000007d4c4598, ExitDataSize=0x0000000000000000, ExitData=<unavailable>, LaunchInText='\0') at OpenCore.c:99:12
+    frame #4: 0x000000007dcec04b OpenCore.dll`OcRunBootPicker [inlined] OcLoadBootEntry(Context=0x000000007d646018, BootEntry=0x000000007d5bfe98, ParentHandle=0x000000007df9ca98) at BootEntryManagement.c:2545:14
+    frame #5: 0x000000007dcebaf8 OpenCore.dll`OcRunBootPicker(Context=0x000000007d646018) at OcBootManagementLib.c:504:16
+    frame #6: 0x000000007dc9eac3 OpenCore.dll`ProcessModuleEntryPointList [inlined] OcMiscBoot(Storage=<unavailable>, Config=<unavailable>, Privilege=0x0000000000000000, StartImage=<unavailable>, CustomBootGuid='\x01', LoadHandle=0x000000007ea0b998) at OpenCoreMisc.c:1026:12
+    frame #7: 0x000000007dc9ea49 OpenCore.dll`ProcessModuleEntryPointList [inlined] OcMain(Storage=<unavailable>, LoadPath=<unavailable>) at OpenCore.c:178:3
+    frame #8: 0x000000007dc97e08 OpenCore.dll`ProcessModuleEntryPointList [inlined] OcBootstrap(DeviceHandle=<unavailable>, FileSystem=<unavailable>, LoadPath=<unavailable>) at OpenCore.c:249:5
+    frame #9: 0x000000007dc973a5 OpenCore.dll`ProcessModuleEntryPointList [inlined] UefiMain(ImageHandle=<unavailable>, SystemTable=<unavailable>) at OpenCore.c:371:3
+    frame #10: 0x000000007dc96ec1 OpenCore.dll`ProcessModuleEntryPointList(ImageHandle=<unavailable>, SystemTable=<unavailable>) at AutoGen.c:816:10
+    frame #11: 0x000000007fe41cbb DxeCore.dll`CoreStartImage(ImageHandle=0x000000007df9ca98, ExitDataSize=0x0000000000000000, ExitData=<unavailable>) at Image.c:1703:22
+    frame #12: 0x000000007de32d70
+    frame #13: 0x000000007fe41cbb DxeCore.dll`CoreStartImage(ImageHandle=<unavailable>, ExitDataSize=<unavailable>, ExitData=<unavailable>) at Image.c:1703:22
+    frame #14: 0x000000007ee276df BdsDxe.dll`EfiBootManagerBoot(BootOption=<unavailable>) at BmBoot.c:2061:12
+    frame #15: 0x000000007ee1fe86 BdsDxe.dll`BdsEntry [inlined] BootBootOptions(BootOptions=<unavailable>, BootOptionCount=<unavailable>, BootManagerMenu=0x000000007fe3cb38) at BdsEntry.c:414:5
+    frame #16: 0x000000007ee1fe45 BdsDxe.dll`BdsEntry(This=<unavailable>) at BdsEntry.c:1094:21
+    frame #17: 0x000000007fe52e55 DxeCore.dll`DxeMain(HobStart=0x000000007f8e7018) at DxeMain.c:570:3
+    frame #18: 0x000000007fe52ea1 DxeCore.dll`ProcessModuleEntryPointList(HobStart=<unavailable>) at AutoGen.c:746:3
+    frame #19: 0x000000007fe57792 DxeCore.dll`_ModuleEntryPoint(HobStart=<unavailable>) at DxeCoreEntryPoint.c:46:3
+    frame #20: 0x000000007febd3d7 DxeIpl.dll`InternalSwitchStack + 15
+    frame #21: 0x000000007febeb0c DxeIpl.dll`DxeLoadCore [inlined] HandOffToDxeCore(DxeCoreEntryPoint=2145744766, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoadFunc.c:129:3
+    frame #22: 0x000000007febdf10 DxeIpl.dll`DxeLoadCore(This=<unavailable>, PeiServices=<unavailable>, HobList=EFI_PEI_HOB_POINTERS @ 0x000000007bf3c700) at DxeLoad.c:456:3
+    frame #23: 0x000000007fecd958
+    frame #24: 0x0000000000824afe PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:458:7
+    frame #25: 0x00000000008280f1 PeiCore.dll`PeiCheckAndSwitchStack(SecCoreData=0x000000007bf3de98, Private=<unavailable>) at Dispatcher.c:875:7
+    frame #26: 0x00000000008247de PeiCore.dll`PeiCore [inlined] PeiDispatcher(SecCoreData=0x000000000081fe98, Private=0x000000000081f608) at Dispatcher.c:1647:13
+    frame #27: 0x0000000000823f72 PeiCore.dll`PeiCore(SecCoreDataPtr=<unavailable>, PpiList=<unavailable>, Data=<unavailable>) at PeiMain.c:620:3
+    frame #28: 0x00000000008285b6 PeiCore.dll`ProcessModuleEntryPointList(SecCoreData=<unavailable>, PpiList=<unavailable>, Context=0x0000000000000000) at AutoGen.c:356:3
+    frame #29: 0x000000000082b295 PeiCore.dll`_ModuleEntryPoint(SecCoreData=<unavailable>, PpiList=<unavailable>) at PeiCoreEntryPoint.c:57:3
+    frame #30: 0x00000000fffca602 SecMain.dll`SecCoreStartupWithStack [inlined] SecStartupPhase2(Context=0x000000000081fe98) at SecMain.c:1022:3
+    frame #31: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack [inlined] InitializeDebugAgent(InitFlag=1, Context=0x000000000081fe98, Function=<unavailable>) at DebugAgentLibNull.c:42:5
+    frame #32: 0x00000000fffca213 SecMain.dll`SecCoreStartupWithStack(BootFv=<unavailable>, TopOfCurrentStack=<unavailable>) at SecMain.c:974:3
+    frame #33: 0x00000000fffc8056 SecMain.dll`InitStack + 45
+(lldb) 
+
+
+```
+
+
 ## 6.使用GDB  分析 OVMF_CODE.fd 在qemu中运行的第一行代码
 
 
@@ -7116,3 +7219,46 @@ typedef struct {
 https://github.com/acidanthera/bugtracker/issues/2389
 
 
+## 2.movzx   eax, word ptr [rdi+2] 和 mov     rcx, [rdi+18h]的区别， word ptr  有什么作用
+
+
+rdi 对应下面的 union
+
+```
+typedef union {
+  EFI_HOB_GENERIC_HEADER *Header;
+  EFI_HOB_HANDOFF_INFO_TABLE *HandoffInformationTable;
+  EFI_HOB_MEMORY_ALLOCATION *MemoryAllocation;
+  EFI_HOB_MEMORY_ALLOCATION_BSP_STORE *MemoryAllocationBspStore;
+  EFI_HOB_MEMORY_ALLOCATION_STACK *MemoryAllocationStack;
+  EFI_HOB_MEMORY_ALLOCATION_MODULE *MemoryAllocationModule;
+  EFI_HOB_RESOURCE_DESCRIPTOR *ResourceDescriptor;
+  EFI_HOB_GUID_TYPE *Guid;
+  EFI_HOB_FIRMWARE_VOLUME *FirmwareVolume;
+  EFI_HOB_FIRMWARE_VOLUME2 *FirmwareVolume2;
+  EFI_HOB_FIRMWARE_VOLUME3 *FirmwareVolume3;
+  EFI_HOB_CPU *Cpu;
+  EFI_HOB_MEMORY_POOL *Pool;
+  EFI_HOB_UEFI_CAPSULE *Capsule;
+  UINT8 *Raw;
+} EFI_PEI_HOB_POINTERS;
+
+```
+
+Why do we need BYTE PTR, WORD PTR, DWORD PTR, and
+OWORD PTR directives in ×86 and ×64 assembly?
+
+Let's say we want to move the value oxi to the memory location specified by the RAX register.
+Now, we may write:
+
+```
+
+mov [rax],0x1
+
+```
+
+But, the above instruction does not specify the operand size. So, we do not know whether the memory location referenced by the RAX register will store 8-bit, 16-bit, 32-bit, or a 64-bit value.
+So, we need to specify the operand size to the assembler. We do so using the BYTE PTR, WORD PIR, DWORD PTR, and QWORD PTR directives in ×86 and ×64 assembly.
+
+
+https://www.thesecuritybuddy.com/reverse-engineering/what-are-byte-ptr-word-ptr-dword-ptr-and-qword-ptr-directives-in-x86-and-x64-assembly/
