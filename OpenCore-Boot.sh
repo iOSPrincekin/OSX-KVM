@@ -227,6 +227,8 @@ OpenCore_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/O
 
 OpenCanopy_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Platform/OpenCanopy/OpenCanopy/DEBUG/OpenCanopy.dll
 
+OpenRuntime_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Platform/OpenRuntime/OpenRuntime/DEBUG/OpenRuntime.dll
+
 boot_dll=${Build_dir}/OpenCorePkg/DEBUG_XCODE5/X64/OpenCorePkg/Application/boot/boot/DEBUG/boot.dll
 
 
@@ -275,6 +277,7 @@ osascript -e "tell application \"Terminal\" to do script \"cd ${ROOT_DIR}\\n lld
   target modules load --file ${Bootstrap_dll} --slide 0x0007DE3D000  \\n\
   target modules add ${OpenCore_dll} \\n target modules load --file ${OpenCore_dll} --slide 0x0007DCA2000  \\n\
   target modules add ${OpenCanopy_dll} \\n target modules load --file ${OpenCanopy_dll} --slide 0x0007DA95000  \\n\
+  target modules add ${OpenRuntime_dll} \\n target modules load --file ${OpenRuntime_dll} --slide 0x0007F88C000  \\n\
   target modules add ${BdsDxe_dll} \\n target modules load --file ${BdsDxe_dll} --slide 0x0007EE1D000 \\n\
   target modules add ${QemuVideoDxe_dll} \\n target modules load --file ${QemuVideoDxe_dll} --slide 0x0007EC08000 \\n\
   target modules add ${boot_dll} \\n target modules load --file ${boot_dll} --slide 0x0007CDED000 \\n\
